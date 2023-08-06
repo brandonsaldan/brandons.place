@@ -1,0 +1,39 @@
+{
+  "name": "brandons.place",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "browserslist": "defaults, not ie <= 11",
+  "dependencies": {
+    "@headlessui/react": "^1.7.13",
+    "@mapbox/rehype-prism": "^0.8.0",
+    "@mdx-js/loader": "^2.1.5",
+    "@mdx-js/react": "^2.1.5",
+    "@next/mdx": "^13.0.2",
+    "@tailwindcss/typography": "^0.5.4",
+    "autoprefixer": "^10.4.12",
+    "cheerio": "^1.0.0-rc.12",
+    "clsx": "^1.2.1",
+    "fast-glob": "^3.2.11",
+    "feed": "^4.2.2",
+    "next": "13.4.12",
+    "next-router-mock": "^0.9.3",
+    "next-themes": "^0.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "remark-gfm": "^3.0.1",
+    "tailwindcss": "^3.3.3",
+    "use-lanyard": "^1.4.4"
+  },
+  "devDependencies": {
+    "eslint": "8.45.0",
+    "eslint-config-next": "13.4.12",
+    "prettier": "^2.8.7",
+    "prettier-plugin-tailwindcss": "^0.2.6"
+  }
+}
