@@ -1,5 +1,6 @@
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { Analytics } from '@vercel/analytics/react';
 
 export function Layout({ children }) {
   return (
@@ -11,7 +12,10 @@ export function Layout({ children }) {
       </div>
       <div className="relative flex w-full flex-col">
         <Header />
-        <main className="flex-auto">{children}</main>
+        <main className="flex-auto">
+          {children}
+          <Analytics />
+        </main>
         <Footer />
       </div>
     </>
