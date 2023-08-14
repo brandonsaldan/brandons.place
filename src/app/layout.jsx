@@ -10,7 +10,7 @@ export const metadata = {
       'Brandon Saldan',
   },
   description:
-    'I’m Brandon, a frontend software engineer and aspiring PM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.',
+    'I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.',
   alternates: {
     types: {
       'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
