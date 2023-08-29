@@ -22,7 +22,7 @@
     "clsx": "^1.2.1",
     "fast-glob": "^3.2.11",
     "feed": "^4.2.2",
-    "next": "13.4.12",
+    "next": "13.4.19",
     "next-router-mock": "^0.9.3",
     "next-themes": "^0.2.1",
     "react": "18.2.0",

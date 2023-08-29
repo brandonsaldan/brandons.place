@@ -1,45 +1,41 @@
-import Image from 'next/image'
-
-import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
-
-import logoInvii from '@/images/logos/invii.svg'
-import logoCodex from '@/images/logos/codex.svg'
-import logoCommunityCenter from '@/images/logos/community-center.svg'
-import logoBrandonsPlace from '@/images/logos/brandons-place.svg'
 
 const projects = [
   {
     name: 'Invii',
-    description:
-      'All-in-one restaurant management platform and payment facilitator.',
+    description: 'All-in-one restaurant management platform and payment facilitator.',
+    imageUrl:
+      '/assets/projects/invii-1.png',
     tools: 'Vue, Nuxt, TailwindCSS, Figma',
-    link: { href: 'https://invii.io/', label: 'invii.io' },
-    logo: logoInvii,
+    href: 'https://invii.io/',
+    hasCaseStudy: true,
   },
   {
     name: 'Codex',
-    description:
-      'A free in-browser bioinformatics platform with a focus on privacy.',
+    description: 'A free in-browser bioinformatics platform with a focus on privacy.',
+    imageUrl:
+      '/assets/projects/codex-1.png',
     tools: 'Next.js, React, TailwindCSS, IndexedDB',
-    link: { href: 'https://github.com/brandonsaldan/codex', label: 'github.com' },
-    logo: logoCodex,
+    href: 'https://codex-brandonsaldan.vercel.app/',
+    hasCaseStudy: true,
   },
   {
     name: 'Community Center',
-    description:
-      'A collection of open-source Stardew Valley tools and resources.',
+    description: 'A collection of open-source Stardew Valley tools and resources.',
+    imageUrl:
+      '/assets/projects/community-center-1.png',
     tools: 'Next.js, React, TypeScript, TailwindCSS',
-    link: { href: 'https://github.com/communitycenter', label: 'github.com' },
-    logo: logoCommunityCenter,
+    href: 'https://github.com/communitycenter/',
+    hasCaseStudy: false,
   },
   {
     name: 'brandons.place',
-    description:
-      'My personal website and blog.',
+    description: 'My personal website and blog.',
+    imageUrl:
+      '/assets/projects/brandons-place-1.png',
     tools: 'Next.js, React, TailwindCSS, Figma',
-    link: { href: 'https://github.com/brandonsaldan/brandons.place', label: 'github.com' },
-    logo: logoBrandonsPlace,
+    href: 'https://brandons.place/',
+    hasCaseStudy: false,
   },
 ]
 
@@ -63,34 +59,39 @@ export default function Projects() {
   return (
     <SimpleLayout
       title="Things I’ve made or contributed to over the years."
-      intro="I’ve worked on tons of little projects since I started developing, most of which are just for fun. Here are a few of my favorites."
+      intro="I’ve worked on tons of projects since I started developing, most of which are just for fun. Here are a few of my favorites."
     >
-      <ul
-        role="list"
-        className="grid grid-cols-1 gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
-      >
+      <ul role="list" className="grid grid-cols-1 gap-x-12 gap-y-12">
         {projects.map((project) => (
-          <Card as="li" key={project.name}>
-            <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
-              <Image
-                src={project.logo}
-                alt=""
-                className="h-8 w-8"
-                unoptimized
-              />
+          <li key={project.name} className="flex flex-col gap-10 sm:flex-row">
+            <img className="sm:w-1/2 flex-none rounded-2xl object-cover" src={project.imageUrl} alt="" />
+            <div className="max-w-xl flex-auto">
+              <h3 className="text-lg font-semibold leading-8 tracking-tight text-zinc-800 dark:text-zinc-100">{project.name}</h3>
+              <p className="text-base leading-7 text-zinc-600 dark:text-zinc-400">{project.description}</p>
+              <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-400">{project.tools}</p>
+              <ul role="list" className="mt-4 flex gap-x-4">
+                <a href={project.href}>
+                  <button
+                    type="button"
+                    className="flex w-40 rounded-full bg-zinc-800 dark:bg-zinc-50 px-3.5 py-2 text-sm font-semibold text-zinc-100 dark:text-zinc-800 shadow-sm transition hover:bg-zinc-600 dark:hover:bg-zinc-200"
+                  >
+                    <div className="flex mx-auto">
+                      Visit
+                      <LinkIcon className="h-6 w-6 flex-none" />
+                    </div>
+                  </button>
+                </a>
+                {project.hasCaseStudy && (
+                  <button
+                    type="button"
+                    className="w-40 rounded-full bg-zinc-50 dark:bg-zinc-800 px-3.5 py-2 text-sm font-semibold text-zinc-800 dark:text-zinc-100 shadow-sm transition hover:bg-zinc-100 dark:hover:bg-zinc-700"
+                  >
+                    Case Study
+                  </button>
+                )}
+              </ul>
             </div>
-            <h2 className="mt-6 text-base font-semibold text-zinc-800 dark:text-zinc-100">
-              <Card.Link href={project.link.href}>{project.name}</Card.Link>
-            </h2>
-            <Card.Description>{project.description}</Card.Description>
-            <p className="relative z-10 mt-1 flex text-sm font-medium text-zinc-400 dark:text-zinc-200">
-              <span className="">{project.tools}</span>
-            </p>
-            <p className="relative z-10 mt-6 flex text-sm font-medium text-zinc-400 transition group-hover:text-teal-500 dark:text-zinc-200">
-              <LinkIcon className="h-6 w-6 flex-none" />
-              <span className="ml-2">{project.link.label}</span>
-            </p>
-          </Card>
+          </li>
         ))}
       </ul>
     </SimpleLayout>
