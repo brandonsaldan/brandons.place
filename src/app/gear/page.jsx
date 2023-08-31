@@ -26,6 +26,9 @@ function Tool({ title, href, children }) {
 export const metadata = {
   title: 'Gear',
   description: 'Software, gadgets, and productivity tools I love.',
+  openGraph: {
+    image: '/assets/open-graph/og-gear.png',
+  }
 }
 
 export default function Gear() {

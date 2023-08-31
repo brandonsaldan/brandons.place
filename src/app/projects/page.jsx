@@ -262,6 +262,7 @@ export default function Projects() {
     <Head>
       <title>Projects - Brandon Saldan</title>
       <meta name="description" content="I’ve worked on tons of projects since I started developing, most of which are just for fun. Here are a few of my favorites." />
+      <meta property="og:image" content="/assets/open-graph/og-projects.png" />
     </Head>
     <ProjectModal project={selectedProject} open={open} setOpen={setOpen} />
     <SimpleLayout

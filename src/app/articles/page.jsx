@@ -36,6 +36,9 @@ export const metadata = {
   title: 'Articles',
   description:
     'All of my long-form thoughts collected in chronological order.',
+  openGraph: {
+    image: '/assets/open-graph/og-articles.png',
+  }
 }
 
 export default async function ArticlesIndex() {
