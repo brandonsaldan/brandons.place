@@ -45,7 +45,7 @@ const projects = [
       { name: 'Brandon Saldan', role: 'Lead Developer' },
     ],
     timeline: '2 Months',
-    status: 'Launched in May 2023',
+    status: 'Launched May 2023',
     overview: 'Codex is a free in-browser bioinformatics platform with a focus on privacy. It allows users to analyze their genomic data without having to upload it to a third-party server.\n As the lead developer, I was responsible for the research and development of the Codex platform, including the design and implementation of the user interface and the integration of the bioinformatics tools.',
     hasGitHub: true,
     hasTwitter: false,
@@ -73,7 +73,7 @@ const projects = [
       { name: 'Leah Lundqvist', role: 'SWE' },
     ],
     timeline: '1 Year',
-    status: 'Launched in Augst 2023',
+    status: 'Launched August 2023',
     overview: 'Community Center is a collection of open-source tools and resources for the popular game Stardew Valley. The goal of the project is to provide users with a centralized location to find, share, and track their progress in-game through an intuitive and easy-to-use interface.\n As a frontend developer, I was responsible for the development of user interface components and the integration of avatar generation tools.',
     hasGitHub: true,
     hasTwitter: false,
@@ -95,12 +95,33 @@ const projects = [
       { name: 'Brandon Saldan', role: 'LDSE' },
     ],
     timeline: '5 Years',
-    status: 'Launched in April 2018',
+    status: 'Launched April 2018',
     overview: 'brandons.place is my personal website and blog. The development of the site was motivated by my desire to learn more about web development and to share my thoughts and experiences with others.\n As the lead developer, I was responsible for the design and implementation of the site, including the user interface, content management system, and blog.\n The site has gone through several iterations since its initial launch in April 2018, each of which has showcased my growth as a developer and designer, and has been driven by my desire to improve the user experience and to learn new technologies.',
     hasGitHub: true,
     hasTwitter: false,
     hasExternalLink: false,
     githubUrl: 'https://github.com/brandonsaldan/brandons.place/',
+  },
+  {
+    name: 'Capsl',
+    description: 'An experimental supplement personalization and delivery service.',
+    imageUrl:
+      '/assets/projects/capsl-1.png',
+    coverImage: '/assets/projects/cover/capsl-cover.png',
+    tools: 'Next.js, React, TailwindCSS, Figma, Supabase',
+    href: 'https://trycapsl.com/',
+    hasCaseStudy: true,
+    role: 'Lead Developer & Designer',
+    duties: 'Frontend, Design',
+    team: [
+      { name: 'Brandon Saldan', role: 'LDSE' },
+    ],
+    timeline: '1 Month',
+    status: 'Not expected to launch',
+    overview: 'Capsl is an experimental (non-functional, and not a real company) supplement personalization and delivery service. It allows users to create custom vitamin and supplement blends tailored to their needs based on a personalization questionnaire.\n This project was created to challenge myself to learn new technologies, mainly backend, and to refine my design skills.\n As the lead developer, I was responsible for the development of the Capsl landing page, registration flow, customer dashboard, questionnaire, and e-commerce platform interface.\n As the designer, I created the Capsl branding and marketing materials, including the logo, color palette, and supplement packaging.',
+    hasGitHub: false,
+    hasTwitter: false,
+    hasExternalLink: false,
   },
 ]
 
@@ -189,9 +210,11 @@ function ProjectModal({ project, open, setOpen }) {
                               <dt className="max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">{project.timeline}, {project.status}</dt>
                             </div>
                             <div className="mt-4 flex gap-4">
-                              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                                <GitHubIcon className="h-6 w-6 flex-none fill-zinc-800 dark:fill-zinc-100" />
-                              </a>
+                              {project.hasGitHub && (
+                                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                                  <GitHubIcon className="h-6 w-6 flex-none fill-zinc-800 dark:fill-zinc-100" />
+                                </a>
+                              )}
                               {project.hasTwitter && (
                                 <a href={project.twitterUrl} target="_blank" rel="noopener noreferrer">
                                   <TwitterIcon className="h-6 w-6 flex-none fill-zinc-800 dark:fill-zinc-100" />
