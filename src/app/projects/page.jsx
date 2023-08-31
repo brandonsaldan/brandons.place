@@ -3,6 +3,7 @@ import { SimpleLayout } from '@/components/SimpleLayout'
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { GitHubIcon, TwitterIcon } from '@/components/SocialIcons';
+import Head from 'next/head'
 
 const projects = [
   {
@@ -258,6 +259,10 @@ export default function Projects() {
 
   return (
     <>
+    <Head>
+      <title>Projects - Brandon Saldan</title>
+      <meta name="description" content="I’ve worked on tons of projects since I started developing, most of which are just for fun. Here are a few of my favorites." />
+    </Head>
     <ProjectModal project={selectedProject} open={open} setOpen={setOpen} />
     <SimpleLayout
       title="Things I’ve made or contributed to over the years."
