@@ -94,7 +94,7 @@ const projects = [
     role: 'Sole Developer',
     duties: 'Frontend, Design',
     team: [
-      { name: 'Brandon Saldan', role: 'LDSE' },
+      { name: 'Brandon Saldan', role: 'LSE' },
     ],
     timeline: '5 Years',
     status: 'Launched April 2018',
@@ -116,7 +116,7 @@ const projects = [
     role: 'Sole Developer & Designer',
     duties: 'Frontend, Design',
     team: [
-      { name: 'Brandon Saldan', role: 'LDSE' },
+      { name: 'Brandon Saldan', role: 'LSE' },
     ],
     timeline: '1 Month',
     status: 'Not expected to launch',
