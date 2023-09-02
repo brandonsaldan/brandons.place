@@ -17,6 +17,9 @@ export const metadata = {
       'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
     },
   },
+  openGraph: {
+    image: '/assets/open-graph/og-about.png',
+  }
 }
 
 export default function RootLayout({ children }) {
