@@ -24,6 +24,7 @@ function Tool({ title, href, children }) {
 }
 
 export const metadata = {
+  metadataBase: new URL('https://brandons.place/'),
   title: 'Gear',
   description: 'Software, gadgets, and productivity tools I love.',
   openGraph: {

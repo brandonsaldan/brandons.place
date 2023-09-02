@@ -38,6 +38,7 @@ function MailIcon(props) {
 }
 
 export const metadata = {
+  metadataBase: new URL('https://brandons.place/'),
   title: 'About',
   description:
     'I’m Brandon Saldan. I live in North Carolina, and I love building.',

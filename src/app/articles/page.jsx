@@ -33,6 +33,7 @@ function Article({ article }) {
 }
 
 export const metadata = {
+  metadataBase: new URL('https://brandons.place/'),
   title: 'Articles',
   description:
     'All of my long-form thoughts collected in chronological order.',
