@@ -4,7 +4,6 @@ import { Layout } from '@/components/Layout'
 import '@/styles/tailwind.css'
 
 export const metadata = {
-  metadataBase: new URL('https://brandons.place/'),
   title: {
     template: '%s - Brandon Saldan',
     default:
@@ -17,9 +16,6 @@ export const metadata = {
       'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
     },
   },
-  openGraph: {
-    images: '/assets/open-graph/og-about.png',
-  }
 }
 
 export default function RootLayout({ children }) {
