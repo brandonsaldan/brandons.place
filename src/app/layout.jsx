@@ -18,7 +18,7 @@ export const metadata = {
     },
   },
   openGraph: {
-    image: '/assets/open-graph/og-about.png',
+    images: '/assets/open-graph/og-about.png',
   }
 }
 

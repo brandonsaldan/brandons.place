@@ -38,7 +38,7 @@ export const metadata = {
   description:
     'All of my long-form thoughts collected in chronological order.',
   openGraph: {
-    image: '/assets/open-graph/og-articles.png',
+    images: '/assets/open-graph/og-articles.png',
   }
 }
 

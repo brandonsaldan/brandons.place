@@ -28,7 +28,7 @@ export const metadata = {
   title: 'Stack',
   description: 'The tools I use to build things.',
   openGraph: {
-    image: '/assets/open-graph/og-stack.png',
+    images: '/assets/open-graph/og-stack.png',
   }
 }
 

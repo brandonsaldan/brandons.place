@@ -44,7 +44,7 @@ export const metadata = {
   title: 'Brandon Saldan',
   description: 'I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.',
   openGraph: {
-    image: '/assets/open-graph/og-about.png',
+    images: '/assets/open-graph/og-about.png',
   }
 }
 
