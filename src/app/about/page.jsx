@@ -43,7 +43,13 @@ export const metadata = {
   description:
     'I’m Brandon Saldan. I live in North Carolina, and I love building.',
   openGraph: {
-    image: '/assets/open-graph/og-about.png',
+    images: [
+      {
+        url: 'https://brandons.place/assets/open-graph/og-about.png',
+        width: 1440,
+        height: 800,
+      }
+    ]
   }
 }
 
