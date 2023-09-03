@@ -255,7 +255,6 @@ function ProjectModal({ project, open, setOpen }) {
 export default function Projects() {
 
   const [open, setOpen] = useState(false)
-  const cancelButtonRef = useRef(null)
   const [selectedProject, setSelectedProject] = useState(projects[0])
 
   return (
