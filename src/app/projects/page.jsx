@@ -4,7 +4,6 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { GitHubIcon, TwitterIcon } from '@/components/SocialIcons';
 import Head from 'next/head'
-import Image from 'next/image'
 
 const projects = [
   {
@@ -188,7 +187,7 @@ function ProjectModal({ project, open, setOpen }) {
                 </div>
                 <div className="sm:flex sm:items-start">
                   <div className="mt-10 text-center sm:mt-0 sm:text-left">
-                    <Image className="flex-none rounded-2xl object-cover" src={project.coverImage} alt="" width={1760} height={924} placeholder="blur" blurDataURL={project.coverImage} />
+                    <img className="flex-none rounded-2xl object-cover" src={project.coverImage} alt="" />
                     <div className="bg-white dark:bg-zinc-800">
                       <div className="mx-auto max-w-7xl py-4 px-4 mt-4 text-left">
                         <h2 className="text-2xl font-bold leading-10 tracking-tight text-zinc-800 dark:text-zinc-100">{project.name}</h2>
@@ -255,6 +254,7 @@ function ProjectModal({ project, open, setOpen }) {
 export default function Projects() {
 
   const [open, setOpen] = useState(false)
+  const cancelButtonRef = useRef(null)
   const [selectedProject, setSelectedProject] = useState(projects[0])
 
   return (
@@ -272,7 +272,7 @@ export default function Projects() {
       <ul role="list" className="grid grid-cols-1 gap-x-12 gap-y-12">
         {projects.map((project) => (
           <li key={project.name} className="flex flex-col gap-10 sm:flex-row">
-            <Image className="sm:w-1/2 flex-none rounded-2xl object-cover" src={project.imageUrl} alt="" width={1760} height={924} placeholder="blur" blurDataURL={project.coverImage} />
+            <img className="sm:w-1/2 flex-none rounded-2xl object-cover" src={project.imageUrl} alt="" />
             <div className="max-w-xl flex-auto">
               <h3 className="text-lg font-semibold leading-8 tracking-tight text-zinc-800 dark:text-zinc-100">{project.name}</h3>
               <p className="text-base leading-7 text-zinc-600 dark:text-zinc-400">{project.description}</p>
