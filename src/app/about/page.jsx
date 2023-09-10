@@ -43,7 +43,7 @@ export const metadata = {
   description:
     'I’m Brandon Saldan. I live in North Carolina, and I love building.',
   openGraph: {
-    images: '/assets/open-graph/og-about.png'
+    images: '/assets/open-graph/og-about.webp'
   }
 }
 

@@ -28,7 +28,7 @@ export const metadata = {
   title: 'Gear',
   description: 'Software, gadgets, and productivity tools I love.',
   openGraph: {
-    images: '/assets/open-graph/og-gear.png',
+    images: '/assets/open-graph/og-gear.webp',
   }
 }
 
