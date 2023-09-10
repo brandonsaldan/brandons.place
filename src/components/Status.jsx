@@ -14,7 +14,7 @@ const Status = () => {
     var codeImage = unformattedCodeImage.substring(unformattedCodeImage.indexOf("https")).replace("https/", "https://");
     console.log(codeImage);
   } else {
-    var codeImage = '/assets/idle-vscode.png';
+    var codeImage = '/assets/idle-vscode.webp';
   }
 
   const renderCodingContent = () => {
@@ -39,7 +39,7 @@ const Status = () => {
     var artLink = listening.album_art_url
   } else {
     var trackLink = '#'
-    var artLink = '/assets/idle-spotify.png'
+    var artLink = '/assets/idle-spotify.webp'
   }
 
   const renderListeningContent = () => {

@@ -10,8 +10,8 @@ const projects = [
     name: 'Invii',
     description: 'All-in-one restaurant management platform and payment facilitator.',
     imageUrl:
-      '/assets/projects/invii-1.png',
-    coverImage: '/assets/projects/cover/invii-cover.png',
+      '/assets/projects/invii-1.webp',
+    coverImage: '/assets/projects/cover/invii-cover.webp',
     tools: 'Vue, Nuxt, TailwindCSS, Figma',
     href: 'https://invii.io/',
     hasCaseStudy: true,
@@ -35,8 +35,8 @@ const projects = [
     name: 'Codex',
     description: 'A free in-browser bioinformatics platform with a focus on privacy.',
     imageUrl:
-      '/assets/projects/codex-1.png',
-      coverImage: '/assets/projects/cover/codex-cover.png',
+      '/assets/projects/codex-1.webp',
+      coverImage: '/assets/projects/cover/codex-cover.webp',
     tools: 'Next.js, React, TailwindCSS, IndexedDB',
     href: 'https://codex-brandonsaldan.vercel.app/',
     hasCaseStudy: true,
@@ -58,8 +58,8 @@ const projects = [
     name: 'Community Center',
     description: 'A collection of open-source Stardew Valley tools and resources.',
     imageUrl:
-      '/assets/projects/community-center-1.png',
-    coverImage: '/assets/projects/cover/community-center-cover.png',
+      '/assets/projects/community-center-1.webp',
+    coverImage: '/assets/projects/cover/community-center-cover.webp',
     tools: 'Next.js, React, TypeScript, TailwindCSS',
     href: 'https://github.com/communitycenter/',
     hasCaseStudy: true,
@@ -85,8 +85,8 @@ const projects = [
     name: 'brandons.place',
     description: 'My personal website and blog.',
     imageUrl:
-      '/assets/projects/brandons-place-1.png',
-    coverImage: '/assets/projects/cover/brandons-place-cover.png',
+      '/assets/projects/brandons-place-1.webp',
+    coverImage: '/assets/projects/cover/brandons-place-cover.webp',
     tools: 'Next.js, React, TailwindCSS, Figma',
     href: 'https://brandons.place/',
     hasCaseStudy: true,
@@ -107,8 +107,8 @@ const projects = [
     name: 'Capsl',
     description: 'An experimental supplement personalization and delivery service.',
     imageUrl:
-      '/assets/projects/capsl-1.png',
-    coverImage: '/assets/projects/cover/capsl-cover.png',
+      '/assets/projects/capsl-1.webp',
+    coverImage: '/assets/projects/cover/capsl-cover.webp',
     tools: 'Next.js, React, TailwindCSS, Figma, Supabase',
     href: 'https://trycapsl.com/',
     hasCaseStudy: true,
@@ -262,7 +262,7 @@ export default function Projects() {
     <Head>
       <title>Projects - Brandon Saldan</title>
       <meta name="description" content="I’ve worked on tons of projects since I started developing, most of which are just for fun. Here are a few of my favorites." />
-      <meta property="og:image" content="/assets/open-graph/og-projects.png" />
+      <meta property="og:image" content="/assets/open-graph/og-projects.webp" />
     </Head>
     <ProjectModal project={selectedProject} open={open} setOpen={setOpen} />
     <SimpleLayout
