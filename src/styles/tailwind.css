@@ -141,3 +141,18 @@
 .arrow--disabled {
   fill: rgba(255, 255, 255, 0.5);
 }
+
+@keyframes fadeInUp {
+  0% {
+    transform: translateY(5%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+.fadeInUp-animation {
+  animation: 0.5s fadeInUp;
+}
