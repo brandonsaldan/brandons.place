@@ -4,6 +4,9 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { GitHubIcon, TwitterIcon } from '@/components/SocialIcons';
 import Head from 'next/head'
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import styles from '@/styles/styles.module.css'
+import Image from 'next/image';
 
 const projects = [
   {
@@ -11,7 +14,6 @@ const projects = [
     description: 'All-in-one restaurant management platform and payment facilitator.',
     imageUrl:
       '/assets/projects/invii-1.webp',
-    coverImage: '/assets/projects/cover/invii-cover.webp',
     tools: 'Vue, Nuxt, TailwindCSS, Figma',
     href: 'https://invii.io/',
     hasCaseStudy: true,
@@ -30,13 +32,16 @@ const projects = [
     githubUrl: 'https://github.com/GetInvii/',
     twitterUrl: 'https://twitter.com/GetInvii/',
     externalLinkUrl: 'https://invii.io/',
+    images: [
+      '/assets/projects/cover/invii/invii-cover-1.png',
+      '/assets/projects/cover/invii/invii-cover-2.png',
+      '/assets/projects/cover/invii/invii-cover-3.png',
+    ],
   },
   {
     name: 'Codex',
     description: 'A free in-browser bioinformatics platform with a focus on privacy.',
-    imageUrl:
-      '/assets/projects/codex-1.webp',
-      coverImage: '/assets/projects/cover/codex-cover.webp',
+    imageUrl: '/assets/projects/codex-1.webp',
     tools: 'Next.js, React, TailwindCSS, IndexedDB',
     href: 'https://codex-brandonsaldan.vercel.app/',
     hasCaseStudy: true,
@@ -53,13 +58,14 @@ const projects = [
     hasExternalLink: true,
     githubUrl: 'https://github.com/brandonsaldan/codex/',
     externalLinkUrl: 'https://codex-brandonsaldan.vercel.app/',
+    images: [
+      '/assets/projects/cover/codex/codex-cover-1.png',
+    ],
   },
   {
     name: 'Community Center',
     description: 'A collection of open-source Stardew Valley tools and resources.',
-    imageUrl:
-      '/assets/projects/community-center-1.webp',
-    coverImage: '/assets/projects/cover/community-center-cover.webp',
+    imageUrl: '/assets/projects/community-center-1.webp',
     tools: 'Next.js, React, TypeScript, TailwindCSS',
     href: 'https://github.com/communitycenter/',
     hasCaseStudy: true,
@@ -80,13 +86,16 @@ const projects = [
     hasTwitter: false,
     hasExternalLink: false,
     githubUrl: 'https://github.com/communitycenter/',
+    images: [
+      '/assets/projects/cover/community-center/community-center-cover-1.png',
+      '/assets/projects/cover/community-center/community-center-cover-2.png',
+      '/assets/projects/cover/community-center/community-center-cover-3.png',
+    ],
   },
   {
     name: 'brandons.place',
     description: 'My personal website and blog.',
-    imageUrl:
-      '/assets/projects/brandons-place-1.webp',
-    coverImage: '/assets/projects/cover/brandons-place-cover.webp',
+    imageUrl: '/assets/projects/brandons-place-1.webp',
     tools: 'Next.js, React, TailwindCSS, Figma',
     href: 'https://brandons.place/',
     hasCaseStudy: true,
@@ -102,13 +111,15 @@ const projects = [
     hasTwitter: false,
     hasExternalLink: false,
     githubUrl: 'https://github.com/brandonsaldan/brandons.place/',
+    images: [
+      '/assets/projects/cover/brandons-place/brandons-place-cover-1.png',
+    ],
   },
   {
     name: 'Capsl',
     description: 'An experimental supplement personalization and delivery service.',
     imageUrl:
       '/assets/projects/capsl-1.webp',
-    coverImage: '/assets/projects/cover/capsl-cover.webp',
     tools: 'Next.js, React, TailwindCSS, Figma, Supabase',
     href: 'https://trycapsl.com/',
     hasCaseStudy: true,
@@ -123,6 +134,12 @@ const projects = [
     hasGitHub: false,
     hasTwitter: false,
     hasExternalLink: false,
+    images: [
+      '/assets/projects/cover/capsl/capsl-cover-1.png',
+      '/assets/projects/cover/capsl/capsl-cover-2.png',
+      '/assets/projects/cover/capsl/capsl-cover-3.png',
+      '/assets/projects/cover/capsl/capsl-cover-4.png',
+    ],
   },
 ]
 
@@ -145,6 +162,113 @@ function XIcon() {
     </svg>
   )
 }
+
+export const CarouselControl = ({
+  isLeft = false,
+  handleNext,
+  handlePrevious,
+}) => {
+  return (
+    <button
+      type="button"
+      onClick={!isLeft ? handleNext : handlePrevious}
+      className={`absolute z-10 flex h-8 w-8 items-center justify-center self-center rounded-full bg-zinc-800 text-sm text-white opacity-40 md:text-2xl ${
+        isLeft ? 'left-2 md:left-8' : 'right-2 md:right-8'
+      }`}
+    >
+      {isLeft ? <ArrowLeft className="h-4 w-4"/> : <ArrowRight className="h-4 w-4"/>}
+    </button>
+  );
+};
+
+export const Carousel = ({ images }) => {
+  const [currentImage, setCurrentImage] = useState(0);
+  const refs = images.reduce((acc, _, i) => {
+    acc[i] = useRef();
+    return acc;
+  }, {});
+  const totalImages = images.length;
+
+  const scrollToImage = (i) => {
+    setCurrentImage(i);
+
+    refs[i].current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'start',
+    });
+  };
+
+  const nextImage = () => {
+    if (currentImage >= totalImages - 1) {
+      scrollToImage(0);
+    } else {
+      scrollToImage(currentImage + 1);
+    }
+  };
+
+  const previousImage = () => {
+    if (currentImage === 0) {
+      scrollToImage(totalImages - 1);
+    } else {
+      scrollToImage(currentImage - 1);
+    }
+  };
+
+  if (totalImages <= 1) {
+    return (
+      <div className="flex w-full justify-center">
+        {images.map((img, i) => (
+          <div
+            className="flex w-full flex-shrink-0 snap-center justify-center"
+            key={img}
+            ref={refs[i]}
+          >
+            <img
+              src={img}
+              className="mb-2 w-auto max-w-full shrink-0 flex-none rounded-2xl object-cover"
+              alt="Demo demo image"
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div
+        className={`scrollbar flex w-full snap-x snap-mandatory overflow-x-auto rounded-lg ${styles.carousel}`}
+      >
+        <CarouselControl
+          isLeft
+          handleNext={nextImage}
+          handlePrevious={previousImage}
+        />
+        {images.map((img, i) => (
+          <div
+            className="flex w-full flex-shrink-0 snap-center justify-center"
+            key={img}
+            ref={refs[i]}
+          >
+            <Image
+              priority
+              src={img}
+              className="mb-2 w-auto max-w-full shrink-0 flex-none rounded-2xl object-cover"
+              alt="Demo demo image"
+              width={1000}
+              height={530}
+            />
+          </div>
+        ))}
+        <CarouselControl
+          handleNext={nextImage}
+          handlePrevious={previousImage}
+        />
+      </div>
+    </>
+  );
+};
 
 function ProjectModal({ project, open, setOpen }) {
   
@@ -187,7 +311,7 @@ function ProjectModal({ project, open, setOpen }) {
                 </div>
                 <div className="sm:flex sm:items-start">
                   <div className="mt-10 text-center sm:mt-0 sm:text-left">
-                    <img className="flex-none rounded-2xl object-cover" src={project.coverImage} alt="" />
+                    <Carousel images={project.images} />
                     <div className="bg-white dark:bg-zinc-800">
                       <div className="mx-auto max-w-7xl py-4 px-4 mt-4 text-left">
                         <h2 className="text-2xl font-bold leading-10 tracking-tight text-zinc-800 dark:text-zinc-100">{project.name}</h2>
