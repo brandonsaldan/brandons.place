@@ -34,26 +34,34 @@ const Status = () => {
     );
   };
 
-  if (listening) {
-    var trackLink = `https://open.spotify.com/track/${listening.track_id}`
-    var artLink = listening.album_art_url
-  } else {
-    var trackLink = '#'
-    var artLink = '/assets/idle-spotify.webp'
-  }
-
   const renderListeningContent = () => {
+    if (listening) {
+      var trackLink = `https://open.spotify.com/track/${listening.track_id}`;
+      var artLink = listening.album_art_url;
+    } else {
+      var trackLink = null;
+      var artLink = '/assets/idle-spotify.webp';
+    }
+  
     return (
       <div className="relative flex items-center space-x-3 rounded-lg border border-zinc-300 dark:border-zinc-300/20 bg-white dark:bg-zinc-900 px-6 py-5 focus-within:ring-0 focus-within:ring-offset-0 hover:border-zinc-400 dark:hover:border-zinc-200 transition ease-in-out duration-150">
         <div className="flex-shrink-0">
           <img className="h-10 w-10 rounded-lg" src={artLink} alt="" />
         </div>
         <div className="min-w-0 flex-1">
-          <a href={trackLink} className="focus:outline-none">
-            <span className="absolute inset-0" aria-hidden="true" />
-            {renderListeningStatusText()}
-            {renderListeningDetails()}
-          </a>
+          {trackLink ? (
+            <a href={trackLink} className="focus:outline-none">
+              <span className="absolute inset-0" aria-hidden="true" />
+              {renderListeningStatusText()}
+              {renderListeningDetails()}
+            </a>
+          ) : (
+            <div>
+              <span className="absolute inset-0" aria-hidden="true" />
+              {renderListeningStatusText()}
+              {renderListeningDetails()}
+            </div>
+          )}
         </div>
       </div>
     );
