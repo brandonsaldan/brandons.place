@@ -74,21 +74,21 @@ function BriefcaseIcon(props) {
 function GraduationCapIcon(props) {
   return (
     <svg
-     xmlns="http://www.w3.org/2000/svg" 
-     width="24" 
-     height="24" 
-     viewBox="0 0 24 24" 
-     fill="none" 
-     stroke="currentColor" 
-     strokeWidth="2" 
-     strokeLinecap="round" 
-     strokeLinejoin="round" 
-     className="lucide lucide-graduation-cap">
-      <path 
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="lucide lucide-graduation-cap">
+      <path
         d="M22 10v6M2 10l10-5 10 5-10 5z"
         className="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"
       />
-      <path 
+      <path
         d="M6 12v5c3 3 9 3 12 0v-5"
         className="stroke-zinc-400 dark:stroke-zinc-500"
       />
@@ -174,9 +174,8 @@ function School() {
               <dt className="sr-only">Date</dt>
               <dd
                 className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
-                aria-label={`${uni.start.label ?? uni.start} until ${
-                  uni.end.label ?? uni.end
-                }`}
+                aria-label={`${uni.start.label ?? uni.start} until ${uni.end.label ?? uni.end
+                  }`}
               >
                 <time dateTime={uni.start.dateTime ?? uni.start}>
                   {uni.start.label ?? uni.start}
@@ -229,9 +228,8 @@ function Resume() {
               <dt className="sr-only">Date</dt>
               <dd
                 className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
-                aria-label={`${role.start.label ?? role.start} until ${
-                  role.end.label ?? role.end
-                }`}
+                aria-label={`${role.start.label ?? role.start} until ${role.end.label ?? role.end
+                  }`}
               >
                 <time dateTime={role.start.dateTime ?? role.start}>
                   {role.start.label ?? role.start}
@@ -261,21 +259,21 @@ function Photos() {
       <div className="flex overflow-x-scroll pb-10 hide-scrollbar">
         <div className="flex gap-5 py-4 sm:gap-8 -ml-12">
           {[image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15, image16, image17, image18, image19, image20, image21, image22].map((image, imageIndex) => (
-          <div
-            key={image.src}
-            className={clsx(
-              'relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 sm:w-72 sm:rounded-2xl',
-              rotations[imageIndex % rotations.length]
-            )}
-          >
-            <Image
-              src={image}
-              alt=""
-              sizes="(min-width: 640px) 18rem, 11rem"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          </div>
-        ))}
+            <div
+              key={image.src}
+              className={clsx(
+                'relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 sm:w-72 sm:rounded-2xl',
+                rotations[imageIndex % rotations.length]
+              )}
+            >
+              <Image
+                src={image}
+                alt=""
+                sizes="(min-width: 640px) 18rem, 11rem"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -290,21 +288,21 @@ function MobilePhotos() {
       <div className="flex overflow-x-scroll hide-scrollbar">
         <div className="flex gap-5 py-4 sm:gap-8 -ml-12">
           {[image1, image3, image2, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15, image16, image17, image18, image19, image20, image21, image22].map((image, imageIndex) => (
-          <div
-            key={image.src}
-            className={clsx(
-              'relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 sm:w-72 sm:rounded-2xl',
-              rotations[imageIndex % rotations.length]
-            )}
-          >
-            <Image
-              src={image}
-              alt=""
-              sizes="(min-width: 640px) 18rem, 11rem"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          </div>
-        ))}
+            <div
+              key={image.src}
+              className={clsx(
+                'relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 sm:w-72 sm:rounded-2xl',
+                rotations[imageIndex % rotations.length]
+              )}
+            >
+              <Image
+                src={image}
+                alt=""
+                sizes="(min-width: 640px) 18rem, 11rem"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

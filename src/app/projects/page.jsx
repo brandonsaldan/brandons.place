@@ -7,6 +7,7 @@ import Head from 'next/head'
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import styles from '@/styles/styles.module.css'
 import Image from 'next/image';
+import { metadata } from '@/lib/projectMetadata';
 
 const projects = [
   {
@@ -384,9 +385,9 @@ export default function Projects() {
   return (
     <>
     <Head>
-      <title>Projects - Brandon Saldan</title>
-      <meta name="description" content="I’ve worked on tons of projects since I started developing, most of which are just for fun. Here are a few of my favorites." />
-      <meta property="og:image" content="/assets/open-graph/og-projects.webp" />
+      <title>{metadata.title} - Brandon Saldan</title>
+      <meta name="description" content={metadata.description} />
+      <meta property="og:image" content={metadata.openGraph.images} />
     </Head>
     <ProjectModal project={selectedProject} open={open} setOpen={setOpen} />
     <SimpleLayout
