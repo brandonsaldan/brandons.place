@@ -36,6 +36,7 @@ import image19 from '@/images/photos/image-19.jpg'
 import image20 from '@/images/photos/image-20.jpg'
 import image21 from '@/images/photos/image-21.jpg'
 import image22 from '@/images/photos/image-22.jpg'
+import image23 from '@/images/photos/image-23.jpg'
 import { formatDate } from '@/lib/formatDate'
 import { getAllArticles } from '@/lib/getAllArticles'
 
@@ -258,7 +259,7 @@ function Photos() {
     <div className="flex flex-col mt-16 sm:mt-20">
       <div className="flex overflow-x-scroll pb-10 hide-scrollbar">
         <div className="flex gap-5 py-4 sm:gap-8 -ml-12">
-          {[image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15, image16, image17, image18, image19, image20, image21, image22].map((image, imageIndex) => (
+          {[image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15, image16, image17, image18, image19, image20, image21, image22, image23].map((image, imageIndex) => (
             <div
               key={image.src}
               className={clsx(
