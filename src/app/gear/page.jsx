@@ -52,10 +52,10 @@ export default function Gear() {
             29” size is perfect for my desk.
           </Tool>
         </ToolsSection>
-        <ToolsSection title="Development Tools">
-          <Tool title="Visual Studio Code">
-            The quintessential code editor. I’ve tried a few others but I always come back to 
-            VS Code due to it's extensions and themes. Not a whole lot more to say here.
+        <ToolsSection title="Development">
+          <Tool title="Cursor">
+            Awesome fork of Visual Studio Code that adds a bunch of useful features and is built
+            around AI. I started using Cursor in September 2023 after using VS Code for years.
           </Tool>
           <Tool title="Vercel">
             Easy choice here for hosting. I’ve been using Vercel for years and it’s 
