@@ -220,13 +220,13 @@ export const Carousel = ({ images }) => {
       <div className="flex w-full justify-center">
         {images.map((img, i) => (
           <div
-            className="flex w-full flex-shrink-0 snap-center justify-center"
+            className="flex w-full flex-shrink-0 snap-center justify-center rounded-2xl"
             key={img}
             ref={refs[i]}
           >
             <img
               src={img}
-              className="mb-2 w-auto max-w-full shrink-0 flex-none  object-cover"
+              className="w-auto max-w-full shrink-0 flex-none object-cover rounded-2xl"
               alt="Demo demo image"
             />
           </div>
