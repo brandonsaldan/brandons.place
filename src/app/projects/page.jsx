@@ -226,7 +226,7 @@ export const Carousel = ({ images }) => {
           >
             <img
               src={img}
-              className="mb-2 w-auto max-w-full shrink-0 flex-none rounded-2xl object-cover"
+              className="mb-2 w-auto max-w-full shrink-0 flex-none  object-cover"
               alt="Demo demo image"
             />
           </div>
@@ -238,7 +238,7 @@ export const Carousel = ({ images }) => {
   return (
     <>
       <div
-        className={`scrollbar flex w-full snap-x snap-mandatory overflow-x-auto rounded-lg ${styles.carousel}`}
+        className={`scrollbar flex w-full snap-x snap-mandatory overflow-x-auto rounded-2xl ${styles.carousel}`}
       >
         <CarouselControl
           isLeft
@@ -247,14 +247,14 @@ export const Carousel = ({ images }) => {
         />
         {images.map((img, i) => (
           <div
-            className="flex w-full flex-shrink-0 snap-center justify-center"
+            className="flex w-full flex-shrink-0 snap-center justify-center rounded-2xl"
             key={img}
             ref={refs[i]}
           >
             <Image
               priority
               src={img}
-              className="mb-2 w-auto max-w-full shrink-0 flex-none rounded-2xl object-cover"
+              className="w-auto max-w-full shrink-0 flex-none object-cover"
               alt="Demo demo image"
               width={1000}
               height={530}
