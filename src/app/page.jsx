@@ -46,7 +46,14 @@ export const metadata = {
   description: 'I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.',
   openGraph: {
     images: '/assets/open-graph/og-main.webp',
-  }
+  },
+  twitter: {
+    site: '@brandonsaldan',
+    cardType: 'summary_large_image',
+    title: 'Brandon Saldan',
+    description: 'I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.',
+    image: '/assets/twitter/og-main.webp',
+  },
 }
 
 function BriefcaseIcon(props) {
