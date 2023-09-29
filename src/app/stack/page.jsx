@@ -29,7 +29,20 @@ export const metadata = {
   description: 'The tools I use to build things.',
   openGraph: {
     images: '/assets/open-graph/og-stack.webp',
-  }
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Brandon Saldan - Stack",
+    description: "The tools I use to build things.",
+    creator: "@brandonsaldan",
+    images: [
+      {
+        url: "https://brandons.place/assets/open-graph/og-stack.webp",
+        width: 1440,
+        height: 800,
+      },
+    ],
+  },
 }
 
 export default function Stack() {

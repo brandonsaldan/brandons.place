@@ -39,7 +39,20 @@ export const metadata = {
     'All of my long-form thoughts collected in chronological order.',
   openGraph: {
     images: '/assets/open-graph/og-articles.webp',
-  }
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Brandon Saldan - Articles",
+    description: "All of my long-form thoughts collected in chronological order.",
+    creator: "@brandonsaldan",
+    images: [
+      {
+        url: "https://brandons.place/assets/open-graph/og-articles.webp",
+        width: 1440,
+        height: 800,
+      },
+    ],
+  },
 }
 
 export default async function ArticlesIndex() {

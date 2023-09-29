@@ -31,7 +31,20 @@ export const metadata = {
   description: 'Software, gadgets, and productivity tools I love.',
   openGraph: {
     images: '/assets/open-graph/og-gear.webp',
-  }
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Brandon Saldan - Gear",
+    description: "Software, gadgets, and productivity tools I love.",
+    creator: "@brandonsaldan",
+    images: [
+      {
+        url: "https://brandons.place/assets/open-graph/og-gear.webp",
+        width: 1440,
+        height: 800,
+      },
+    ],
+  },
 }
 
 export default function Gear() {

@@ -48,11 +48,18 @@ export const metadata = {
     images: '/assets/open-graph/og-main.webp',
   },
   twitter: {
-    site: '@brandonsaldan',
-    cardType: 'summary_large_image',
-    title: 'Brandon Saldan',
-    description: 'I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.',
-    image: '/assets/twitter/og-main.webp',
+    card: "summary_large_image",
+    title: "Brandon Saldan",
+    description: "I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.",
+    creator: "@brandonsaldan",
+    images: [
+      {
+        url: "https://brandons.place/assets/open-graph/og-main.webp",
+        width: 1200,
+        height: 630,
+        alt: "Your alt text",
+      },
+    ],
   },
 }
 
