@@ -12,6 +12,7 @@ import {
   TwitterIcon,
 } from '@/components/SocialIcons'
 import logoRaleigh from '@/images/logos/raleigh.svg'
+import logoInvii from '@/images/logos/invii.svg'
 import logoWakeTech from '@/images/logos/waketech.svg'
 import logoUNCCharlotte from '@/images/logos/unccharlotte.svg'
 import image1 from '@/images/photos/image-1.jpg'
@@ -210,6 +211,13 @@ function School() {
 
 function Resume() {
   let resume = [
+    {
+      company: 'Invii',
+      title: 'Frontend Engineer',
+      logo: logoInvii,
+      start: '2021',
+      end: 'Present',
+    },
     {
       company: 'City of Raleigh Municipal Government',
       title: 'Business Analyst Intern',
