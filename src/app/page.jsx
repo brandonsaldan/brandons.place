@@ -179,9 +179,6 @@ function School() {
           <li key={uniIndex} className="flex gap-4">
             <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
               <Image src={uni.logo} alt="" className="h-7 w-7" unoptimized />
-              {uniIndex !== school.length - 1 ? (
-                <span className="absolute left-4.5 top-10 h-full w-0.5 dark:bg-zinc-700" aria-hidden="true" />
-              ) : null}
             </div>
             <dl className="flex flex-auto flex-wrap gap-x-2">
               <dt className="sr-only">University</dt>
@@ -246,9 +243,6 @@ function Resume() {
           <li key={roleIndex} className="flex gap-4">
             <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
               <Image src={role.logo} alt="" className="h-7 w-7" unoptimized />
-              {roleIndex !== resume.length - 1 ? (
-                <span className="absolute left-4.5 top-10 h-full w-0.5 dark:bg-zinc-700" aria-hidden="true" />
-              ) : null}
             </div>
             <dl className="flex flex-auto flex-wrap gap-x-2">
               <dt className="sr-only">Company</dt>
