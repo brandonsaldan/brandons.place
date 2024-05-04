@@ -14,7 +14,7 @@ import {
 import logoRaleigh from '@/images/logos/raleigh.svg'
 import logoInvii from '@/images/logos/invii.svg'
 import logoWakeTech from '@/images/logos/waketech.svg'
-import logoUNCCharlotte from '@/images/logos/unccharlotte.svg'
+import logoUTampa from '@/images/logos/utampa.svg'
 import image1 from '@/images/photos/image-1.jpg'
 import image2 from '@/images/photos/image-2.jpg'
 import image3 from '@/images/photos/image-3.jpg'
@@ -151,10 +151,10 @@ function SocialLink({ icon: Icon, ...props }) {
 function School() {
   let school = [
     {
-      college: 'University of North Carolina at Charlotte',
+      college: 'The University of Tampa',
       degree: 'BSBA, MIS',
       mobileDegree: 'BSBA, MIS',
-      logo: logoUNCCharlotte,
+      logo: logoUTampa,
       start: '2024',
       end: '2026',
     },
