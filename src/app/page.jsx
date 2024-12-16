@@ -14,7 +14,7 @@ import {
 import logoRaleigh from '@/images/logos/raleigh.svg'
 import logoInvii from '@/images/logos/invii.svg'
 import logoWakeTech from '@/images/logos/waketech.svg'
-import logoUTampa from '@/images/logos/utampa.svg'
+import logoUncc from '@/images/logos/uncc.svg'
 import image1 from '@/images/photos/image-1.jpg'
 import image2 from '@/images/photos/image-2.jpg'
 import image3 from '@/images/photos/image-3.jpg'
@@ -44,21 +44,23 @@ import { getAllArticles } from '@/lib/getAllArticles'
 export const metadata = {
   metadataBase: new URL('https://brandons.place/'),
   title: 'Brandon Saldan',
-  description: 'I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.',
+  description:
+    'I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.',
   openGraph: {
     images: '/assets/open-graph/og-main.webp',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Brandon Saldan",
-    description: "I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.",
-    creator: "@brandonsaldan",
+    card: 'summary_large_image',
+    title: 'Brandon Saldan',
+    description:
+      'I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.',
+    creator: '@brandonsaldan',
     images: [
       {
-        url: "https://brandons.place/assets/open-graph/og-main.webp",
+        url: 'https://brandons.place/assets/open-graph/og-main.webp',
         width: 1200,
         height: 630,
-        alt: "Your alt text",
+        alt: 'Your alt text',
       },
     ],
   },
@@ -99,7 +101,8 @@ function GraduationCapIcon(props) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="lucide lucide-graduation-cap">
+      className="lucide lucide-graduation-cap"
+    >
       <path
         d="M22 10v6M2 10l10-5 10 5-10 5z"
         className="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"
@@ -151,21 +154,21 @@ function SocialLink({ icon: Icon, ...props }) {
 function School() {
   let school = [
     {
-      college: 'The University of Tampa',
-      degree: 'BSBA, MIS',
-      mobileDegree: 'BSBA, MIS',
-      logo: logoUTampa,
-      start: '2024',
-      end: '2026',
+      college: 'University of North Carolina at Charlotte',
+      degree: 'BS, Management Information Systems',
+      mobileDegree: 'BS, Management Information Systems',
+      logo: logoUncc,
+      start: '2025',
+      end: '2027',
     },
     {
       college: 'Wake Technical Community College',
       degree: 'AA, Business Administration',
-      mobileDegree: 'AA, Business Admin.',
+      mobileDegree: 'AA, Business Administration',
       logo: logoWakeTech,
       start: '2022',
       end: '2024',
-    }
+    },
   ]
 
   return (
@@ -178,7 +181,12 @@ function School() {
         {school.map((uni, uniIndex) => (
           <li key={uniIndex} className="flex gap-4">
             <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
-              <Image src={uni.logo} alt="" className="ring-4 ring-zinc-100 rounded-full h-7 w-7" unoptimized />
+              <Image
+                src={uni.logo}
+                alt=""
+                className="h-7 w-7 rounded-full ring-4 ring-zinc-100"
+                unoptimized
+              />
             </div>
             <dl className="flex flex-auto flex-wrap gap-x-2">
               <dt className="sr-only">University</dt>
@@ -186,17 +194,18 @@ function School() {
                 {uni.college}
               </dd>
               <dt className="sr-only">Degree</dt>
-              <dd className="hidden sm:block text-xs text-zinc-500 dark:text-zinc-400">
+              <dd className="hidden text-xs text-zinc-500 dark:text-zinc-400 sm:block">
                 {uni.degree}
               </dd>
-              <dd className="block sm:hidden text-xs text-zinc-500 dark:text-zinc-400">
+              <dd className="block text-xs text-zinc-500 dark:text-zinc-400 sm:hidden">
                 {uni.mobileDegree}
               </dd>
               <dt className="sr-only">Date</dt>
               <dd
                 className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
-                aria-label={`${uni.start.label ?? uni.start} until ${uni.end.label ?? uni.end
-                  }`}
+                aria-label={`${uni.start.label ?? uni.start} until ${
+                  uni.end.label ?? uni.end
+                }`}
               >
                 <time dateTime={uni.start.dateTime ?? uni.start}>
                   {uni.start.label ?? uni.start}
@@ -256,8 +265,9 @@ function Resume() {
               <dt className="sr-only">Date</dt>
               <dd
                 className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
-                aria-label={`${role.start.label ?? role.start} until ${role.end.label ?? role.end
-                  }`}
+                aria-label={`${role.start.label ?? role.start} until ${
+                  role.end.label ?? role.end
+                }`}
               >
                 <time dateTime={role.start.dateTime ?? role.start}>
                   {role.start.label ?? role.start}
@@ -271,7 +281,11 @@ function Resume() {
           </li>
         ))}
       </ol>
-      <Button href="/assets/BrandonSaldanResume.pdf" variant="secondary" className="group mt-6 w-full">
+      <Button
+        href="/assets/BrandonSaldanResume.pdf"
+        variant="secondary"
+        className="group mt-6 w-full"
+      >
         Download Resume
         <ArrowDownIcon className="h-4 w-4 stroke-zinc-400 transition group-active:stroke-zinc-600 dark:group-hover:stroke-zinc-50 dark:group-active:stroke-zinc-50" />
       </Button>
@@ -283,10 +297,34 @@ function Photos() {
   let rotations = ['rotate-2', '-rotate-2', 'rotate-2', 'rotate-2', '-rotate-2']
 
   return (
-    <div className="flex flex-col mt-16 sm:mt-20">
-      <div className="flex overflow-x-scroll pb-10 hide-scrollbar">
-        <div className="flex gap-5 py-4 sm:gap-8 -ml-12">
-          {[image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15, image16, image17, image18, image19, image20, image21, image22, image23].map((image, imageIndex) => (
+    <div className="mt-16 flex flex-col sm:mt-20">
+      <div className="hide-scrollbar flex overflow-x-scroll pb-10">
+        <div className="-ml-12 flex gap-5 py-4 sm:gap-8">
+          {[
+            image1,
+            image2,
+            image3,
+            image4,
+            image5,
+            image6,
+            image7,
+            image8,
+            image9,
+            image10,
+            image11,
+            image12,
+            image13,
+            image14,
+            image15,
+            image16,
+            image17,
+            image18,
+            image19,
+            image20,
+            image21,
+            image22,
+            image23,
+          ].map((image, imageIndex) => (
             <div
               key={image.src}
               className={clsx(
@@ -312,10 +350,34 @@ function MobilePhotos() {
   let rotations = ['rotate-2', '-rotate-2', 'rotate-2', 'rotate-2', '-rotate-2']
 
   return (
-    <div className="flex flex-col mt-16 sm:mt-20">
-      <div className="flex overflow-x-scroll hide-scrollbar">
-        <div className="flex gap-5 py-4 sm:gap-8 -ml-12">
-          {[image1, image3, image2, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15, image16, image17, image18, image19, image20, image21, image22, image23].map((image, imageIndex) => (
+    <div className="mt-16 flex flex-col sm:mt-20">
+      <div className="hide-scrollbar flex overflow-x-scroll">
+        <div className="-ml-12 flex gap-5 py-4 sm:gap-8">
+          {[
+            image1,
+            image3,
+            image2,
+            image4,
+            image5,
+            image6,
+            image7,
+            image8,
+            image9,
+            image10,
+            image11,
+            image12,
+            image13,
+            image14,
+            image15,
+            image16,
+            image17,
+            image18,
+            image19,
+            image20,
+            image21,
+            image22,
+            image23,
+          ].map((image, imageIndex) => (
             <div
               key={image.src}
               className={clsx(
@@ -342,13 +404,15 @@ export default async function Home() {
 
   return (
     <>
-      <Container className="mt-9 fadeInUp-animation">
+      <Container className="fadeInUp-animation mt-9">
         <div className="max-w-2xl">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
             Brandon Saldan
           </h1>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            I’m Brandon, a frontend software engineer and aspiring TPM based in Chapel Hill, NC. I love building responsive web applications that are fast, accessible, and make a difference in people’s lives.
+            I’m Brandon, a frontend software engineer and aspiring TPM based in
+            Chapel Hill, NC. I love building responsive web applications that
+            are fast, accessible, and make a difference in people’s lives.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
@@ -374,15 +438,15 @@ export default async function Home() {
           </div>
         </div>
       </Container>
-      <div className="hidden sm:block fadeInUp-animation">
+      <div className="fadeInUp-animation hidden sm:block">
         <Photos />
       </div>
-      <div className="block sm:hidden fadeInUp-animation">
+      <div className="fadeInUp-animation block sm:hidden">
         <MobilePhotos />
       </div>
       <Container className="mt-12 md:mt-28">
         <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
-          <div className="hidden sm:flex flex-col gap-16">
+          <div className="hidden flex-col gap-16 sm:flex">
             {articles.map((article) => (
               <Article key={article.slug} article={article} />
             ))}
@@ -391,7 +455,7 @@ export default async function Home() {
             <Resume />
             <School />
           </div>
-          <div className="sm:hidden flex-col gap-16">
+          <div className="flex-col gap-16 sm:hidden">
             {articles.map((article) => (
               <Article key={article.slug} article={article} />
             ))}
