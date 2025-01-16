@@ -1,7 +1,7 @@
 ---
 import { marked } from 'marked';
 import Button from './Button.astro';
-import PhotosGallery from './PhotosGallery.astro';
+import PhotoGallery from './PhotoGallery.astro';
 import siteConfig from '../data/site-config';
 
 const hero = siteConfig.hero;
@@ -28,7 +28,7 @@ const hero = siteConfig.hero;
         </section>
 
         <div class="relative -mx-4 md:-mx-8 w-screen" style="left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-            <PhotosGallery />
+            <PhotoGallery />
         </div>
     )
 }

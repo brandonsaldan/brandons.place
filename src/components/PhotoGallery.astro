@@ -1,0 +1,82 @@
+---
+const rotations = ['rotate-2', '-rotate-2', 'rotate-2', 'rotate-2', '-rotate-2'];
+const images = Array.from({ length: 23 }, (_, i) => `/photos/image-${i + 1}.jpg`);
+---
+
+<div id="gallery-container" class="mt-16 mb-10 sm:h-96 sm:mt-20">
+    <div id="gallery" class="hide-scrollbar relative flex gap-5 overflow-x-hidden py-4 sm:gap-8">
+        {images.map((imageSrc, imageIndex) => (
+            <div
+                class={`relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 sm:w-72 sm:rounded-2xl ${
+                    rotations[imageIndex % rotations.length]
+                }`}
+            >
+                <img
+                    src={imageSrc}
+                    alt=""
+                    class="absolute inset-0 h-full w-full object-cover select-none"
+                    loading="lazy"
+                    draggable="false"
+                />
+            </div>
+        ))}
+    </div>
+</div>
+
+<style>
+    .hide-scrollbar {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+
+<script>
+    function initGallery() {
+        const gallery = document.getElementById('gallery');
+        const container = document.getElementById('gallery-container');
+        let animationFrame: number | undefined;
+        let lastScrollTop = 0;
+
+        const handleScroll = () => {
+            if (!gallery || !container) return;
+
+            const rect = container.getBoundingClientRect();
+            const startOffset = window.innerHeight;
+            
+            const scrollWindow = window.innerHeight * 40;
+            
+            const scrollPosition = Math.max(0, window.scrollY - rect.top + startOffset);
+            const scrollPercentage = Math.min(Math.max(scrollPosition / scrollWindow, 0), 1);
+
+            const totalScrollWidth = gallery.scrollWidth - gallery.clientWidth;
+            
+            gallery.scrollLeft = totalScrollWidth * scrollPercentage;
+            lastScrollTop = window.scrollY;
+        };
+
+        const onScroll = () => {
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+            animationFrame = requestAnimationFrame(handleScroll);
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        handleScroll();
+
+        document.addEventListener('astro:before-swap', () => {
+            window.removeEventListener('scroll', onScroll);
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+        });
+    }
+
+    initGallery();
+    
+    document.addEventListener('astro:after-swap', initGallery);
+</script>
