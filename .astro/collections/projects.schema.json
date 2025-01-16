@@ -1,0 +1,84 @@
+{
+  "$ref": "#/definitions/projects",
+  "definitions": {
+    "projects": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "publishDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "isFeatured": {
+          "type": "boolean",
+          "default": false
+        },
+        "seo": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 120
+            },
+            "description": {
+              "type": "string",
+              "minLength": 15,
+              "maxLength": 160
+            },
+            "image": {
+              "type": "object",
+              "properties": {
+                "src": {
+                  "type": "string"
+                },
+                "alt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "src"
+              ],
+              "additionalProperties": false
+            },
+            "pageType": {
+              "type": "string",
+              "enum": [
+                "website",
+                "article"
+              ],
+              "default": "website"
+            }
+          },
+          "additionalProperties": false
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "publishDate"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
