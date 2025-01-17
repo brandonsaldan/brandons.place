@@ -58,7 +58,7 @@ The community's response was overwhelming. Users began contributing ideas and co
 Despite these challenges, Nocturne had received coverage in numerous news outlets, including [TechSpot](https://www.techspot.com/news/105402-developers-keep-spotify-car-thing-alive-custom-firmware.html), [Ars Technica](https://arstechnica.com/gaming/2024/11/firmware-hacks-are-rejuvenating-spotifys-car-thing-before-the-company-bricks-it/), and [Gizmodo](https://gizmodo.com/spotify-car-thing-is-being-kept-alive-by-devoted-tinkerers-2000536816), and had been reviewed by large tech YouTubers, gathering over 3 million views. It even earned a mention on Linus Tech Tips' "The WAN Show".
 
 <figure>
-    <img src="/blog/nocturne-1.jpeg" alt="Nocturne OS running on Spotify Car Thing hardware" width="600" class="rounded-lg mx-auto" />
+    <img src="/blog/nocturne-1.png" alt="Nocturne OS running on Spotify Car Thing hardware" width="600" class="rounded-lg mx-auto" />
     <figcaption class="text-sm text-center mt-2 font-serif text-gray-600">v1.0.0-alpha running on my Car Thing with a Raspberry Pi Zero 2 W connected.</figcaption>
 </figure>
 
