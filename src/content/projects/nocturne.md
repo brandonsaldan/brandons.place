@@ -9,7 +9,7 @@ seo:
     alt: "Nocturne OS running on Spotify Car Thing hardware"
 ---
 
-![Nocturne OS running on Spotify Car Thing hardware](/projects/nocturne/nocturne-1.png)
+<img src="/projects/nocturne/nocturne-1.png" alt="Nocturne OS running on Spotify Car Thing hardware" class="rounded-lg w-full" />
 
 **Project Overview:**
 Nocturne is an innovative open-source operating system that breathes new life into discontinued Spotify Car Thing hardware. By engineering custom software solutions to interface directly with the device's Amlogic S905D2 SoC, we've transformed these devices from single-purpose Spotify controllers into versatile music management systems, overcoming original hardware limitations through clever software architecture.

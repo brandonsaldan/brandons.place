@@ -9,7 +9,7 @@ seo:
     alt: "Invii platform interface"
 ---
 
-![Invii platform interface](/projects/invii/invii-1.png)
+<img src="/projects/invii/invii-1.png" alt="Invii platform interface" class="rounded-lg w-full" />
 
 **Project Overview:**
 Invii was an innovative restaurant management platform that explored new approaches to restaurant operations in the digital age. As founder and CEO, I led the development of a comprehensive suite of tools designed to streamline business operations, enhance customer engagement, and modernize payment processing for the restaurant industry.

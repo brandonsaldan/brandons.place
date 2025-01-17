@@ -9,7 +9,7 @@ seo:
     alt: "Capsl supplement personalization interface"
 ---
 
-![Capsl supplement personalization interface](/projects/capsl/capsl-1.png)
+<img src="/projects/capsl/capsl-1.png" alt="Capsl supplement personalization interface" class="rounded-lg w-full" />
 
 **Project Overview:**
 Capsl is an experimental supplement personalization platform that enables users to create custom vitamin and supplement blends tailored to their individual needs. Through an intuitive questionnaire-driven interface, users can receive personalized supplement recommendations and manage their subscription through a comprehensive customer dashboard.

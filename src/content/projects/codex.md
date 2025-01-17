@@ -9,7 +9,7 @@ seo:
     alt: "Codex interface displaying genetic analysis"
 ---
 
-![Codex interface displaying genetic analysis](/projects/codex/codex-1.png)
+<img src="/projects/codex/codex-1.png" alt="Codex interface displaying genetic analysis" class="rounded-lg w-full" />
 
 **Project Overview:**
 Codex is an intuitive interface for analyzing genetic data by connecting with SNPedia's wealth of genetic research. By processing raw DNA data files in the browser, users can explore their genetic variants while maintaining complete privacy of their sensitive genetic information.

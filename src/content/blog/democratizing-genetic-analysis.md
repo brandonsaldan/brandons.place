@@ -9,7 +9,7 @@ seo:
     alt: "Codex platform interface"
 ---
 
-![Codex platform interface](/projects/codex/codex-1.png)
+<img src="/projects/codex/codex-1.png" alt="Codex platform interface" class="rounded-lg w-full" />
 
 **Project Overview:**
 Codex emerged from a personal need to analyze genetic raw data after losing access to a paid report. What started as a solution to avoid repaying $12 evolved into an innovative bioinformatics platform that processes genetic information locally in-browser, making sophisticated genetic analysis accessible to everyone.
