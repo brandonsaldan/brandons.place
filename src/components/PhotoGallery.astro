@@ -1,11 +1,12 @@
 ---
 const rotations = ['rotate-2', '-rotate-2', 'rotate-2', 'rotate-2', '-rotate-2'];
 const images = Array.from({ length: 23 }, (_, i) => `/photos/image-${i + 1}.jpg`);
+const tripleImages = [...images, ...images, ...images];
 ---
 
 <div id="gallery-container" class="mt-16 mb-10 sm:h-96 sm:mt-20">
     <div id="gallery" class="hide-scrollbar relative flex gap-5 overflow-x-hidden py-4 sm:gap-8">
-        {images.map((imageSrc, imageIndex) => (
+        {tripleImages.map((imageSrc, imageIndex) => (
             <div
                 class={`relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 sm:w-72 sm:rounded-2xl ${
                     rotations[imageIndex % rotations.length]
@@ -39,23 +40,40 @@ const images = Array.from({ length: 23 }, (_, i) => `/photos/image-${i + 1}.jpg`
         const gallery = document.getElementById('gallery');
         const container = document.getElementById('gallery-container');
         let animationFrame: number | undefined;
-        let lastScrollTop = 0;
+        let isDragging = false;
+        let startX: number;
+        let scrollLeft: number;
+        let lastScrollY = window.scrollY;
+        let lastRelativeScroll = 0;
+
+        if (!gallery || !container) return;
+
+        gallery.scrollLeft = gallery.scrollWidth / 3;
 
         const handleScroll = () => {
-            if (!gallery || !container) return;
+            if (!gallery || !container || isDragging) return;
 
             const rect = container.getBoundingClientRect();
             const startOffset = window.innerHeight;
-            
             const scrollWindow = window.innerHeight * 40;
-            
             const scrollPosition = Math.max(0, window.scrollY - rect.top + startOffset);
-            const scrollPercentage = Math.min(Math.max(scrollPosition / scrollWindow, 0), 1);
-
-            const totalScrollWidth = gallery.scrollWidth - gallery.clientWidth;
             
-            gallery.scrollLeft = totalScrollWidth * scrollPercentage;
-            lastScrollTop = window.scrollY;
+            const scrollDelta = window.scrollY - lastScrollY;
+            const scrollRatio = scrollDelta / scrollWindow;
+            const singleSetWidth = gallery.scrollWidth / 3;
+            
+            lastRelativeScroll = (lastRelativeScroll + scrollRatio) % 1;
+            if (lastRelativeScroll < 0) lastRelativeScroll += 1;
+            
+            gallery.scrollLeft += scrollRatio * singleSetWidth;
+
+            if (gallery.scrollLeft >= singleSetWidth * 2) {
+                gallery.scrollLeft -= singleSetWidth;
+            } else if (gallery.scrollLeft <= 0) {
+                gallery.scrollLeft += singleSetWidth;
+            }
+
+            lastScrollY = window.scrollY;
         };
 
         const onScroll = () => {
@@ -65,11 +83,84 @@ const images = Array.from({ length: 23 }, (_, i) => `/photos/image-${i + 1}.jpg`
             animationFrame = requestAnimationFrame(handleScroll);
         };
 
+        const handleMouseDown = (e: MouseEvent) => {
+            isDragging = true;
+            startX = e.pageX - gallery.offsetLeft;
+            scrollLeft = gallery.scrollLeft;
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - gallery.offsetLeft;
+            const walk = (x - startX) * 2;
+            gallery.scrollLeft = scrollLeft - walk;
+
+            handleInfiniteScroll(e.pageX);
+        };
+
+        const handleMouseUp = () => {
+            isDragging = false;
+        };
+
+        const handleTouchStart = (e: TouchEvent) => {
+            isDragging = true;
+            startX = e.touches[0].pageX - gallery.offsetLeft;
+            scrollLeft = gallery.scrollLeft;
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.touches[0].pageX - gallery.offsetLeft;
+            const walk = (x - startX) * 2;
+            gallery.scrollLeft = scrollLeft - walk;
+
+            handleInfiniteScroll(e.touches[0].pageX);
+        };
+
+        const handleTouchEnd = () => {
+            isDragging = false;
+        };
+
+        const handleInfiniteScroll = (pageX: number) => {
+            const singleSetWidth = gallery.scrollWidth / 3;
+            if (gallery.scrollLeft >= singleSetWidth * 2) {
+                gallery.scrollLeft -= singleSetWidth;
+                scrollLeft = gallery.scrollLeft;
+                startX = pageX - gallery.offsetLeft;
+            } else if (gallery.scrollLeft <= 0) {
+                gallery.scrollLeft += singleSetWidth;
+                scrollLeft = gallery.scrollLeft;
+                startX = pageX - gallery.offsetLeft;
+            }
+        };
+
         window.addEventListener('scroll', onScroll, { passive: true });
-        handleScroll();
+        
+        gallery.addEventListener('mousedown', handleMouseDown);
+        gallery.addEventListener('mousemove', handleMouseMove);
+        gallery.addEventListener('mouseup', handleMouseUp);
+        gallery.addEventListener('mouseleave', handleMouseUp);
+        
+        gallery.addEventListener('touchstart', handleTouchStart, { passive: false });
+        gallery.addEventListener('touchmove', handleTouchMove, { passive: false });
+        gallery.addEventListener('touchend', handleTouchEnd);
+        gallery.addEventListener('touchcancel', handleTouchEnd);
 
         document.addEventListener('astro:before-swap', () => {
             window.removeEventListener('scroll', onScroll);
+            
+            gallery.removeEventListener('mousedown', handleMouseDown);
+            gallery.removeEventListener('mousemove', handleMouseMove);
+            gallery.removeEventListener('mouseup', handleMouseUp);
+            gallery.removeEventListener('mouseleave', handleMouseUp);
+            
+            gallery.removeEventListener('touchstart', handleTouchStart);
+            gallery.removeEventListener('touchmove', handleTouchMove);
+            gallery.removeEventListener('touchend', handleTouchEnd);
+            gallery.removeEventListener('touchcancel', handleTouchEnd);
+            
             if (animationFrame) {
                 cancelAnimationFrame(animationFrame);
             }
@@ -77,6 +168,5 @@ const images = Array.from({ length: 23 }, (_, i) => `/photos/image-${i + 1}.jpg`
     }
 
     initGallery();
-    
     document.addEventListener('astro:after-swap', initGallery);
 </script>
