@@ -77,7 +77,7 @@ Invii was an innovative restaurant management platform that explored new approac
 ## Technology Stack
 
 - Frontend: React.js, Next.js
-- Styling: Tailwind CSS
+- Styling: TailwindCSS
 - Backend: Python
 - Database: Supabase
 - Payment Processing: Stripe integration
