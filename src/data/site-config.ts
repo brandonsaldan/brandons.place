@@ -35,7 +35,7 @@ const siteConfig: SiteConfig = {
   title: "Brandon Saldan",
   subtitle: "Frontend Software Engineer",
   description:
-    "Frontend software engineer and aspiring TPM based in Chapel Hill, NC",
+    "Frontend software engineer and aspiring TPM based in Charlotte, NC",
   portrait: {
     src: "/photos/portrait.webp",
     alt: "Brandon Saldan",
@@ -83,7 +83,7 @@ const siteConfig: SiteConfig = {
     },
   ],
   hero: {
-    text: "I'm a frontend software engineer and aspiring TPM based in Charlotte, NC. I've been passionate about technology and building things since I first started using computers at age 4. From tinkering with programs to learning to code, my journey has been driven by curiosity and a desire to create meaningful solutions.\n\nCurrently, I'm pursuing degrees in Management Information Systems and Business Administration at the University of North Carolina at Charlotte while working as a freelance software engineer. I specialize in building responsive, accessible web applications that make a real difference in people's lives.\n\nI'm constantly learning, building, and seeking new opportunities to grow both technically and professionally.",
+    text: "I'm a frontend software engineer and aspiring TPM based in Charlotte, NC. I've been passionate about technology since I first started using computers at age 4, but what really excites me is the intersection of tech and business, understanding not just how to build something, but why it matters and who it serves. From tinkering with programs to learning to code, I've been driven by curiosity about both the technical and strategic sides of product development.\n\nCurrently, I'm working as a Technical Operations Associate at Apple while pursuing dual degrees in Management Information Systems and Business Analytics at the University of North Carolina at Charlotte. I also freelance, focusing on building polished, responsive, and accessible web applications that balance technical excellence with real user value.\n\nI'm constantly learning, building, and seeking new opportunities to grow both technically and professionally.",
     actions: [
       {
         text: "Get in Touch",
