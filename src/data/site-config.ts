@@ -33,7 +33,7 @@ export type SiteConfig = {
 
 const siteConfig: SiteConfig = {
   title: "Brandon Saldan",
-  subtitle: "Frontend Software Engineer",
+  subtitle: "MIS/BA @ UNC Charlotte",
   description:
     "Frontend software engineer and aspiring TPM based in Charlotte, NC",
   portrait: {
@@ -56,6 +56,14 @@ const siteConfig: SiteConfig = {
     {
       text: "Blog",
       href: "/blog",
+    },
+    {
+      text: "Travel",
+      href: "/travel",
+    },
+    {
+      text: "Research",
+      href: "/research",
     },
   ],
   footerNavLinks: [
@@ -83,7 +91,7 @@ const siteConfig: SiteConfig = {
     },
   ],
   hero: {
-    text: "I'm a frontend software engineer and aspiring TPM based in Charlotte, NC. I've been passionate about technology since I first started using computers at age 4, but what really excites me is the intersection of tech and business, understanding not just how to build something, but why it matters and who it serves. From tinkering with programs to learning to code, I've been driven by curiosity about both the technical and strategic sides of product development.\n\nCurrently, I'm working as a Platform Support Analyst at Apple while pursuing dual degrees in Management Information Systems and Business Analytics at the University of North Carolina at Charlotte. I also freelance, focusing on building polished, responsive, and accessible web applications that balance technical excellence with real user value.\n\nI'm constantly learning, building, and seeking new opportunities to grow both technically and professionally.",
+    text: "My work focuses on how technology and business shape complex systems, especially in policy and national security contexts.\n\nWith a foundation in frontend software engineering, I focus on product and strategy by examining how organizations grow, how value is created, and how technology supports meaningful outcomes.\n\nI’m a Technical Advisor at Apple while completing dual degrees in Management Information Systems and Business Analytics, with minors in Security & Intelligence Studies, Political Science, and American Studies. Alongside my studies, I build and consult on digital products, bringing technical depth into business and mission-driven environments.\n\nI’m drawn to work where technology, governance, and security intersect and shape real-world impact.",
     actions: [
       {
         text: "Get in Touch",

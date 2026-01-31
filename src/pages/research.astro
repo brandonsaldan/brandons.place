@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout
+  title="Research"
+  description="Selected academic and policy-oriented writing by Brandon Saldan."
+  image={{ src: '/og/og-main.webp', alt: 'Research' }}
+  showHeader={false}
+>
+  <h1 class="mb-12 text-2xl leading-tight font-serif italic sm:mb-16 sm:text-4xl">Research</h1>
+
+  <div class="mb-12 sm:mb-16">
+    <p class="text-base leading-relaxed sm:text-lg">
+      I publish selected academic and policy-oriented work here. These papers reflect my interests in international systems, political economy, and national security.
+    </p>
+  </div>
+
+  <section>
+    <h2 class="text-xl font-serif italic mb-8 sm:text-2xl">Selected Work</h2>
+
+    <article class="border border-neutral-300 dark:border-neutral-700 rounded-sm p-6 sm:p-8 bg-neutral-50 dark:bg-neutral-900/30">
+      <h3 class="text-xl leading-tight font-serif font-medium mb-3 sm:text-2xl">
+        Africa in the International System: Theoretical Perspectives, Challenges, and Strategic Pathways
+      </h3>
+
+      <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+        Final paper • Theoretical frameworks: realism, liberalism, dependency theory
+      </p>
+
+      <p class="text-base leading-relaxed mb-6">
+        This paper analyzes Africa's position in the international system through major IR and political economy frameworks, then evaluates structural constraints and strategic pathways for greater agency in a multipolar environment.
+      </p>
+
+      <p class="text-sm italic text-neutral-600 dark:text-neutral-400 mb-6">
+        Produced as part of advanced undergraduate coursework at the University of North Carolina at Charlotte. Faculty feedback characterized the work as graduate-level and recommended further development for publication.
+      </p>
+
+      <div>
+        <Button href="/papers/SaldanAfricaInTheInternationalSystem.pdf">
+          Read PDF
+        </Button>
+      </div>
+    </article>
+  </section>
+</BaseLayout>

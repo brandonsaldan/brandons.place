@@ -8,6 +8,11 @@ type Props = { post: CollectionEntry<'blog'>; class?: string; headingLevel?: 'h2
 const { post, class: className, headingLevel = 'h2' } = Astro.props;
 const { title, publishDate, updatedDate, excerpt } = post.data;
 const TitleTag = headingLevel;
+
+const content = post.body || '';
+const wordsPerMinute = 200;
+const wordCount = content.trim().split(/\s+/).length;
+const readingTime = Math.ceil(wordCount / wordsPerMinute);
 ---
 
 <a class:list={['flex justify-between items-start gap-8 group', className]} href={`/blog/${post.id}/`}>
@@ -29,6 +34,12 @@ const TitleTag = headingLevel;
                     </>
                 )
             }
+            {readingTime > 0 && (
+                <>
+                    {' · '}
+                    <span>{readingTime} min read</span>
+                </>
+            )}
         </div>
         {excerpt && <div class="mt-3 text-sm leading-normal">{excerpt}</div>}
     </div>

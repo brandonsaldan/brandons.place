@@ -1,0 +1,264 @@
+---
+import type { Journey, TravelMode } from '../data/travel-data';
+
+type Props = {
+  journeys: Journey[];
+};
+
+const { journeys } = Astro.props;
+
+const cityCoordinates: Record<string, [number, number]> = {
+  'Philadelphia': [39.9526, -75.1652],
+  'Punta Cana': [18.5601, -68.3725],
+  'Gander': [48.9560, -54.6082],
+  'St. Johns': [47.5615, -52.7126],
+  'Raleigh': [35.7796, -78.6382],
+  'Newark': [40.7357, -74.1724],
+  'Berlin': [52.5200, 13.4050],
+  'Budapest': [47.4979, 19.0402],
+  'Washington, DC': [38.9072, -77.0369],
+  'Trenton': [40.2171, -74.7429],
+  'Tampa': [27.9506, -82.4572],
+  'New York': [40.7128, -74.0060],
+  'Wilmington': [39.7391, -75.5398],
+  'Atlanta': [33.7490, -84.3880],
+  'Detroit': [42.3314, -83.0458],
+  'Indianapolis': [39.7684, -86.1581],
+  'Dallas': [32.7767, -96.7970],
+  'Norfolk': [36.8508, -76.2859],
+  'Charleston': [32.7765, -79.9311],
+  'Nassau': [25.0443, -77.3504],
+  'Half Moon Cay': [25.3333, -77.9333],
+  'Grand Turk': [21.4664, -71.1360],
+  'Amber Cove': [19.7500, -70.6833],
+};
+
+const mappedJourneys = journeys.filter(j => j.mode === 'air' || j.mode === 'sea').map(j => ({
+  ...j,
+  from: cityCoordinates[j.from] || null,
+  to: cityCoordinates[j.to] || null,
+  fromName: j.from,
+  toName: j.to,
+})).filter(j => j.from && j.to);
+---
+
+<div class="space-y-6">
+  <!-- Legend -->
+  <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm pb-4 border-b border-neutral-200 dark:border-neutral-800">
+    <span class="font-serif italic text-neutral-600 dark:text-neutral-400">Journey Types:</span>
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-0.5" style="border-top: 2px dashed #3b82f6;"></div>
+      <span>Flight</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-0.5" style="border-top: 2px dotted #06b6d4;"></div>
+      <span>Sea</span>
+    </div>
+  </div>
+
+  <!-- Map Container -->
+  <div
+    id="travel-map"
+    class="w-full h-96 sm:h-[500px] border border-neutral-200 dark:border-neutral-800 rounded-sm overflow-hidden"
+    data-journeys={JSON.stringify(mappedJourneys)}
+  ></div>
+
+  <!-- Journey Details -->
+  <details class="group">
+    <summary class="cursor-pointer text-sm font-serif italic text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors list-none flex items-center gap-2">
+      <span class="transform transition-transform group-open:rotate-90">▶</span>
+      Journey Details ({mappedJourneys.length} {mappedJourneys.length === 1 ? 'journey' : 'journeys'})
+    </summary>
+    <div class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      {mappedJourneys.map((journey) => (
+        <div class="flex items-center gap-2 p-2 text-sm border border-neutral-200 dark:border-neutral-800 rounded-sm hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors">
+          <div
+            class="w-3 h-3 rounded-full flex-shrink-0"
+            class:list={[
+              journey.mode === 'air' && 'bg-blue-500',
+              journey.mode === 'sea' && 'bg-cyan-500',
+            ]}
+          />
+          <div class="flex-grow min-w-0 truncate">
+            <span class="font-medium">{journey.fromName}</span>
+            <span class="text-neutral-400 dark:text-neutral-600 mx-1">→</span>
+            <span class="font-medium">{journey.toName}</span>
+          </div>
+          {journey.date && (
+            <span class="text-xs text-neutral-500 dark:text-neutral-500 font-serif italic flex-shrink-0">
+              {journey.date}
+            </span>
+          )}
+        </div>
+      ))}
+    </div>
+  </details>
+</div>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<script>
+  import L from 'leaflet';
+
+  const mapElement = document.getElementById('travel-map');
+  if (mapElement) {
+    const journeysData = JSON.parse(mapElement.dataset.journeys || '[]');
+
+    const map = L.map('travel-map', {
+      center: [20, 0],
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 10,
+      scrollWheelZoom: false,
+      attributionControl: false,
+      zoomControl: true,
+      worldCopyJump: true,
+      maxBounds: [[-90, -180], [90, 180]],
+      maxBoundsViscosity: 1.0,
+    });
+
+    const isDarkMode = document.documentElement.classList.contains('dark') ||
+                       window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const tileUrl = isDarkMode
+      ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png';
+
+    const tileLayer = L.tileLayer(tileUrl, {
+      subdomains: 'abcd',
+      noWrap: true,
+    }).addTo(map);
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          const newIsDarkMode = document.documentElement.classList.contains('dark') ||
+                                window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const newTileUrl = newIsDarkMode
+            ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
+            : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png';
+
+          tileLayer.setUrl(newTileUrl);
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    const allCities = new Set();
+
+    const createCurvedArc = (from: number[], to: number[]) => {
+      const latlngs = [];
+      const steps = 100;
+
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+
+        const lat = from[0] + (to[0] - from[0]) * t;
+        const lng = from[1] + (to[1] - from[1]) * t;
+
+        const distance = Math.sqrt(
+          Math.pow(to[0] - from[0], 2) + Math.pow(to[1] - from[1], 2)
+        );
+        const arcHeight = distance * 0.2;
+        const offset = Math.sin(t * Math.PI) * arcHeight;
+
+        latlngs.push([lat + offset, lng]);
+      }
+
+      return latlngs;
+    };
+
+    journeysData.forEach((journey: any) => {
+      const { from, to, fromName, toName, date, mode } = journey;
+
+      allCities.add(JSON.stringify({ name: fromName, coords: from }));
+      allCities.add(JSON.stringify({ name: toName, coords: to }));
+
+      let line;
+
+      if (mode === 'air') {
+        const arcPath = createCurvedArc(from, to);
+        line = L.polyline(arcPath, {
+          color: '#3b82f6',
+          dashArray: '10, 10',
+          weight: 2,
+          opacity: 0.6,
+        }).addTo(map);
+      } else {
+        line = L.polyline([from, to], {
+          color: '#06b6d4',
+          dashArray: '2, 8',
+          weight: 2,
+          opacity: 0.6,
+        }).addTo(map);
+      }
+
+      const modeLabel = mode === 'air' ? 'Flight' : 'Sea Journey';
+      line.bindPopup(`
+        <div style="font-family: serif;">
+          <strong>${fromName} → ${toName}</strong><br/>
+          <span style="font-size: 0.875rem; font-style: italic;">${modeLabel}${date ? ` (${date})` : ''}</span>
+        </div>
+      `);
+    });
+
+    Array.from(allCities).forEach((cityStr) => {
+      const city = JSON.parse(cityStr as string);
+
+      const marker = L.circleMarker(city.coords, {
+        radius: 5,
+        fillColor: '#000',
+        color: '#fff',
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.8,
+      }).addTo(map);
+
+      marker.bindPopup(`<strong style="font-family: serif;">${city.name}</strong>`);
+    });
+
+    if (journeysData.length > 0) {
+      const bounds = journeysData.flatMap((j: any) => [j.from, j.to]);
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }
+</script>
+
+<style>
+  :global(.leaflet-popup-content-wrapper) {
+    border-radius: 2px;
+    font-family: serif;
+  }
+
+  :global(#travel-map .leaflet-control-zoom) {
+    border: 1px solid rgb(212 212 212) !important;
+    border-radius: 2px !important;
+  }
+
+  :global(#travel-map .leaflet-control-zoom a) {
+    color: rgb(23 23 23) !important;
+    border-radius: 0 !important;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(#travel-map .leaflet-control-zoom) {
+      border-color: rgb(64 64 64) !important;
+      background-color: rgb(23 23 23) !important;
+    }
+
+    :global(#travel-map .leaflet-control-zoom a) {
+      background-color: rgb(23 23 23) !important;
+      color: rgb(250 250 250) !important;
+      border-color: rgb(64 64 64) !important;
+    }
+
+    :global(#travel-map .leaflet-control-zoom a:hover) {
+      background-color: rgb(38 38 38) !important;
+    }
+  }
+</style>

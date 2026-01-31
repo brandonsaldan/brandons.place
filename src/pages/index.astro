@@ -20,11 +20,18 @@ const featuredProjects = projects.filter(({ data }) => data.isFeatured);
     {
         featuredProjects?.length > 0 && (
             <div class="mb-16 sm:mb-24">
-                <h2 class="mb-12 text-xl font-serif italic sm:mb-16 sm:text-2xl">Projects</h2>
-                {featuredProjects.map((project) => (
-                    <ProjectPreview project={project} class="mb-10 sm:mb-12" headingLevel="h3" />
-                ))}
-                <div class="mt-12 sm:mt-16">
+                <div class="flex items-baseline justify-between mb-8 sm:mb-12">
+                    <h2 class="text-xl font-serif italic sm:text-2xl">Selected Projects</h2>
+                    <span class="text-base font-serif italic text-neutral-500 dark:text-neutral-500">
+                        {featuredProjects.length} {featuredProjects.length === 1 ? 'project' : 'projects'}
+                    </span>
+                </div>
+                <div class="grid gap-6 sm:gap-8">
+                    {featuredProjects.map((project) => (
+                        <ProjectPreview project={project} headingLevel="h3" />
+                    ))}
+                </div>
+                <div class="mt-12 sm:mt-16 text-center">
                     <Button href="/projects">View All Projects</Button>
                 </div>
             </div>
@@ -33,11 +40,18 @@ const featuredProjects = projects.filter(({ data }) => data.isFeatured);
     {
         featuredPosts?.length > 0 && (
             <div class="mb-16 sm:mb-24">
-                <h2 class="mb-12 text-xl font-serif italic sm:mb-16 sm:text-2xl">Writing</h2>
-                {featuredPosts.map((post) => (
-                    <PostPreview post={post} class="mb-10 sm:mb-12" headingLevel="h3" />
-                ))}
-                <div class="mt-12 sm:mt-16">
+                <div class="flex items-baseline justify-between mb-8 sm:mb-12">
+                    <h2 class="text-xl font-serif italic sm:text-2xl">Recent Writing</h2>
+                    <span class="text-base font-serif italic text-neutral-500 dark:text-neutral-500">
+                        {featuredPosts.length} {featuredPosts.length === 1 ? 'post' : 'posts'}
+                    </span>
+                </div>
+                <div class="space-y-6">
+                    {featuredPosts.map((post) => (
+                        <PostPreview post={post} headingLevel="h3" />
+                    ))}
+                </div>
+                <div class="mt-12 sm:mt-16 text-center">
                     <Button href="/blog">View All Posts</Button>
                 </div>
             </div>

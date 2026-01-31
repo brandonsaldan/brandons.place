@@ -1,0 +1,101 @@
+---
+import type { Location } from '../data/travel-data';
+
+type Props = {
+  states: Location[];
+  countries: Location[];
+};
+
+const { states, countries } = Astro.props;
+
+const statesId = 'states-tooltip-' + Math.random().toString(36).substr(2, 9);
+const countriesId = 'countries-tooltip-' + Math.random().toString(36).substr(2, 9);
+---
+
+<div class="mb-12 sm:mb-16">
+  <p class="text-base leading-relaxed sm:text-lg">
+    Travel has always been central to how I understand the world. Over the years, I've been fortunate to explore <span class="font-serif underline decoration-dashed underline-offset-4 decoration-1 hover:decoration-2 transition-all cursor-help" data-tooltip={statesId}>{states.length}</span> U.S. states and <span class="font-serif underline decoration-dashed underline-offset-4 decoration-1 hover:decoration-2 transition-all cursor-help" data-tooltip={countriesId}>{countries.length}</span> countries, most more times than I can even count. Each journey has shaped how I think about culture, infrastructure, and the ways people organize their lives across different contexts. The map below traces flights and sea routes I've taken. I'd include road trips as well, but having driven tens of thousands of long haul miles across the U.S., most along the same routes, it would be nearly impossible to map comprehensively.
+  </p>
+
+  <!-- Hidden tooltip content -->
+  <div id={statesId} class="hidden">
+    <div class="text-sm font-serif italic mb-3 text-neutral-600 dark:text-neutral-400">
+      States Visited
+    </div>
+    <ul class="text-sm space-y-1.5">
+      {states.map((state) => (
+        <li class="flex justify-between items-baseline gap-3">
+          <span>{state.name}</span>
+          {state.visitedDate && (
+            <span class="text-xs text-neutral-500 dark:text-neutral-500 font-serif italic flex-shrink-0">
+              {state.visitedDate}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div id={countriesId} class="hidden">
+    <div class="text-sm font-serif italic mb-3 text-neutral-600 dark:text-neutral-400">
+      Countries Visited
+    </div>
+    <ul class="text-sm space-y-1.5">
+      {countries.map((country) => (
+        <li class="flex flex-col gap-0.5">
+          <div class="flex justify-between items-baseline gap-3">
+            <span>{country.name}</span>
+            {country.visitedDate && (
+              <span class="text-xs text-neutral-500 dark:text-neutral-500 font-serif italic flex-shrink-0">
+                {country.visitedDate}
+              </span>
+            )}
+          </div>
+          {country.notes && (
+            <span class="text-xs text-neutral-500 dark:text-neutral-500">
+              {country.notes}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<script>
+  let activeTooltip: HTMLElement | null = null;
+
+  document.querySelectorAll('[data-tooltip]').forEach((trigger) => {
+    const tooltipId = trigger.getAttribute('data-tooltip');
+    if (!tooltipId) return;
+
+    const contentEl = document.getElementById(tooltipId);
+    if (!contentEl) return;
+
+    trigger.addEventListener('mouseenter', () => {
+      if (activeTooltip) {
+        activeTooltip.remove();
+        activeTooltip = null;
+      }
+
+      const tooltip = document.createElement('div');
+      tooltip.className = 'fixed w-64 sm:w-80 bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 rounded-sm p-4 shadow-lg';
+      tooltip.style.zIndex = '9999';
+      tooltip.innerHTML = contentEl.innerHTML;
+      const rect = trigger.getBoundingClientRect();
+      tooltip.style.left = rect.left + 'px';
+      tooltip.style.top = (rect.bottom + 10) + 'px';
+
+      document.body.appendChild(tooltip);
+      activeTooltip = tooltip;
+    });
+
+    trigger.addEventListener('mouseleave', () => {
+      if (activeTooltip) {
+        activeTooltip.remove();
+        activeTooltip = null;
+      }
+    });
+  });
+</script>
+

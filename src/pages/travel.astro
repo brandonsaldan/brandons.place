@@ -1,0 +1,284 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TravelStats from '../components/TravelStats.astro';
+import TravelMap from '../components/TravelMap.astro';
+import travelData from '../data/travel-data';
+---
+
+<BaseLayout
+  title="Travel"
+  description="Places I've been and journeys I've taken"
+  image={{ src: '/og/og-main.webp', alt: 'Travel' }}
+  showHeader={false}
+>
+  <h1 class="mb-12 text-2xl leading-tight font-serif italic sm:mb-16 sm:text-4xl">Travel</h1>
+
+  <section class="mb-12 sm:mb-16">
+    <TravelStats states={travelData.states} countries={travelData.countries} />
+  </section>
+
+  <section class="mb-12 sm:mb-16">
+    <h2 class="text-xl font-serif italic mb-8 sm:text-2xl">
+      Journey Map
+    </h2>
+    <TravelMap journeys={travelData.journeys} />
+  </section>
+
+  <section>
+    <h2 class="text-xl font-serif italic mb-8 sm:text-2xl">
+      Future Destinations
+    </h2>
+
+    <div class="space-y-6">
+      <p class="text-base leading-relaxed sm:text-lg">
+        One of my long-term goals is to visit all seven continents. So far, I've been to North America and Europe - five more to go.
+      </p>
+
+      <div class="space-y-6">
+        <div>
+          <h3 class="text-lg font-serif font-medium mb-3">Places I Want to Visit</h3>
+
+          <div class="space-y-4">
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Afghanistan</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                The end state of America's longest war and Taliban governance in practice. A critical case study in state failure, humanitarian crisis, and non-Western governance models. Represents what happens when external intervention ends and local power structures reassert control.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Antarctica</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                The ultimate frontier. Governed by international treaty, critical for climate research, and a test case for global scientific cooperation.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Bosnia and Herzegovina</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Post-conflict governance and frozen ethnic division. Sarajevo shows the legacy of international administration and what happens when peace is imposed without reconciliation. A complex constitutional structure designed to prevent war but unable to build a functional state.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Cambodia</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Post-Khmer Rouge recovery under authoritarian governance. Phnom Penh shows how a state rebuilds after genocide while maintaining one-party rule under Hun Sen's decades-long grip on power. Increasingly aligned with China through Belt and Road infrastructure, representing democratic backsliding and Beijing's growing influence in Southeast Asia.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Chile</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Transition from dictatorship to democracy and Latin America's most stable economy. Santiago represents successful neoliberal reform. Shows both the successes and limitations of market-oriented development.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Cuba</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                The last major socialist state in the Western Hemisphere. Havana is a living museum of Cold War politics, showing how embargo economics and one-party rule operate in practice.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">El Salvador</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Shows how a small state responds to crime with mass incarceration while simultaneously attempting radical economic innovation. A test case for whether security-first governance can rebuild a failed state.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Greenland</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Arctic geopolitics and climate change frontline. As ice melts, shipping routes open and resource competition intensifies. An autonomous territory of Denmark becoming increasingly strategic for great power competition.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Iran</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Theocratic governance and a major regional power operating outside Western frameworks. Tehran, Isfahan, and Shiraz display how an isolated but sophisticated state maintains influence through sanctions, proxy networks, and a unique political-religious system.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Iraq</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Post-conflict state rebuilding and the long-term consequences of intervention. Erbil in Kurdistan shows autonomous governance within a federal system, while Baghdad showcases the realities of reconstruction, sectarian dynamics, and state fragility in a region shaped by decades of conflict.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Israel</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Advanced military-tech state and startup ecosystem built on security imperatives. Tel Aviv for tech innovation, Jerusalem for geopolitics and religious dynamics. Shows how a small state maintains regional dominance through technological edge, intelligence capabilities, and strategic alliances.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Italy</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                European Union member state with political fragmentation and populist movements. Rome and Milan show how a wealthy democracy can experience government instability, debt crises, and immigration pressures while remaining culturally influential.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Kosovo</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Contested statehood and NATO intervention legacy. Pristina shows the challenges of new state-building, international recognition politics, and ongoing tensions with Serbia.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Morocco</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Moderate monarchy in North Africa balancing tradition with modernization. Rabat and Casablanca show how an Arab state maintains stability through gradual reform while managing Western Sahara occupation. A key U.S. partner and model for measured political opening in an unstable region.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Myanmar</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Military junta governance and democratic backsliding. An example of what happens when a transitional democracy fails, with ongoing ethnic conflicts and the reassertion of military control over civilian institutions. Shows the fragility of political reform in authoritarian contexts.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">New Zealand</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Progressive governance and unique position in Pacific security. Auckland and Wellington combine beautiful landscapes with a model of transparent, effective democracy. Increasingly important in U.S.-China competition as Pacific island nations become strategic assets in great power rivalry.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">North Korea</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                The most isolated state in the international system. A rare opportunity to observe authoritarian governance, juche ideology, and information control in practice. Shows Cold War relics and how a regime maintains total control over a population.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Palestine (West Bank)</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Occupation dynamics, settlements, and stateless governance. Ramallah and Hebron show how contested sovereignty functions in daily life, checkpoints, dual legal systems, and the mechanics of a conflict that shapes Middle Eastern politics and international law.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Russia</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Resurgent authoritarian power and great power revisionism. Moscow and St. Petersburg display how a declining state maintains global influence through energy leverage, military intervention, and information warfare. Central to understanding European security, nuclear politics, and challenges to the liberal international order.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Rwanda</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Post-genocide reconstruction and an authoritarian development model. Kigali is remarkably clean and organized, representing controversial but effective governance.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Serbia</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Regional power navigating between Russia and the West. Belgrade shows how a former pariah state rebuilds influence, balances competing great power interests, and maintains nationalist politics while seeking EU integration. Key to understanding Balkan stability and European security dynamics.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Singapore</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                The gold standard for governance efficiency, urban planning, and economic strategy. A city-state that punches far above its weight through meritocracy, strategic positioning, and disciplined state management. Shows how small states can dominate in trade, finance, and regional influence.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">South Africa</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                A critical player in African regional dynamics, with complex post-apartheid transformation and strategic importance in global affairs.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">South Korea</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Successful democracy in Northeast Asia and North Korea's counterpart. Seoul represents what the other Korea could have been, economic powerhouse, cultural exporter, and tech leader. A case study in rapid modernization and democratic consolidation on the front lines of authoritarian-democratic competition.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Spain</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Post-Franco democracy with regional separatism. Madrid and Barcelona reveal tensions between centralized governance and regional autonomy, particularly in Catalonia and the Basque Country. Shows how national identity disputes persist in established democracies and how states manage secessionist pressures.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Taiwan</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Frontline of U.S.-China competition and contested sovereignty. Taipei is critical for understanding tech geopolitics through semiconductor dominance, while the island represents democratic resilience under authoritarian pressure. The most dangerous flashpoint in modern great power rivalry.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Transnistria</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Unrecognized breakaway state propped up by Russia. Tiraspol is a Soviet time capsule and case study in frozen conflict, a statelet that exists in limbo, unrecognized but functional. Shows how great powers use proxy territories to maintain influence and prevent adversaries from consolidating control.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Turkmenistan</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                One of the world's most closed societies and extreme authoritarian governance. Ashgabat is a surreal monument to state control, personality cult, and resource wealth, with marble palaces in a desert and little connection to the outside world. A study in how isolation and autocracy function at their most extreme.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Ukraine</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Active war zone and the defining conflict of 21st century Europe. Kyiv represents resistance to authoritarian expansion and the front line of democratic defense. A test case for Western resolve, NATO expansion consequences, and how great power competition manifests in territorial conflict.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">United Arab Emirates</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Gulf state modernization and soft power projection. Dubai and Abu Dhabi showcase what petrostates can become through diversification, infrastructure investment, and strategic positioning as global hubs. A model of resource-driven development beyond oil dependency.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">United Kingdom</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Post-Brexit Britain redefining its global role. London remains a financial hub, but the UK now navigates between Europe and the Anglosphere, searching for relevance after empire and EU membership. Shows how middle powers adjust to diminished status while maintaining outsized cultural and intelligence influence.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Vietnam</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Socialist market economy and rapid development under one-party rule. Ho Chi Minh City and Hanoi show economic transformation while maintaining political control. A strategic player in U.S.-China competition and a case study in how communist states can embrace capitalism without democratizing.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Western Sahara</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Africa's last colonial question and a territorial conflict most people have never heard of. Moroccan-controlled but disputed by the Polisario Front. Shows how decolonization remains incomplete and how resource-rich disputed territories become frozen conflicts ignored by the international system.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
+              <h4 class="font-medium mb-1">Zimbabwe</h4>
+              <p class="text-sm text-neutral-700 dark:text-neutral-300">
+                Post-liberation state failure and economic collapse under authoritarian rule. Harare shows what happens when a resource-rich nation is mismanaged by kleptocratic elites.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
