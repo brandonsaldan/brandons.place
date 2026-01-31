@@ -43,7 +43,6 @@ const mappedJourneys = journeys.filter(j => j.mode === 'air' || j.mode === 'sea'
 ---
 
 <div class="space-y-6">
-  <!-- Legend -->
   <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm pb-4 border-b border-neutral-200 dark:border-neutral-800">
     <span class="font-serif italic text-neutral-600 dark:text-neutral-400">Journey Types:</span>
     <div class="flex items-center gap-2">
@@ -56,14 +55,12 @@ const mappedJourneys = journeys.filter(j => j.mode === 'air' || j.mode === 'sea'
     </div>
   </div>
 
-  <!-- Map Container -->
   <div
     id="travel-map"
     class="w-full h-96 sm:h-[500px] border border-neutral-200 dark:border-neutral-800 rounded-sm overflow-hidden"
     data-journeys={JSON.stringify(mappedJourneys)}
   ></div>
 
-  <!-- Journey Details -->
   <details class="group">
     <summary class="cursor-pointer text-sm font-serif italic text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors list-none flex items-center gap-2">
       <span class="transform transition-transform group-open:rotate-90">▶</span>
@@ -95,7 +92,6 @@ const mappedJourneys = journeys.filter(j => j.mode === 'air' || j.mode === 'sea'
   </details>
 </div>
 
-<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <script>

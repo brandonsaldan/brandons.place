@@ -17,7 +17,6 @@ const countriesId = 'countries-tooltip-' + Math.random().toString(36).substr(2, 
     Travel has always been central to how I understand the world. Over the years, I've been fortunate to explore <span class="font-serif underline decoration-dashed underline-offset-4 decoration-1 hover:decoration-2 transition-all cursor-help" data-tooltip={statesId}>{states.length}</span> U.S. states and <span class="font-serif underline decoration-dashed underline-offset-4 decoration-1 hover:decoration-2 transition-all cursor-help" data-tooltip={countriesId}>{countries.length}</span> countries, most more times than I can even count. Each journey has shaped how I think about culture, infrastructure, and the ways people organize their lives across different contexts. The map below traces flights and sea routes I've taken. I'd include road trips as well, but having driven tens of thousands of long haul miles across the U.S., most along the same routes, it would be nearly impossible to map comprehensively.
   </p>
 
-  <!-- Hidden tooltip content -->
   <div id={statesId} class="hidden">
     <div class="text-sm font-serif italic mb-3 text-neutral-600 dark:text-neutral-400">
       States Visited

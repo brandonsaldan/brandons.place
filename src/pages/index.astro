@@ -5,6 +5,7 @@ import Button from '../components/Button.astro';
 import Hero from '../components/Hero.astro';
 import PostPreview from '../components/PostPreview.astro';
 import ProjectPreview from '../components/ProjectPreview.astro';
+import ResearchPreview from '../components/ResearchPreview.astro';
 import siteConfig from '../data/site-config';
 import { sortItemsByDateDesc } from '../utils/data-utils';
 
@@ -13,6 +14,9 @@ const featuredPosts = posts.filter(({ data }) => data.isFeatured);
 
 const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
 const featuredProjects = projects.filter(({ data }) => data.isFeatured);
+
+const research = (await getCollection('research')).sort(sortItemsByDateDesc);
+const featuredResearch = research.filter(({ data }) => data.isFeatured);
 ---
 
 <BaseLayout description={siteConfig.description} image={siteConfig.image}>
@@ -53,6 +57,26 @@ const featuredProjects = projects.filter(({ data }) => data.isFeatured);
                 </div>
                 <div class="mt-12 sm:mt-16 text-center">
                     <Button href="/blog">View All Posts</Button>
+                </div>
+            </div>
+        )
+    }
+    {
+        featuredResearch?.length > 0 && (
+            <div class="mb-16 sm:mb-24">
+                <div class="flex items-baseline justify-between mb-8 sm:mb-12">
+                    <h2 class="text-xl font-serif italic sm:text-2xl">Recent Research</h2>
+                    <span class="text-base font-serif italic text-neutral-500 dark:text-neutral-500">
+                        {featuredResearch.length} {featuredResearch.length === 1 ? 'paper' : 'papers'}
+                    </span>
+                </div>
+                <div class="space-y-6">
+                    {featuredResearch.map((paper) => (
+                        <ResearchPreview paper={paper} headingLevel="h3" />
+                    ))}
+                </div>
+                <div class="mt-12 sm:mt-16 text-center">
+                    <Button href="/research">View All Research</Button>
                 </div>
             </div>
         )
