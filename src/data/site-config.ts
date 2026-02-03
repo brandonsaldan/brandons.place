@@ -91,7 +91,7 @@ const siteConfig: SiteConfig = {
     },
   ],
   hero: {
-    text: "My work focuses on how technology and business shape complex systems, especially in policy and national security contexts.\n\nWith a foundation in frontend software engineering, I focus on product and strategy by examining how organizations grow, how value is created, and how technology supports meaningful outcomes.\n\nI work as a Technical Advisor at Apple while completing dual degrees in Management Information Systems and Business Analytics, with minors in Security & Intelligence Studies, Political Science, and American Studies. Alongside my studies, I build and consult on digital products, bringing technical depth into business and mission-driven environments.\n\nI’m drawn to work where technology, governance, and security intersect and shape real-world impact.",
+    text: "My work centers on leveraging technology, data, and business strategy to manage teams and operations and address complex organizational problems, especially in policy and national security contexts.\n\nMy software engineering background gives me a technical lens on strategic challenges - I understand how systems are built, which helps me evaluate technology investments, manage technical teams, and bridge the gap between engineering and business leadership.\n\nI work as a Technical Advisor at Apple while completing dual degrees in Management Information Systems and Business Analytics, with minors in Security & Intelligence Studies, Political Science, and American Studies. Alongside my studies, I build and consult on digital products, bringing technical depth into business and mission-driven environments.",
     actions: [
       {
         text: "Get in Touch",
