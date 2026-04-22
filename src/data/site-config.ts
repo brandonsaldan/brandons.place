@@ -91,7 +91,7 @@ const siteConfig: SiteConfig = {
     },
   ],
   hero: {
-    text: "My work centers on leveraging technology, data, and business strategy to manage teams and operations and address complex organizational problems, especially in policy and national security contexts.\n\nMy software engineering background gives me a technical lens on strategic challenges - I understand how systems are built, which helps me evaluate technology investments, manage technical teams, and bridge the gap between engineering and business leadership.\n\nI work as a Technical Advisor at Apple while completing dual degrees in Management Information Systems and Business Analytics, with minors in Security & Intelligence Studies, Political Science, and American Studies. Alongside my studies, I build and consult on digital products, bringing technical depth into business and mission-driven environments.",
+    text: "My work centers on leveraging technology, data, and business strategy to manage teams and operations and address complex organizational problems, especially in policy and national security contexts.\n\nMy software engineering background gives me a technical lens on strategic challenges - I understand how systems are built, which helps me evaluate technology investments, manage technical teams, and bridge the gap between engineering and business leadership.\n\nI work as a Technical Advisor at Apple while completing dual degrees in Management Information Systems, and Business Analytics, with minors in Political Science, and American Studies. Alongside my studies, I build and consult on digital products, bringing technical depth into business and mission-driven environments.",
     actions: [
       {
         text: "Get in Touch",
