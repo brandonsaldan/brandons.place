@@ -19,6 +19,7 @@ const blog = defineCollection({
         title: z.string(),
         excerpt: z.string().optional(),
         publishDate: z.coerce.date(),
+        image: z.object({ src: z.string(), alt: z.string().optional() }).optional(),
         updatedDate: z.coerce.date().optional(),
         isFeatured: z.boolean().default(false),
         tags: z.array(z.string()).default([]),
@@ -40,6 +41,7 @@ const projects = defineCollection({
         title: z.string(),
         description: z.string().optional(),
         publishDate: z.coerce.date(),
+        image: z.object({ src: z.string(), alt: z.string().optional() }).optional(),
         isFeatured: z.boolean().default(false),
         seo: seoSchema.optional()
     })
@@ -59,6 +61,7 @@ const research = defineCollection({
             researchGate: z.string().url(),
             academia: z.string().url()
         }),
+        image: z.object({ src: z.string(), alt: z.string().optional() }).optional(),
         pageCount: z.number().int().positive(),
         abstractLabel: z.enum(['Abstract', 'Overview']).default('Abstract'),
         excerpt: z.string().optional(),

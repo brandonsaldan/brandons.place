@@ -2,26 +2,24 @@
 import { type CollectionEntry } from 'astro:content';
 import ArrowRight from '../icons/ArrowRight.astro';
 
-type Props = { paper: CollectionEntry<'research'>; class?: string; headingLevel?: 'h2' | 'h3' };
+type Props = { paper: CollectionEntry<'research'>; class?: string; headingLevel?: 'h2' | 'h3'; showMeta?: boolean };
 
-const { paper, class: className, headingLevel = 'h2' } = Astro.props;
+const { paper, class: className, headingLevel = 'h2', showMeta = true } = Astro.props;
 const { title, paperType, excerpt, publishDate } = paper.data;
 const TitleTag = headingLevel;
 ---
 
-<a class:list={['flex justify-between items-start gap-8 group', className]} href={`/research/${paper.id}/`}>
+<a class:list={['flex justify-between items-start gap-8 group/preview', className]} href={`/research/${paper.id}/`}>
     <div class="grow">
         <TitleTag
-            class="text-xl leading-tight font-serif font-medium group-hover:underline group-hover:decoration-dashed group-hover:underline-offset-4 group-hover:decoration-1 sm:text-2xl"
+            class="text-xl leading-tight font-serif font-medium group-hover/preview:underline group-hover/preview:decoration-dashed group-hover/preview:underline-offset-4 group-hover/preview:decoration-1 sm:text-2xl"
         >
             {title}
         </TitleTag>
-        <div class="mt-1 text-sm leading-normal">
-            {publishDate.getUTCFullYear()} · {paperType}
-        </div>
+        {showMeta && <div class="mt-1 text-sm leading-normal">{publishDate.getUTCFullYear()} · {paperType}</div>}
         {excerpt && <div class="mt-3 text-sm leading-normal">{excerpt}</div>}
     </div>
-    <div class="hidden font-serif italic opacity-0 transition group-hover:opacity-100 sm:inline-flex sm:gap-1 sm:items-center sm:shrink-0">
+    <div class="hidden font-serif italic opacity-0 transition group-hover/preview:opacity-100 sm:inline-flex sm:gap-1 sm:items-center sm:shrink-0">
         Read Paper <ArrowRight class="fill-current w-4 h-4" />
     </div>
 </a>

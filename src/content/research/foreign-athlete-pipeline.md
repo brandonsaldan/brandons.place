@@ -9,6 +9,9 @@ repositories:
   kcworks: "https://works.hcommons.org/records/07azx-8yw93"
   researchGate: "https://www.researchgate.net/publication/414924487_The_Foreign_Athlete_Pipeline_International_Recruiting_in_American_College_Athletics_as_a_Geopolitical_and_National_Security_Issue_1952-2026"
   academia: "https://www.academia.edu/165264001/The_Foreign_Athlete_Pipeline_International_Recruiting_in_American_College_Athletics_as_a_Geopolitical_and_National_Security_Issue_1952_2026"
+image:
+  src: "/research/foreign-athlete-pipeline.webp"
+  alt: "Oil painting of red curtains framing purple trees"
 pageCount: 25
 excerpt: "Tracing international recruitment in American college athletics from the Cold War to 2026, this paper examines the intersection of athletic labor, immigration law, and national security."
 publishDate: "2026-05-05"

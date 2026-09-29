@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PreviewBlock from '../components/PreviewBlock.astro';
 import ResearchPreview from '../components/ResearchPreview.astro';
 import { sortItemsByDateDesc } from '../utils/data-utils';
 
@@ -9,24 +10,24 @@ const papers = (await getCollection('research')).sort(sortItemsByDateDesc);
 
 <BaseLayout
     title="Research"
-    description="Selected academic and policy-oriented writing by Brandon Saldan on international relations, political economy, and national security."
+    description="Selected research and long-form inquiry by Brandon Saldan into institutions, technology, culture, and public life."
     image={{ src: '/og/og-main.png', alt: 'Research' }}
     showHeader={false}
 >
-    <h1 class="mb-12 text-2xl leading-tight font-serif italic sm:mb-16 sm:text-4xl">Research</h1>
+    <h1 class="mb-3 text-2xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Research</h1>
 
     <p class="mb-12 text-base leading-relaxed sm:mb-16 sm:text-lg">
-        Selected academic and policy-oriented writing on international systems, political economy, and national security.
+        Selected research and long-form inquiry into institutions, technology, culture, and the systems that shape public life.
     </p>
 
-    <div class="space-y-10 sm:space-y-12">
-        {papers.map((paper) => (
-            <article>
-                <ResearchPreview paper={paper} />
+    <div>
+        {papers.map((paper, index) => (
+            <PreviewBlock index={index} image={paper.data.image} href={`/research/${paper.id}/`}>
+                <ResearchPreview paper={paper} showMeta={false} />
                 <p class="mt-4 text-sm text-neutral-600 dark:text-neutral-400">
                     DOI: <a class="underline decoration-dashed decoration-1 underline-offset-2 hover:decoration-solid" href={`https://doi.org/${paper.data.doi}`}>{paper.data.doi}</a>
                 </p>
-            </article>
+            </PreviewBlock>
         ))}
     </div>
 </BaseLayout>

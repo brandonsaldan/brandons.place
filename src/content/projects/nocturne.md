@@ -2,6 +2,9 @@
 title: "Nocturne - Custom Firmware and Companion App Ecosystem for Spotify Car Thing Hardware"
 description: "An open-source custom firmware and companion app ecosystem that repurposes discontinued Spotify Car Thing hardware into a standalone Bluetooth media controller."
 publishDate: "2024-01-15"
+image:
+  src: "/projects/art/nocturne.webp"
+  alt: "Painterly artwork selected for the Nocturne project"
 isFeatured: true
 seo:
   image:

@@ -51,32 +51,65 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
                 {shortTitle}<span class="sr-only">: </span>
                 <span class="block mt-4 text-xl leading-snug font-normal sm:text-2xl">{subtitle}</span>
             </h1>
-            <p class="mt-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-                Brandon Saldan · {formatResearchDate(publishDate)} · {paperType} · {pageCount} pages
-            </p>
-            <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4">
-                <Button href={pdfUrl}>Read PDF</Button>
-                <p class="text-sm text-neutral-600 dark:text-neutral-400">
-                    DOI: <a class={linkClasses} href={`https://doi.org/${doi}`}>{doi}</a>
-                </p>
-            </div>
         </header>
 
-        <div class="max-w-none prose prose-main sm:prose-lg">
-            <h2>{abstractLabel}</h2>
-            <Content />
+        <div class="border-y border-main/15 py-6 sm:py-8">
+            <div class="grid gap-7 sm:grid-cols-3 sm:gap-10">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Author</p>
+                    <p class="mt-2 text-sm leading-relaxed">Brandon Saldan</p>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Published</p>
+                    <p class="mt-2 text-sm leading-relaxed">{formatResearchDate(publishDate)}</p>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Persistent identifier</p>
+                    <a class={`mt-2 block break-all text-sm ${linkClasses}`} href={`https://doi.org/${doi}`} target="_blank" rel="noreferrer">doi:{doi}</a>
+                </div>
+            </div>
         </div>
-        <p class="mt-6 text-sm leading-relaxed italic text-neutral-600 dark:text-neutral-400">{researchContext}</p>
 
-        <div class="mt-8 pt-6 border-t border-dashed border-main/30 sm:mt-12">
-            <p class="text-sm leading-relaxed">
-                Also available on <a class={linkClasses} href={repositories.kcworks}>KCWorks</a>,
-                <a class={linkClasses} href={repositories.researchGate}>ResearchGate</a>, and
-                <a class={linkClasses} href={repositories.academia}>Academia.edu</a>.
-            </p>
-            <details class="mt-6">
-                <summary class="w-fit cursor-pointer text-lg font-serif italic hover:underline hover:underline-offset-2">Cite this paper</summary>
-                <p class="mt-4 text-sm leading-relaxed" data-citation-text>{citation}</p>
+        <div class="mt-10 grid gap-12 sm:mt-14 sm:grid-cols-[minmax(0,1fr)_14rem] sm:gap-16">
+            <div class="min-w-0">
+                <h2 class="mb-5 text-2xl font-serif italic sm:text-3xl">Abstract</h2>
+                <div class="max-w-none prose prose-main sm:prose-lg">
+                    <Content />
+                </div>
+                <div class="mt-10 max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 sm:mt-12">
+                    <p class="mb-2 text-xs uppercase tracking-[0.16em] text-main/45">Context</p>
+                    <p class="italic">{researchContext}</p>
+                </div>
+            </div>
+
+            <aside class="self-start sm:sticky sm:top-8">
+                <div class="border-t-2 border-main pt-4">
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access this paper</p>
+                    <Button class="mt-4 w-full" href={pdfUrl} target="_blank" rel="noreferrer">Read PDF <span class="ml-2 text-xs not-italic">↗</span></Button>
+                    <div class="mt-5 divide-y divide-main/15 border-y border-main/15">
+                        <a class={`block py-3 text-sm ${linkClasses}`} href={`https://doi.org/${doi}`} target="_blank" rel="noreferrer">Open DOI <span class="float-right">↗</span></a>
+                        <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.kcworks} target="_blank" rel="noreferrer">KCWorks <span class="float-right">↗</span></a>
+                        <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.researchGate} target="_blank" rel="noreferrer">ResearchGate <span class="float-right">↗</span></a>
+                        <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.academia} target="_blank" rel="noreferrer">Academia.edu <span class="float-right">↗</span></a>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-xs uppercase tracking-[0.16em] text-main/50">Paper details</p>
+                        <dl class="mt-4 space-y-4 text-sm leading-relaxed">
+                            <div><dt class="text-main/50">Format</dt><dd>{paperType}</dd></div>
+                            <div><dt class="text-main/50">Length</dt><dd>{pageCount} pages</dd></div>
+                            <div><dt class="text-main/50">Keywords</dt><dd>{frameworks.join(' · ')}</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <div class="mt-12 sm:mt-16">
+            <details>
+                <summary class="w-fit cursor-pointer font-serif text-lg italic hover:underline hover:underline-offset-2">Cite this paper</summary>
+                <div class="mt-5 max-w-2xl rounded-sm bg-muted px-5 py-4 sm:px-6">
+                    <p class="text-sm leading-relaxed" data-citation-text>{citation}</p>
+                </div>
                 <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-4">
                     <Button type="button" class="hidden" data-copy-citation>Copy citation</Button>
                     <a class:list={['text-sm', linkClasses]} href={`/research/${paper.id}.bib`} download={`${paper.id}.bib`}>Download BibTeX</a>

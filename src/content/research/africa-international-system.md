@@ -9,6 +9,9 @@ repositories:
   kcworks: "https://works.hcommons.org/records/j8av3-99j73"
   researchGate: "https://www.researchgate.net/publication/414928720_Africa_in_the_International_System_Theoretical_Perspectives_Challenges_and_Strategic_Pathways"
   academia: "https://www.academia.edu/161255162/Africa_in_the_International_System_Theoretical_Perspectives_Challenges_and_Strategic_Pathways"
+image:
+  src: "/research/africa-international-system.webp"
+  alt: "Painterly landscape of a waterfront settlement beneath a mountain"
 pageCount: 15
 abstractLabel: "Overview"
 excerpt: "This paper analyzes Africa's position in the international system through major IR and political economy frameworks, then evaluates structural constraints and strategic pathways for greater agency in a multipolar environment."

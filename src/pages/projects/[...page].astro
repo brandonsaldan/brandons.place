@@ -4,6 +4,7 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Pagination from '../../components/Pagination.astro';
 import ProjectPreview from '../../components/ProjectPreview.astro';
+import PreviewBlock from '../../components/PreviewBlock.astro';
 import siteConfig from '../../data/site-config';
 import { sortItemsByDateDesc } from '../../utils/data-utils';
 
@@ -20,11 +21,18 @@ const portfolio = page.data;
 
 <BaseLayout
     title="Portfolio"
-    description="A collection of projects I've worked on."
+    description="Software, products, and experiments built across engineering, design, and the spaces where technical work meets everyday life."
     image={{ src: '/og/og-main.png', alt: 'The preview of the site' }}
     showHeader={false}
 >
-    <h1 class="mb-12 text-2xl leading-tight font-serif italic sm:mb-16 sm:text-4xl">Projects</h1>
-    {portfolio.map((project) => <ProjectPreview project={project} class="mb-10 sm:mb-12" />)}
+    <h1 class="mb-3 text-2xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Projects</h1>
+    <p class="mb-12 text-base leading-relaxed sm:mb-16 sm:text-lg">Software, products, and experiments built across engineering, design, and the spaces where technical work meets everyday life.</p>
+    <div>
+        {portfolio.map((project, index) => (
+        <PreviewBlock index={index} image={project.data.image} href={`/projects/${project.id}/`}>
+                <ProjectPreview project={project} />
+            </PreviewBlock>
+        ))}
+    </div>
     <Pagination page={page} class="my-16 sm:my-24" />
 </BaseLayout>
