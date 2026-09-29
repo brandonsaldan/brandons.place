@@ -5,17 +5,11 @@ import ArrowRight from '../icons/ArrowRight.astro';
 type Props = { paper: CollectionEntry<'research'>; class?: string; headingLevel?: 'h2' | 'h3' };
 
 const { paper, class: className, headingLevel = 'h2' } = Astro.props;
-const { title, paperType, excerpt, pdfUrl, readingTime: customReadingTime } = paper.data;
+const { title, paperType, excerpt, publishDate } = paper.data;
 const TitleTag = headingLevel;
-
-const content = paper.body || '';
-const wordsPerMinute = 200;
-const wordCount = content.trim().split(/\s+/).length;
-const calculatedReadingTime = Math.ceil(wordCount / wordsPerMinute);
-const readingTime = customReadingTime || calculatedReadingTime;
 ---
 
-<a class:list={['flex justify-between items-start gap-8 group', className]} href={pdfUrl} target="_blank">
+<a class:list={['flex justify-between items-start gap-8 group', className]} href={`/research/${paper.id}/`}>
     <div class="grow">
         <TitleTag
             class="text-xl leading-tight font-serif font-medium group-hover:underline group-hover:decoration-dashed group-hover:underline-offset-4 group-hover:decoration-1 sm:text-2xl"
@@ -23,13 +17,7 @@ const readingTime = customReadingTime || calculatedReadingTime;
             {title}
         </TitleTag>
         <div class="mt-1 text-sm leading-normal">
-            {paperType}
-            {readingTime > 0 && (
-                <>
-                    {' · '}
-                    <span>{readingTime} min read</span>
-                </>
-            )}
+            {publishDate.getUTCFullYear()} · {paperType}
         </div>
         {excerpt && <div class="mt-3 text-sm leading-normal">{excerpt}</div>}
     </div>
