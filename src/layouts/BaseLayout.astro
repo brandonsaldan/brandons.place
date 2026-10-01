@@ -11,17 +11,25 @@ const { showHeader = true, ...head } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="antialiased break-words overflow-x-hidden">
+<html lang="en" class="antialiased break-words overflow-x-clip">
     <head>
         <BaseHead {...head} />
+        <slot name="head" />
         <script>
             if (localStorage.theme === 'dark') {
                 document.documentElement.classList.add('dark');
             }
         </script>
+        <script>
+            document.addEventListener('dragstart', (event) => {
+                if (event.target instanceof HTMLImageElement) {
+                    event.preventDefault();
+                }
+            });
+        </script>
         <ClientRouter />
     </head>
-    <body class="bg-main text-main">
+    <body class:list={['bg-main text-main', { 'overflow-x-clip': Astro.url.pathname === '/travel' }]}>
         <div class="flex flex-col min-h-screen px-4 md:px-8">
             <Nav />
             {showHeader && <Header />}

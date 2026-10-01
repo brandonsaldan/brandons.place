@@ -54,16 +54,16 @@ const siteConfig: SiteConfig = {
       href: "/projects",
     },
     {
+      text: "Research",
+      href: "/research",
+    },
+    {
       text: "Blog",
       href: "/blog",
     },
     {
       text: "Travel",
       href: "/travel",
-    },
-    {
-      text: "Research",
-      href: "/research",
     },
   ],
   footerNavLinks: [
@@ -91,7 +91,7 @@ const siteConfig: SiteConfig = {
     },
   ],
   hero: {
-    text: "My work centers on leveraging technology, data, and business strategy to manage teams and operations and address complex organizational problems, especially in policy and national security contexts.\n\nMy software engineering background gives me a technical lens on strategic challenges - I understand how systems are built, which helps me evaluate technology investments, manage technical teams, and bridge the gap between engineering and business leadership.\n\nI work as a Technical Advisor at Apple while completing dual degrees in Management Information Systems, and Business Analytics, with minors in Political Science, and American Studies. Alongside my studies, I build and consult on digital products, bringing technical depth into business and mission-driven environments.",
+    text: "I work at the intersection of technology, data, and business strategy, helping teams navigate complex operational and organizational problems, especially in policy and national security.\n\nI’m a Technical Advisor at Apple, completing dual degrees in Management Information Systems and Business Analytics with minors in Political Science and American Studies. My software engineering background helps me evaluate technology, lead technical work, and build digital products that connect engineering with business strategy.",
     actions: [
       {
         text: "Get in Touch",

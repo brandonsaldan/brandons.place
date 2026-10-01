@@ -9,7 +9,7 @@ const hero = siteConfig.hero;
 
 {
     (hero?.title || hero?.image?.src || hero?.text || (hero?.actions && hero.actions.length > 0)) && (
-        <section class="w-full flex flex-col gap-8 mb-16 sm:mb-24">
+        <section class="w-full flex flex-col gap-8 mb-6 sm:mb-24">
             {hero.title && <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">{hero.title}</h1>}
             {hero.image?.src && (
                 <figure>
@@ -27,7 +27,7 @@ const hero = siteConfig.hero;
             )}
         </section>
 
-        <div class="relative -mx-4 md:-mx-8 w-screen" style="left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+        <div class="relative -mx-4 md:-mx-8 w-screen mt-6 sm:mt-20" style="left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
             <PhotoGallery />
         </div>
     )

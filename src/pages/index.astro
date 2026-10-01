@@ -5,6 +5,7 @@ import Button from '../components/Button.astro';
 import Hero from '../components/Hero.astro';
 import PostPreview from '../components/PostPreview.astro';
 import ProjectPreview from '../components/ProjectPreview.astro';
+import PreviewBlock from '../components/PreviewBlock.astro';
 import ResearchPreview from '../components/ResearchPreview.astro';
 import siteConfig from '../data/site-config';
 import { sortItemsByDateDesc } from '../utils/data-utils';
@@ -30,33 +31,15 @@ const featuredResearch = research.filter(({ data }) => data.isFeatured);
                         {featuredProjects.length} {featuredProjects.length === 1 ? 'project' : 'projects'}
                     </span>
                 </div>
-                <div class="grid gap-6 sm:gap-8">
-                    {featuredProjects.map((project) => (
-                        <ProjectPreview project={project} headingLevel="h3" />
+                <div>
+                    {featuredProjects.map((project, index) => (
+                        <PreviewBlock index={index} image={project.data.image} href={`/projects/${project.id}/`}>
+                            <ProjectPreview project={project} headingLevel="h3" />
+                        </PreviewBlock>
                     ))}
                 </div>
                 <div class="mt-12 sm:mt-16 text-center">
                     <Button href="/projects">View All Projects</Button>
-                </div>
-            </div>
-        )
-    }
-    {
-        featuredPosts?.length > 0 && (
-            <div class="mb-16 sm:mb-24">
-                <div class="flex items-baseline justify-between mb-8 sm:mb-12">
-                    <h2 class="text-xl font-serif italic sm:text-2xl">Recent Writing</h2>
-                    <span class="text-base font-serif italic text-neutral-500 dark:text-neutral-500">
-                        {featuredPosts.length} {featuredPosts.length === 1 ? 'post' : 'posts'}
-                    </span>
-                </div>
-                <div class="space-y-6">
-                    {featuredPosts.map((post) => (
-                        <PostPreview post={post} headingLevel="h3" />
-                    ))}
-                </div>
-                <div class="mt-12 sm:mt-16 text-center">
-                    <Button href="/blog">View All Posts</Button>
                 </div>
             </div>
         )
@@ -70,13 +53,37 @@ const featuredResearch = research.filter(({ data }) => data.isFeatured);
                         {featuredResearch.length} {featuredResearch.length === 1 ? 'paper' : 'papers'}
                     </span>
                 </div>
-                <div class="space-y-6">
-                    {featuredResearch.map((paper) => (
-                        <ResearchPreview paper={paper} headingLevel="h3" />
+                <div>
+                    {featuredResearch.map((paper, index) => (
+                        <PreviewBlock index={index} image={paper.data.image} href={`/research/${paper.id}/`}>
+                            <ResearchPreview paper={paper} headingLevel="h3" showMeta={false} />
+                        </PreviewBlock>
                     ))}
                 </div>
                 <div class="mt-12 sm:mt-16 text-center">
                     <Button href="/research">View All Research</Button>
+                </div>
+            </div>
+        )
+    }
+    {
+        featuredPosts?.length > 0 && (
+            <div class="mb-16 sm:mb-24">
+                <div class="flex items-baseline justify-between mb-8 sm:mb-12">
+                    <h2 class="text-xl font-serif italic sm:text-2xl">Recent Writing</h2>
+                    <span class="text-base font-serif italic text-neutral-500 dark:text-neutral-500">
+                        {featuredPosts.length} {featuredPosts.length === 1 ? 'post' : 'posts'}
+                    </span>
+                </div>
+                <div>
+                    {featuredPosts.map((post, index) => (
+                        <PreviewBlock index={index} image={post.data.image} href={`/blog/${post.id}/`}>
+                            <PostPreview post={post} headingLevel="h3" showMeta={false} />
+                        </PreviewBlock>
+                    ))}
+                </div>
+                <div class="mt-12 sm:mt-16 text-center">
+                    <Button href="/blog">View All Posts</Button>
                 </div>
             </div>
         )

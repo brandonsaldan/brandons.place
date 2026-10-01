@@ -1,284 +1,1448 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TravelStats from '../components/TravelStats.astro';
-import TravelMap from '../components/TravelMap.astro';
+import TripCollage from '../components/TripCollage.astro';
 import travelData from '../data/travel-data';
+
+const trips = [
+  {
+    name: 'La Altagracia',
+    date: 'Jun 2007',
+    sortKey: '2007-06',
+    places: 'Dominican Republic',
+    detail: 'Punta Cana',
+    mode: 'air',
+    scene: 'punta',
+  },
+  {
+    name: 'Newfoundland',
+    date: 'Jul 2018',
+    sortKey: '2018-07',
+    places: 'Canada',
+    detail: 'Twillingate, Cape Spear, St. John’s, Gander',
+    mode: 'air',
+    scene: 'notebook',
+    intro: 'A trip to visit family and see the island from its beaches and cliffs. We stood at Cape Spear, the easternmost point in mainland North America, walked through the World War I trench recreation in Elliston, and fired a Lee-Enfield and an (inert) grenade launcher. By the end, I had also learned how to gut, clean, and cook a cod.',
+    slides: [
+      { label: 'puffins', image: '/photos/newfoundland-puffins.webp', caption: 'puffins' },
+      { label: 'harbor', image: '/photos/newfoundland-harbor.webp', caption: 'harbor view' },
+      { label: 'the lighthouse', image: '/photos/newfoundland-lighthouse.webp', caption: 'long point', alt: 'The Long Point Lighthouse sign in Newfoundland' },
+      { label: 'the catch', image: '/photos/newfoundland-fishing.webp', caption: 'preparing the catch', alt: 'Cleaning a fish in Newfoundland' },
+      { label: 'the range', image: '/photos/newfoundland-range-display.webp', caption: 'at the range', alt: 'A shooting range in Newfoundland' },
+      { label: 'the coast', image: '/photos/newfoundland-flag.webp', caption: 'a good wind' },
+    ],
+  },
+  {
+    name: 'Central Europe',
+    date: 'Apr 2019',
+    sortKey: '2019-04',
+    places: 'Germany · Czechia · Poland · Slovakia · Hungary',
+    detail: 'Berlin, Dresden, Prague, Kraków, Oświęcim, Košice, Budapest',
+    mode: 'air',
+    scene: 'foldout',
+    intro: 'A school trip during my sophomore year took us through five countries, mostly by bus with a few long train rides. We visited war museums in Berlin, had a day to explore Prague on our own, toured the Wieliczka Salt Mine and Auschwitz, and spent time exploring Budapest. I had plenty of beer, bratwurst, and pretzels in Germany, and incredible pierogi in Poland. It was an amazing trip, and I met many great people along the way.',
+    slides: [
+      { label: 'Berlin', image: '/photos/europe-berlin-reichstag.webp', caption: 'the reichstag' },
+      { label: 'Prague', image: '/photos/europe-prague-clock.webp', caption: 'prague astronomical clock' },
+      { label: 'Prague', image: '/photos/europe-statue.webp', caption: 'on charles bridge, prague' },
+      { label: 'Prague', image: '/photos/europe-church.webp', caption: 'church of saint nicholas, prague' },
+      { label: 'Kraków', image: '/photos/europe-wawel-cathedral.webp', caption: 'wawel cathedral, kraków' },
+      { label: 'Budapest', image: '/photos/europe-budapest-basilica.webp', caption: 'st. stephen’s basilica, budapest' },
+    ],
+  },
+  {
+    name: 'Tampa Bay',
+    date: 'Jul 2022',
+    sortKey: '2022-07',
+    places: 'Florida',
+    detail: 'St. Petersburg, Clearwater, Pinellas Park',
+    mode: 'photo journal',
+    scene: 'tampa-scrapbook',
+    intro: 'I met up with some of my closest friends, most of whom I had only known online through software development. We watched incredible sunsets, raced go-karts more times than I can count, and met glaive backstage before his concert. After the show, his touring drummer gave me one of the sticks he had played with and signed it for me, which meant even more because I play drums too. (Thank you Devin!)',
+    slides: [
+      { label: 'The water', image: '/photos/tampa-sunset.webp', caption: 'last light', alt: 'Sunset over the water in Tampa Bay' },
+      { label: 'Sand Key', image: '/photos/tampa-sand-key.webp', caption: 'first group pic', alt: 'Friends together at Sand Key' },
+      { label: 'St. Pete', image: '/photos/tampa-st-petersburg-night.webp', caption: 'after dark', alt: 'Friends together at night in St. Petersburg' },
+      { label: 'The Orpheum', image: '/photos/tampa-orpheum.webp', caption: 'before the show', alt: 'Backstage with the band at the Orpheum' },
+    ],
+  },
+  {
+    name: 'Nassau',
+    date: 'Apr 2023',
+    sortKey: '2023-04',
+    places: 'The Bahamas',
+    detail: 'Charleston, Half Moon Cay',
+    mode: 'sea',
+    scene: 'ship-log',
+    intro: 'My first cruise. I spent a day walking around Nassau, got yelled at by street vendors when I passed on their sunglasses, and spent a couple of hours on the beach at Half Moon Cay.',
+    slides: [
+      { label: 'At sea', image: '/photos/bahamas-at-sea.webp', caption: 'committing code in the middle of the ocean' },
+      { label: 'On board', image: '/photos/bahamas-ship-interior-display.webp', caption: 'the ship’s atrium' },
+      { label: 'Tender ride', image: '/photos/bahamas-tender-display.webp', caption: 'between ship and shore' },
+      { label: 'Nassau', image: '/photos/bahamas-nassau-building-display.webp', caption: 'a morning in nassau' },
+    ],
+  },
+  {
+    name: 'Catskill Mountains',
+    date: 'Oct 2024',
+    sortKey: '2024-10',
+    places: 'New York',
+    detail: 'Hudson, Athens',
+    mode: 'photo journal',
+    scene: 'scorecard',
+    intro: 'The first Bagel Fund meetup took us by train from Penn Station up to the mountains. We made steak with garlic truffle butter, beat the odds by building a fire after recent rain soaked the wood and kindling, roasted marshmallows, hiked part of the mountains, and skipped plenty of rocks across the lake.',
+    slides: [
+      { label: 'The lake', image: '/photos/catskills-lake.webp', caption: 'on the lake' },
+      { label: 'The team', image: '/photos/catskills-bagel-fund.webp', caption: 'bagel fund team' },
+      { label: 'The road', image: '/photos/catskills-fall-road.webp', caption: 'great sights in the fall' },
+      { label: 'The fire', image: '/photos/catskills-fire-display.webp', caption: 'building the fire' },
+    ],
+  },
+  {
+    name: 'Caribbean',
+    date: 'Feb 2026',
+    sortKey: '2026-02',
+    places: 'The Bahamas · Turks and Caicos · Dominican Republic',
+    detail: 'Half Moon Cay, Grand Turk, Amber Cove',
+    mode: 'sea',
+    scene: 'port-pass',
+    intro: 'Weather left us stranded in port for a while, but there was plenty to do on board. We watched the Super Bowl in the ship’s theater, had French toast with peach compote for breakfast, drank plenty of piña coladas, and I won a little over $800 in the casino.',
+    slides: [
+      { label: 'The theater', image: '/photos/caribbean-theater-display.webp', caption: 'super bowl watch party' },
+      { label: 'Dinner', image: '/photos/caribbean-dinner-display.webp', caption: 'demolished' },
+      { label: 'The pool deck', image: '/photos/caribbean-pool-deck-display.webp', caption: 'pool deck' },
+      { label: 'On shore', image: '/photos/caribbean-beach-display.webp', caption: 'on shore' },
+      { label: 'The casino', image: '/photos/caribbean-slots-display.webp', caption: 'a lucky night' },
+    ],
+  },
+];
+
+const futurePlaces = [
+  'Afghanistan', 'Antarctica', 'Bosnia and Herzegovina', 'Cambodia', 'Chile',
+  'Cuba', 'El Salvador', 'Greenland', 'Iran', 'Iraq', 'Israel', 'Italy', 'Kosovo',
+  'Morocco', 'Myanmar', 'New Zealand', 'North Korea', 'Palestine (West Bank)',
+  'Russia', 'Rwanda', 'Serbia', 'Singapore', 'South Africa', 'South Korea',
+  'Spain', 'Taiwan', 'Transnistria', 'Turkmenistan', 'Ukraine',
+  'United Arab Emirates', 'United Kingdom', 'Vietnam', 'Western Sahara',
+  'Zimbabwe',
+];
+
+const placesOnMyMind = [
+  'Antarctica', 'Greenland', 'Morocco', 'New Zealand', 'Singapore', 'Vietnam',
+];
+const otherFuturePlaces = futurePlaces.filter((place) => !placesOnMyMind.includes(place));
+const timelineTrips = [...trips].sort((a, b) => a.sortKey.localeCompare(b.sortKey));
+
+const statesCount = travelData.states.filter((state) => state.name !== 'Washington, DC').length;
+const journeyGroups = Array.from(
+  travelData.journeys.reduce((groups, journey) => {
+    const year = journey.date?.split('-')[1] ?? 'Undated';
+    const group = groups.get(year) ?? [];
+    group.push(journey);
+    groups.set(year, group);
+    return groups;
+  }, new Map<string, typeof travelData.journeys>())
+).reverse();
 ---
 
 <BaseLayout
   title="Travel"
-  description="Places I've been and journeys I've taken"
+  description="A personal index of trips taken and places still on my mind."
   image={{ src: '/og/og-main.png', alt: 'Travel' }}
   showHeader={false}
 >
-  <h1 class="mb-12 text-2xl leading-tight font-serif italic sm:mb-16 sm:text-4xl">Travel</h1>
+  <h1 class="mb-3 text-2xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Travel</h1>
+  <p class="mb-10 max-w-3xl text-base leading-relaxed sm:mb-14 sm:text-lg">
+    I like going places. Here are a few trips that stand out, along with the places I’ve been and the ones I’d still like to see.
+  </p>
 
-  <section class="mb-12 sm:mb-16">
-    <TravelStats states={travelData.states} countries={travelData.countries} />
-  </section>
+  <section class="mb-16 sm:mb-24" aria-labelledby="trips-heading">
+    <h2 id="trips-heading" class="sr-only">Trips that stand out</h2>
 
-  <section class="mb-12 sm:mb-16">
-    <h2 class="text-xl font-serif italic mb-8 sm:text-2xl">
-      Journey Map
-    </h2>
-    <TravelMap journeys={travelData.journeys} />
-  </section>
-
-  <section>
-    <h2 class="text-xl font-serif italic mb-8 sm:text-2xl">
-      Future Destinations
-    </h2>
-
-    <div class="space-y-6">
-      <p class="text-base leading-relaxed sm:text-lg">
-        One of my long-term goals is to visit all seven continents. So far, I've been to North America and Europe - five more to go.
-      </p>
-
-      <div class="space-y-6">
-        <div>
-          <h3 class="text-lg font-serif font-medium mb-3">Places I Want to Visit</h3>
-
-          <div class="space-y-4">
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Afghanistan</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                The end state of America's longest war and Taliban governance in practice. A critical case study in state failure, humanitarian crisis, and non-Western governance models. Represents what happens when external intervention ends and local power structures reassert control.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Antarctica</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                The ultimate frontier. Governed by international treaty, critical for climate research, and a test case for global scientific cooperation.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Bosnia and Herzegovina</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Post-conflict governance and frozen ethnic division. Sarajevo shows the legacy of international administration and what happens when peace is imposed without reconciliation. A complex constitutional structure designed to prevent war but unable to build a functional state.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Cambodia</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Post-Khmer Rouge recovery under authoritarian governance. Phnom Penh shows how a state rebuilds after genocide while maintaining one-party rule under Hun Sen's decades-long grip on power. Increasingly aligned with China through Belt and Road infrastructure, representing democratic backsliding and Beijing's growing influence in Southeast Asia.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Chile</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Transition from dictatorship to democracy and Latin America's most stable economy. Santiago represents successful neoliberal reform. Shows both the successes and limitations of market-oriented development.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Cuba</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                The last major socialist state in the Western Hemisphere. Havana is a living museum of Cold War politics, showing how embargo economics and one-party rule operate in practice.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">El Salvador</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Shows how a small state responds to crime with mass incarceration while simultaneously attempting radical economic innovation. A test case for whether security-first governance can rebuild a failed state.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Greenland</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Arctic geopolitics and climate change frontline. As ice melts, shipping routes open and resource competition intensifies. An autonomous territory of Denmark becoming increasingly strategic for great power competition.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Iran</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Theocratic governance and a major regional power operating outside Western frameworks. Tehran, Isfahan, and Shiraz display how an isolated but sophisticated state maintains influence through sanctions, proxy networks, and a unique political-religious system.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Iraq</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Post-conflict state rebuilding and the long-term consequences of intervention. Erbil in Kurdistan shows autonomous governance within a federal system, while Baghdad showcases the realities of reconstruction, sectarian dynamics, and state fragility in a region shaped by decades of conflict.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Israel</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Advanced military-tech state and startup ecosystem built on security imperatives. Tel Aviv for tech innovation, Jerusalem for geopolitics and religious dynamics. Shows how a small state maintains regional dominance through technological edge, intelligence capabilities, and strategic alliances.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Italy</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                European Union member state with political fragmentation and populist movements. Rome and Milan show how a wealthy democracy can experience government instability, debt crises, and immigration pressures while remaining culturally influential.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Kosovo</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Contested statehood and NATO intervention legacy. Pristina shows the challenges of new state-building, international recognition politics, and ongoing tensions with Serbia.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Morocco</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Moderate monarchy in North Africa balancing tradition with modernization. Rabat and Casablanca show how an Arab state maintains stability through gradual reform while managing Western Sahara occupation. A key U.S. partner and model for measured political opening in an unstable region.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Myanmar</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Military junta governance and democratic backsliding. An example of what happens when a transitional democracy fails, with ongoing ethnic conflicts and the reassertion of military control over civilian institutions. Shows the fragility of political reform in authoritarian contexts.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">New Zealand</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Progressive governance and unique position in Pacific security. Auckland and Wellington combine beautiful landscapes with a model of transparent, effective democracy. Increasingly important in U.S.-China competition as Pacific island nations become strategic assets in great power rivalry.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">North Korea</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                The most isolated state in the international system. A rare opportunity to observe authoritarian governance, juche ideology, and information control in practice. Shows Cold War relics and how a regime maintains total control over a population.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Palestine (West Bank)</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Occupation dynamics, settlements, and stateless governance. Ramallah and Hebron show how contested sovereignty functions in daily life, checkpoints, dual legal systems, and the mechanics of a conflict that shapes Middle Eastern politics and international law.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Russia</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Resurgent authoritarian power and great power revisionism. Moscow and St. Petersburg display how a declining state maintains global influence through energy leverage, military intervention, and information warfare. Central to understanding European security, nuclear politics, and challenges to the liberal international order.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Rwanda</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Post-genocide reconstruction and an authoritarian development model. Kigali is remarkably clean and organized, representing controversial but effective governance.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Serbia</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Regional power navigating between Russia and the West. Belgrade shows how a former pariah state rebuilds influence, balances competing great power interests, and maintains nationalist politics while seeking EU integration. Key to understanding Balkan stability and European security dynamics.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Singapore</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                The gold standard for governance efficiency, urban planning, and economic strategy. A city-state that punches far above its weight through meritocracy, strategic positioning, and disciplined state management. Shows how small states can dominate in trade, finance, and regional influence.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">South Africa</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                A critical player in African regional dynamics, with complex post-apartheid transformation and strategic importance in global affairs.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">South Korea</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Successful democracy in Northeast Asia and North Korea's counterpart. Seoul represents what the other Korea could have been, economic powerhouse, cultural exporter, and tech leader. A case study in rapid modernization and democratic consolidation on the front lines of authoritarian-democratic competition.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Spain</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Post-Franco democracy with regional separatism. Madrid and Barcelona reveal tensions between centralized governance and regional autonomy, particularly in Catalonia and the Basque Country. Shows how national identity disputes persist in established democracies and how states manage secessionist pressures.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Taiwan</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Frontline of U.S.-China competition and contested sovereignty. Taipei is critical for understanding tech geopolitics through semiconductor dominance, while the island represents democratic resilience under authoritarian pressure. The most dangerous flashpoint in modern great power rivalry.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Transnistria</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Unrecognized breakaway state propped up by Russia. Tiraspol is a Soviet time capsule and case study in frozen conflict, a statelet that exists in limbo, unrecognized but functional. Shows how great powers use proxy territories to maintain influence and prevent adversaries from consolidating control.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Turkmenistan</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                One of the world's most closed societies and extreme authoritarian governance. Ashgabat is a surreal monument to state control, personality cult, and resource wealth, with marble palaces in a desert and little connection to the outside world. A study in how isolation and autocracy function at their most extreme.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Ukraine</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Active war zone and the defining conflict of 21st century Europe. Kyiv represents resistance to authoritarian expansion and the front line of democratic defense. A test case for Western resolve, NATO expansion consequences, and how great power competition manifests in territorial conflict.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">United Arab Emirates</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Gulf state modernization and soft power projection. Dubai and Abu Dhabi showcase what petrostates can become through diversification, infrastructure investment, and strategic positioning as global hubs. A model of resource-driven development beyond oil dependency.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">United Kingdom</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Post-Brexit Britain redefining its global role. London remains a financial hub, but the UK now navigates between Europe and the Anglosphere, searching for relevance after empire and EU membership. Shows how middle powers adjust to diminished status while maintaining outsized cultural and intelligence influence.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Vietnam</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Socialist market economy and rapid development under one-party rule. Ho Chi Minh City and Hanoi show economic transformation while maintaining political control. A strategic player in U.S.-China competition and a case study in how communist states can embrace capitalism without democratizing.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Western Sahara</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Africa's last colonial question and a territorial conflict most people have never heard of. Moroccan-controlled but disputed by the Polisario Front. Shows how decolonization remains incomplete and how resource-rich disputed territories become frozen conflicts ignored by the international system.
-              </p>
-            </div>
-
-            <div class="border-l-2 border-neutral-300 dark:border-neutral-700 pl-4">
-              <h4 class="font-medium mb-1">Zimbabwe</h4>
-              <p class="text-sm text-neutral-700 dark:text-neutral-300">
-                Post-liberation state failure and economic collapse under authoritarian rule. Harare shows what happens when a resource-rich nation is mismanaged by kleptocratic elites.
-              </p>
-            </div>
+    <div class="travel-timeline" data-travel-timeline>
+      <div class="travel-timeline-rail-slot">
+        <aside class="travel-timeline-rail" aria-label="Travel timeline">
+          <div class="travel-timeline-sticky">
+            <span class="travel-timeline-count mb-3 block text-[0.65rem] font-medium uppercase tracking-[0.16em] text-main/45" data-timeline-count>Trip 01 / {String(timelineTrips.length).padStart(2, '0')}</span>
+            <span class="travel-timeline-date mt-2 block font-serif text-2xl italic leading-none sm:text-3xl" data-timeline-date>{timelineTrips[0].date}</span>
+            <span class="travel-timeline-progress mt-5 block h-px bg-main/15"><span></span></span>
           </div>
+        </aside>
+      </div>
+
+      <div class="travel-timeline-entries">
+        <span class="travel-timeline-line-progress" data-timeline-line-progress aria-hidden="true"></span>
+        {timelineTrips.map((trip) => (
+          <article
+            class:list={['travel-timeline-entry', { 'travel-timeline-entry--punta': trip.scene === 'punta', 'travel-timeline-entry--notebook': trip.scene === 'notebook', 'travel-timeline-entry--foldout': trip.scene === 'foldout', 'travel-timeline-entry--tampa-scrapbook': trip.scene === 'tampa-scrapbook', 'travel-timeline-entry--ship-log': trip.scene === 'ship-log', 'travel-timeline-entry--scorecard': trip.scene === 'scorecard', 'travel-timeline-entry--port-pass': trip.scene === 'port-pass' }]}
+            data-timeline-entry
+            data-timeline-date={trip.date}
+          >
+            <time class="sr-only">{trip.date}</time>
+            <span class="travel-timeline-marker" data-marker-date={trip.date} aria-hidden="true"></span>
+            <div class="travel-timeline-card">
+              {trip.scene === 'punta' ? (
+                <div class="punta-scene" data-punta-scene>
+                  <div class="punta-scene-stage">
+                    <h3 class="font-serif text-3xl leading-[1.05] sm:text-4xl">{trip.name}</h3>
+                    <p class="trip-place text-sm leading-relaxed sm:text-base">{trip.places}</p>
+                    <p class="trip-detail font-serif text-sm italic leading-relaxed text-main/50">{trip.detail}</p>
+                    <div class="punta-scene-intro">
+                      <p>My first flight and real trip. I was too young to remember much, but I do remember trying to order chocolate milk at a restaurant. What arrived was milk with chocolate sticks in it, and after a few unsuccessful attempts by my parents to explain in English what I meant, I finally offered, “leche chocolate!” an imperfect bit of Spanish I had probably picked up from watching Dora the Explorer. I don’t actually remember whether that worked either, but apparently my attempt got a laugh out of the restaurant staff.</p>
+                    </div>
+                    <div class="punta-scene-objects">
+                      <div class="punta-passport" aria-hidden="true">
+                        <img class="punta-passport-cover-image" src="/photos/punta-cana-passport.webp" alt="" decoding="async" />
+                      </div>
+                      <figure class="punta-flight-photo">
+                        <img src="/photos/punta-cana-flight.webp" alt="Brandon as a child on his first flight to Punta Cana" decoding="async" fetchpriority="high" />
+                        <figcaption>first flight</figcaption>
+                      </figure>
+                      <div class="punta-ticket">
+                        <div class="punta-ticket-main">
+                          <div class="punta-ticket-meta"><span>boarding pass</span><span></span></div>
+                          <span class="punta-ticket-barcode" aria-hidden="true"></span>
+                          <div class="punta-ticket-route">
+                            <span class="punta-ticket-airport"><strong>PHL</strong><small>Philadelphia</small></span>
+                            <span class="punta-route-path" aria-hidden="true">
+                              <svg viewBox="0 0 120 34" preserveAspectRatio="none" role="presentation"><path d="M1 16C33 -8 87 -8 119 16" /></svg>
+                              <svg class="punta-route-plane" viewBox="0 0 24 24" role="presentation"><path d="M22 16.21v-1.895L14 8V4a2 2 0 0 0-4 0v4.105L2 14.42v1.789l8-2.81V18l-3 2v2l5-2 5 2v-2l-3-2v-4.685l8 2.895z" /></svg>
+                            </span>
+                            <span class="punta-ticket-airport"><strong>PUJ</strong><small>Punta Cana</small></span>
+                          </div>
+                          <div class="punta-ticket-details">
+                            <span><small>Passenger</small><strong>Brandon Saldan</strong></span>
+                            <span><small>Flight</small><strong>First</strong></span>
+                            <span><small>Seat</small><strong>23A</strong></span>
+                          </div>
+                        </div>
+                        <div class="punta-ticket-stub punta-ticket-stub--anchor">
+                          <div class="punta-ticket-stub-surface">
+                            <div class="punta-stub-route">
+                              <span><small>From</small><strong>PHL</strong><em>Philadelphia</em></span>
+                              <span><small>To</small><strong>PUJ</strong><em>Punta Cana</em></span>
+                            </div>
+                            <div class="punta-stub-details">
+                              <span class="punta-stub-passenger"><small>Passenger</small><strong>Brandon Saldan</strong></span>
+                              <span><small>Flight</small><strong>First</strong></span>
+                              <span><small>Seat</small><strong>23A</strong></span>
+                            </div>
+                            <span class="punta-stub-barcode" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <div class="punta-ticket-stub punta-ticket-stub--torn">
+                          <div class="punta-ticket-stub-surface">
+                            <div class="punta-stub-route">
+                              <span><small>From</small><strong>PHL</strong><em>Philadelphia</em></span>
+                              <span><small>To</small><strong>PUJ</strong><em>Punta Cana</em></span>
+                            </div>
+                            <div class="punta-stub-details">
+                              <span class="punta-stub-passenger"><small>Passenger</small><strong>Brandon Saldan</strong></span>
+                              <span><small>Flight</small><strong>First</strong></span>
+                              <span><small>Seat</small><strong>23A</strong></span>
+                            </div>
+                            <span class="punta-stub-barcode" aria-hidden="true"></span>
+                          </div>
+                        </div>
+                        <img class="punta-stamp punta-stamp--light" src="/photos/punta-cana-passport-stamp.webp" alt="" aria-hidden="true" decoding="async" />
+                        <img class="punta-stamp punta-stamp--dark" src="/photos/punta-cana-passport-stamp-dark-display.webp" alt="" aria-hidden="true" decoding="async" />
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+              <>
+              <h3 class="font-serif text-3xl leading-[1.05] sm:text-4xl">{trip.name}</h3>
+              <p class="trip-place text-sm leading-relaxed sm:text-base">{trip.places}</p>
+              <p class="trip-detail font-serif text-sm italic leading-relaxed text-main/50">{trip.detail}</p>
+              <p class="trip-intro max-w-[28rem] font-serif text-[0.94rem] italic leading-[1.4]">{trip.intro}</p>
+              <TripCollage trip={trip} />
+              </>
+              )}
+            </div>
+          </article>
+        ))}
+        <div class="travel-timeline-end" aria-hidden="true">
+          <span class="travel-timeline-marker"></span>
+          <span class="font-serif text-sm italic text-main/45">and then, wherever next</span>
         </div>
       </div>
     </div>
+
+  </section>
+
+  <section class="mb-16 grid gap-8 border-t border-main/25 pt-8 sm:mb-24 sm:grid-cols-[13rem_minmax(0,1fr)] sm:gap-12 sm:pt-10" aria-labelledby="places-heading">
+    <div>
+      <span class="mb-3 block text-[0.65rem] font-medium uppercase tracking-[0.18em] text-main/45">The index</span>
+      <h2 id="places-heading" class="font-serif text-2xl italic sm:text-3xl">Places so far</h2>
+      <p class="mt-3 text-sm leading-relaxed text-main/55">
+        {travelData.countries.length} countries, {statesCount} states, and Washington, DC.
+      </p>
+    </div>
+    <div>
+      <h3 class="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-main/50">Countries</h3>
+      <ul class="grid gap-x-7 sm:grid-cols-2">
+        {travelData.countries.map((country) => (
+          <li class="border-t border-main/15 py-3">
+            <span class="block font-serif text-lg leading-tight">{country.name}</span>
+            <span class="mt-1 block text-xs leading-relaxed text-main/50">{country.notes ?? country.visitedDate}</span>
+          </li>
+        ))}
+      </ul>
+      <details class="group mt-5 border-y border-main/20">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
+          <span class="font-serif italic">U.S. states & DC</span>
+          <span class="text-lg leading-none text-main/50 transition-transform duration-200 group-open:rotate-45" aria-hidden="true">+</span>
+        </summary>
+        <ul class="grid gap-x-6 gap-y-2 pb-6 text-sm text-main/70 sm:grid-cols-3">
+          {travelData.states.map((state) => <li>{state.name}</li>)}
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <section class="mb-16 sm:mb-24" aria-label="Full route log">
+    <details class="group border-y border-main/20">
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
+        <h2 class="font-serif text-lg italic">Full route log</h2>
+        <span class="flex items-center gap-5 text-xs text-main/50">
+          {travelData.journeys.length} air and sea legs
+          <span class="text-lg leading-none transition-transform duration-200 group-open:rotate-45" aria-hidden="true">+</span>
+        </span>
+      </summary>
+      <div class="pb-8">
+        {journeyGroups.map(([year, journeys]) => (
+          <div class="grid gap-2 border-t border-main/15 py-5 sm:grid-cols-[6rem_minmax(0,1fr)] sm:gap-6">
+            <h3 class="font-serif text-lg italic text-main/55">{year}</h3>
+            <ol>
+              {journeys.map((journey) => (
+                <li class="grid grid-cols-[minmax(0,1fr)_auto] gap-4 border-b border-main/10 py-2 text-sm last:border-b-0">
+                  <span>{journey.from} <span class="mx-1 text-main/35">→</span> {journey.to}</span>
+                  <span class="font-serif text-xs italic text-main/45">{journey.mode === 'air' ? 'air' : 'sea'}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))}
+        <p class="text-xs leading-relaxed text-main/50">Road trips aren’t included in this log.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="bg-muted px-6 py-8 sm:px-10 sm:py-10" aria-labelledby="future-heading">
+    <div class="flex items-start justify-between gap-5">
+      <div>
+        <span class="mb-3 block text-[0.65rem] font-medium uppercase tracking-[0.18em] text-main/45">The long game</span>
+        <h2 id="future-heading" class="font-serif text-2xl italic sm:text-3xl">Still on my mind</h2>
+      </div>
+      <span class="font-serif text-3xl italic text-main/25 sm:text-4xl" aria-hidden="true">↗</span>
+    </div>
+    <p class="mt-3 max-w-xl text-sm leading-relaxed text-main/60 sm:text-base">
+      I’d like to make it to all seven continents eventually. For now, these are simply places I hope to see.
+    </p>
+    <ul class="mt-8 grid gap-x-8 sm:grid-cols-2">
+      {placesOnMyMind.map((place) => (
+        <li class="border-t border-main/20 py-3 font-serif text-xl sm:text-2xl">{place}</li>
+      ))}
+    </ul>
+    <details class="group mt-4 border-t border-main/20">
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 pt-5 text-sm [&::-webkit-details-marker]:hidden">
+        <span class="font-serif italic">And {otherFuturePlaces.length} more places</span>
+        <span class="text-lg leading-none text-main/50 transition-transform duration-200 group-open:rotate-45" aria-hidden="true">+</span>
+      </summary>
+      <ul class="grid gap-x-6 gap-y-2 pt-6 text-sm leading-relaxed text-main/70 sm:grid-cols-2">
+        {otherFuturePlaces.map((place) => <li>{place}</li>)}
+      </ul>
+    </details>
   </section>
 </BaseLayout>
+
+<script>
+  const initTravelTimeline = () => {
+    const timeline = document.querySelector('[data-travel-timeline]');
+    if (!(timeline instanceof HTMLElement) || timeline.dataset.ready === 'true') return;
+
+    const entries = Array.from(timeline.querySelectorAll('[data-timeline-entry]'));
+    const firstMarker = entries[0]?.querySelector('.travel-timeline-marker');
+    const date = timeline.querySelector('[data-timeline-date]');
+    const count = timeline.querySelector('[data-timeline-count]');
+    const lineProgress = timeline.querySelector('[data-timeline-line-progress]');
+    const endMarker = timeline.querySelector('.travel-timeline-end .travel-timeline-marker');
+    const puntaScenes = Array.from(timeline.querySelectorAll('[data-punta-scene]'));
+    if (!(firstMarker instanceof HTMLElement) || !(date instanceof HTMLElement) || !(count instanceof HTMLElement) ||
+        !(lineProgress instanceof HTMLElement) || !(endMarker instanceof HTMLElement)) return;
+
+    timeline.dataset.ready = 'true';
+    let activeEntry = null;
+    let dateCueEntry = null;
+    let dateCueScrollY = 0;
+    let dateCueVisible = false;
+    let holdFirstDateOnUpwardScroll = false;
+    let lastScrollY = window.scrollY;
+    let scrollDirection = 0;
+
+    const setActive = (entry) => {
+      if (entry !== activeEntry) {
+        entries.forEach((item) => item.classList.toggle('is-active', item === entry));
+        activeEntry = entry;
+        if (window.matchMedia('(max-width: 767px)').matches) {
+          if (dateCueEntry instanceof HTMLElement) dateCueEntry.classList.remove('is-date-visible');
+          entry.classList.add('is-date-visible');
+          dateCueEntry = entry;
+          dateCueScrollY = window.scrollY;
+          dateCueVisible = true;
+          holdFirstDateOnUpwardScroll = entry === entries[0] && scrollDirection < 0;
+        }
+        const index = entries.indexOf(entry) + 1;
+        date.textContent = entry.dataset.timelineDate ?? '';
+        count.textContent = `Trip ${String(index).padStart(2, '0')} / ${String(entries.length).padStart(2, '0')}`;
+      }
+    };
+
+    const updateTimelineProgress = () => {
+      const firstRect = firstMarker.getBoundingClientRect();
+      const playhead = firstRect.top + firstRect.height / 2 + Math.max(0, window.scrollY);
+      const lineTop = lineProgress.getBoundingClientRect().top;
+      const endRect = endMarker.getBoundingClientRect();
+      const lineEnd = endRect.bottom - lineTop;
+
+      let currentEntry = entries[0];
+      const markerStates = entries.map((entry, index) => {
+        const marker = entry.querySelector('.travel-timeline-marker');
+        if (!(marker instanceof HTMLElement)) return { entry, reached: false };
+        const markerRect = marker.getBoundingClientRect();
+        const reached = index === 0 || markerRect.top + markerRect.height / 2 <= playhead;
+        if (reached) currentEntry = entry;
+        return { entry, reached };
+      });
+
+      lineProgress.style.height = `${Math.max(0, Math.min(playhead + firstRect.height / 2 - lineTop, lineEnd))}px`;
+      markerStates.forEach(({ entry, reached }) => entry.classList.toggle('is-reached', reached));
+      endMarker.classList.toggle('is-reached', endRect.top + endRect.height / 2 <= playhead);
+      if (currentEntry instanceof HTMLElement) setActive(currentEntry);
+      if (dateCueEntry instanceof HTMLElement) {
+        if (holdFirstDateOnUpwardScroll && scrollDirection > 0) {
+          holdFirstDateOnUpwardScroll = false;
+          dateCueScrollY = window.scrollY;
+        }
+        const cueShouldBeVisible = holdFirstDateOnUpwardScroll || Math.abs(window.scrollY - dateCueScrollY) < 96;
+        if (cueShouldBeVisible !== dateCueVisible) {
+          dateCueEntry.classList.toggle('is-date-visible', cueShouldBeVisible);
+          dateCueVisible = cueShouldBeVisible;
+        }
+      }
+    };
+
+    let scrollFrame = 0;
+    const updateScrollEffects = () => {
+      scrollFrame = 0;
+      const viewportHeight = window.innerHeight;
+      const currentScrollY = window.scrollY;
+      scrollDirection = currentScrollY < lastScrollY ? -1 : currentScrollY > lastScrollY ? 1 : 0;
+      lastScrollY = currentScrollY;
+      updateTimelineProgress();
+
+      const clamp = (value) => Math.min(1, Math.max(0, value));
+      const between = (value, start, end) => clamp((value - start) / (end - start));
+      const settle = (value) => 1 - Math.pow(1 - value, 3);
+
+      puntaScenes.forEach((scene) => {
+        if (!(scene instanceof HTMLElement)) return;
+        const rect = scene.getBoundingClientRect();
+        const sceneProgress = clamp(
+          (viewportHeight * 0.52 - rect.top) / Math.max(rect.height * 0.78, viewportHeight * 0.38)
+        );
+        const ticket = 1;
+        const stamp = settle(between(sceneProgress, 0.7, 0.9));
+        const photoProgress = 1;
+        const tearProgress = settle(between(sceneProgress, 0.12, 0.44));
+        const release = settle(between(sceneProgress, 0.4, 0.66));
+        const flightPhoto = scene.querySelector('.punta-flight-photo');
+        const passport = scene.querySelector('.punta-passport');
+        const anchorStub = scene.querySelector('.punta-ticket-stub--anchor');
+        const tornStub = scene.querySelector('.punta-ticket-stub--torn');
+        const anchorSurface = anchorStub?.querySelector('.punta-ticket-stub-surface');
+        const tornSurface = tornStub?.querySelector('.punta-ticket-stub-surface');
+
+        scene.style.setProperty('--punta-ticket-y', `${Math.round((1 - ticket) * 112)}px`);
+        scene.style.setProperty('--punta-ticket-rotate', `${(5.5 - ticket * 6.7).toFixed(2)}deg`);
+        scene.style.setProperty('--punta-ticket-opacity', ticket.toFixed(3));
+        scene.style.setProperty('--punta-stamp-x', `${Math.round((1 - stamp) * 18)}px`);
+        scene.style.setProperty('--punta-stamp-y', `${Math.round((1 - stamp) * -28)}px`);
+        scene.style.setProperty('--punta-stamp-scale', `${(1 + (1 - stamp) * 0.55 + Math.sin(stamp * Math.PI * 2) * 0.15).toFixed(3)}`);
+        scene.style.setProperty('--punta-stamp-rotate', `${(18 - stamp * 27).toFixed(2)}deg`);
+        scene.style.setProperty('--punta-stamp-opacity', stamp.toFixed(3));
+        scene.style.setProperty('--punta-photo-progress', photoProgress.toFixed(3));
+        if (flightPhoto instanceof HTMLElement) {
+          const photoX = -4 + photoProgress * 5;
+          const photoY = 34 - photoProgress * 34;
+          const photoRotate = -6 + photoProgress * 3;
+          const photoScale = 0.86 + photoProgress * 0.14;
+          flightPhoto.style.opacity = photoProgress.toFixed(3);
+          flightPhoto.style.transform = `translate3d(${photoX.toFixed(1)}px, ${photoY.toFixed(1)}px, 0) rotate(${photoRotate.toFixed(2)}deg) scale(${photoScale.toFixed(3)})`;
+        }
+        if (passport instanceof HTMLElement) {
+          const passportX = 13 - photoProgress * 13;
+          const passportY = -8 + photoProgress * 8;
+          const passportRotate = 12 - photoProgress * 4;
+          passport.style.opacity = photoProgress.toFixed(3);
+          passport.style.transform = `translate3d(${passportX.toFixed(1)}px, ${passportY.toFixed(1)}px, 0) rotate(${passportRotate.toFixed(2)}deg)`;
+        }
+        const tornTravelX = window.innerWidth <= 359 ? 16 : window.innerWidth <= 639 ? 22 : 30;
+        scene.style.setProperty('--punta-torn-x', `${Math.round(release * tornTravelX)}px`);
+        scene.style.setProperty('--punta-torn-y', `${Math.round(release * 12)}px`);
+        scene.style.setProperty('--punta-torn-rotate', `${(release * 5.8).toFixed(2)}deg`);
+        scene.style.setProperty('--punta-anchor-shadow-opacity', (1 - tearProgress).toFixed(3));
+        scene.style.setProperty('--punta-torn-shadow-opacity', tearProgress.toFixed(3));
+
+        if (anchorSurface instanceof HTMLElement) {
+          anchorSurface.style.clipPath = tearProgress > 0 ? `inset(${(tearProgress * 100).toFixed(2)}% 0 0 0)` : '';
+        }
+        if (tornSurface instanceof HTMLElement) {
+          tornSurface.style.clipPath = tearProgress > 0
+            ? `inset(0 0 ${(100 - tearProgress * 100).toFixed(2)}% 0)`
+            : 'inset(0 0 100% 0)';
+        }
+      });
+    };
+
+    const onScroll = () => {
+      if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateScrollEffects);
+    };
+
+    setActive(entries[0]);
+    updateScrollEffects();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    document.addEventListener('astro:before-swap', () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    }, { once: true });
+  };
+
+  initTravelTimeline();
+  document.addEventListener('astro:page-load', initTravelTimeline);
+</script>
+
+<style>
+  .travel-timeline {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.3fr) minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .travel-timeline-rail {
+    min-width: 0;
+  }
+
+  .travel-timeline-rail-slot {
+    display: contents;
+  }
+
+  .travel-timeline-sticky {
+    position: sticky;
+    top: 1.5rem;
+    padding-top: 0.35rem;
+  }
+
+  .travel-timeline-progress {
+    position: relative;
+    width: 85.714%;
+    overflow: hidden;
+  }
+
+  .travel-timeline-progress > span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: rgb(var(--color-text-main) / 0.5);
+  }
+
+  .travel-timeline-entries {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  .travel-timeline-entries::before {
+    position: absolute;
+    top: 0.4rem;
+    bottom: 1rem;
+    left: 0.3rem;
+    width: 1px;
+    background: rgb(var(--color-border-main) / 0.22);
+    content: '';
+  }
+
+  .travel-timeline-line-progress {
+    position: absolute;
+    top: 0.4rem;
+    left: 0.3rem;
+    z-index: 1;
+    width: 1px;
+    height: 0;
+    background: rgb(var(--color-text-main) / 0.58);
+  }
+
+  .travel-timeline-entry {
+    position: relative;
+    padding-bottom: 4.5rem;
+  }
+
+  .travel-timeline-marker {
+    position: absolute;
+    top: 0.35rem;
+    left: -1.75rem;
+    z-index: 1;
+    width: 0.65rem;
+    height: 0.65rem;
+    border: 1px solid rgb(var(--color-text-main) / 0.5);
+    border-radius: 999px;
+    background: rgb(var(--color-bg-main));
+    transition: box-shadow 180ms ease, transform 180ms ease;
+  }
+
+  .travel-timeline-entry:not(:first-of-type) .travel-timeline-marker {
+    top: -0.325rem;
+  }
+
+  .travel-timeline-card {
+    border-top: 1px solid rgb(var(--color-border-main) / 0.2);
+    padding: 1.5rem 0 0;
+    transition: border-color 220ms ease;
+  }
+
+  .travel-timeline-entry.is-reached .travel-timeline-marker,
+  .travel-timeline-end .travel-timeline-marker.is-reached {
+    border-color: rgb(var(--color-text-main) / 0.7);
+    background: rgb(var(--color-text-main));
+  }
+
+  .travel-timeline-entry.is-active .travel-timeline-marker {
+    transform: scale(1.3);
+    box-shadow: 0 0 0 0.3rem rgb(var(--color-bg-main)), 0 0 0 0.35rem rgb(var(--color-border-main) / 0.18);
+  }
+
+  .travel-timeline-entry.is-active .travel-timeline-card {
+    border-color: rgb(var(--color-border-main) / 0.4);
+  }
+
+  .travel-timeline-entry:first-of-type .travel-timeline-card {
+    border-top: 0;
+  }
+
+  .trip-place {
+    margin-top: 0;
+  }
+
+  .trip-detail {
+    margin-top: 0.25rem;
+  }
+
+  .trip-intro,
+  .punta-scene-intro {
+    margin-top: 0.5rem;
+  }
+
+  .travel-timeline-entry--punta {
+    min-height: 0;
+    padding-bottom: 1.75rem;
+  }
+
+  .travel-timeline-entry--notebook {
+    padding-bottom: 1.75rem;
+  }
+
+  .travel-timeline-entry--foldout {
+    padding-bottom: 1.75rem;
+  }
+
+  .travel-timeline-entry--tampa-scrapbook {
+    padding-bottom: 1.75rem;
+  }
+
+  .travel-timeline-entry--ship-log,
+  .travel-timeline-entry--scorecard,
+  .travel-timeline-entry--port-pass {
+    padding-bottom: 1.75rem;
+  }
+
+  .punta-scene {
+    height: auto;
+    min-height: 0;
+    margin-top: 0;
+  }
+
+  .punta-scene-stage {
+    position: static;
+    display: block;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .punta-scene-intro {
+    max-width: 26rem;
+    padding-top: 0;
+  }
+
+  .punta-scene-intro p {
+    margin: 0;
+    font-family: var(--font-serif, serif);
+    font-size: 0.94rem;
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .punta-scene-objects {
+    position: relative;
+    margin-top: 1.55rem;
+    min-height: 29.5rem;
+  }
+
+  .punta-passport {
+    position: absolute;
+    top: 0.5rem;
+    right: 1.8rem;
+    z-index: 1;
+    width: min(13rem, 44vw);
+    aspect-ratio: 800 / 1134;
+    opacity: 1;
+    transform: rotate(8deg);
+    transform-origin: 18% 82%;
+    isolation: isolate;
+    will-change: transform, opacity;
+  }
+
+  .punta-passport-cover-image {
+    position: relative;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    filter: drop-shadow(0 3px 5px rgb(54 45 32 / 0.28)) drop-shadow(5px 16px 20px rgb(54 45 32 / 0.2)) drop-shadow(10px 30px 38px rgb(54 45 32 / 0.12));
+  }
+
+  .punta-passport::after {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+    content: '';
+    background-image:
+      linear-gradient(115deg, rgb(255 255 255 / 0.14), transparent 42%, rgb(0 0 0 / 0.16)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.42' numOctaves='3' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.72'/%3E%3C/svg%3E");
+    background-position: 0 0, 0 0;
+    background-size: 100% 100%, 192px 192px;
+    border-radius: 0.8rem;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), inset 0 0.2rem 0.65rem rgb(0 0 0 / 0.2);
+    opacity: 0.2;
+  }
+
+  .punta-flight-photo {
+    position: absolute;
+    top: 1.55rem;
+    left: 1rem;
+    right: auto;
+    z-index: 3;
+    width: min(18.3rem, 60vw);
+    margin: 0;
+    padding: 0.46rem 0.46rem 0.7rem;
+    overflow: hidden;
+    border-radius: 0.12rem;
+    background: #fffdf8;
+    box-shadow: 0 2px 4px rgb(54 45 32 / 0.14), 4px 14px 18px rgb(54 45 32 / 0.1), 9px 26px 33px rgb(54 45 32 / 0.05);
+    transform-origin: 18% 82%;
+    will-change: transform, opacity;
+  }
+
+  .punta-flight-photo::before,
+  .punta-flight-photo::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: '';
+    border-radius: inherit;
+  }
+
+  .punta-flight-photo::before {
+    z-index: 2;
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.45'/%3E%3C/svg%3E");
+  }
+
+  .punta-flight-photo::after {
+    z-index: 2;
+    box-shadow: inset 0 0 16px rgb(40 35 25 / 0.07);
+  }
+
+  .punta-flight-photo img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    filter: saturate(0.84) contrast(0.97);
+  }
+
+  .punta-flight-photo figcaption {
+    position: relative;
+    z-index: 3;
+    margin-top: 0.38rem;
+    color: rgb(var(--color-text-main) / 0.56);
+    font-family: var(--font-serif, serif);
+    font-size: 0.54rem;
+    font-style: italic;
+    line-height: 1;
+  }
+
+  .punta-ticket {
+    --punta-stub-width: 7.25rem;
+    position: absolute;
+    top: 16.25rem;
+    left: 0.5rem;
+    z-index: 2;
+    width: min(100% - 1rem, 30rem);
+    min-height: 10rem;
+    opacity: var(--punta-ticket-opacity, 1);
+    transform: translate3d(0, var(--punta-ticket-y, 0), 0) rotate(var(--punta-ticket-rotate, -1.2deg));
+    transform-origin: 26% 80%;
+    will-change: transform, opacity;
+  }
+
+.punta-ticket-main {
+  position: relative;
+  display: flex;
+  min-width: 0;
+    flex-direction: column;
+    min-height: 10rem;
+    width: calc(100% - var(--punta-stub-width));
+    padding: 1.05rem 1.15rem 0.9rem 3.15rem;
+    border: 0;
+    border-right: 0;
+    border-radius: 0.72rem 0 0 0.72rem;
+    background: #fffdf8;
+    box-shadow: 0 2px 4px rgb(54 45 32 / 0.14), 4px 14px 18px rgb(54 45 32 / 0.1), 9px 26px 33px rgb(54 45 32 / 0.05);
+  }
+
+  .punta-ticket-main::before,
+  .punta-ticket-stub-surface::before {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: '';
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.45'/%3E%3C/svg%3E");
+  }
+
+  .punta-ticket-main::after,
+  .punta-ticket-stub-surface::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: '';
+    border-radius: inherit;
+  }
+
+  .punta-ticket-main::after {
+    box-shadow: inset 0 0 16px rgb(40 35 25 / 0.07);
+  }
+
+  .punta-ticket-main > *,
+  .punta-ticket-stub-surface > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .punta-ticket-main > .punta-ticket-barcode {
+    position: absolute;
+  }
+
+  .punta-ticket-barcode {
+    position: absolute;
+    top: 2.3rem;
+    bottom: 2.15rem;
+    left: 0.85rem;
+    width: 1.35rem;
+    background: repeating-linear-gradient(to bottom, rgb(var(--color-text-main) / 0.53) 0 1px, transparent 1px 3px, rgb(var(--color-text-main) / 0.48) 3px 5px, transparent 5px 6px, rgb(var(--color-text-main) / 0.35) 6px 7px, transparent 7px 10px);
+    opacity: 0.75;
+  }
+
+  .punta-ticket-meta,
+  .punta-stub-label,
+  .punta-tag-label {
+    color: rgb(var(--color-text-main) / 0.5);
+    font-size: 0.53rem;
+    font-weight: 600;
+    letter-spacing: 0.145em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .punta-ticket-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .punta-ticket-route {
+    display: grid;
+    grid-template-columns: auto minmax(4.8rem, 1fr) auto;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1.05rem;
+  }
+
+  .punta-ticket-airport {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .punta-ticket-airport strong {
+    font-family: var(--font-serif, serif);
+    font-size: 1.62rem;
+    font-style: italic;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+  }
+
+  .punta-ticket-airport small {
+    margin-top: 0.38rem;
+    color: rgb(var(--color-text-main) / 0.55);
+    font-family: var(--font-serif, serif);
+    font-size: 0.48rem;
+    font-style: italic;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .punta-ticket-airport:last-child {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .punta-route-path {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0.05rem 0 0;
+    color: rgb(var(--color-text-main) / 0.52);
+  }
+
+  .punta-route-path svg {
+    display: block;
+    width: 100%;
+    height: 2.25rem;
+    overflow: visible;
+  }
+
+  .punta-route-path > svg:first-child path {
+    fill: none;
+    stroke: currentColor;
+    stroke-dasharray: 3 4;
+    stroke-width: 1.7;
+  }
+
+  .punta-route-path > .punta-route-plane {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    width: clamp(1.35rem, 20%, 1.8rem);
+    height: auto;
+    overflow: visible;
+    transform: translate(-50%, -50%) rotate(90deg);
+    fill: #111;
+  }
+
+  :global(.dark) .punta-route-path > .punta-route-plane {
+    fill: #fff;
+  }
+
+  .punta-ticket-details {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 0.5fr;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+    padding-top: 0.58rem;
+    border-top: 1px solid rgb(var(--color-border-main) / 0.22);
+  }
+
+  .punta-ticket-details span {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .punta-ticket-details small {
+    color: rgb(var(--color-text-main) / 0.44);
+    font-size: 0.4rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .punta-ticket-details strong {
+    margin-top: 0.23rem;
+    overflow: hidden;
+    color: rgb(var(--color-text-main) / 0.68);
+    font-family: var(--font-serif, serif);
+    font-size: 0.55rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+.punta-ticket-stub {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(100% - var(--punta-stub-width));
+  min-width: 0;
+  width: var(--punta-stub-width);
+  border-radius: 0 0.72rem 0.72rem 0;
+  background: transparent;
+  --punta-shadow-opacity: var(--punta-anchor-shadow-opacity, 1);
+  box-shadow: 0 2px 4px rgb(54 45 32 / calc(0.14 * var(--punta-shadow-opacity))), 4px 14px 18px rgb(54 45 32 / calc(0.1 * var(--punta-shadow-opacity))), 9px 26px 33px rgb(54 45 32 / calc(0.05 * var(--punta-shadow-opacity)));
+}
+
+.punta-ticket-stub-surface {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.9rem 0.8rem 0.7rem;
+  overflow: hidden;
+  border-left: 1px dashed rgb(var(--color-text-main) / 0.24);
+  border-radius: 0 0.72rem 0.72rem 0;
+  background: #fffdf8;
+}
+
+  .punta-ticket-stub--anchor {
+    z-index: 2;
+  }
+
+  .punta-ticket-stub--torn {
+    z-index: 4;
+    --punta-shadow-opacity: var(--punta-torn-shadow-opacity, 0);
+    transform: translate3d(var(--punta-torn-x, 0), var(--punta-torn-y, 0), 0) rotate(var(--punta-torn-rotate, 0deg));
+    transform-origin: 0 0;
+    will-change: transform;
+  }
+
+  .punta-stub-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.3rem;
+    color: rgb(var(--color-text-main) / 0.48);
+    font-size: 0.43rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .punta-stub-route {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.3rem;
+    margin-top: 0.7rem;
+  }
+
+  .punta-stub-route > span,
+  .punta-stub-details > span {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .punta-stub-route small,
+  .punta-stub-details small {
+    color: rgb(var(--color-text-main) / 0.48);
+    font-size: 0.4rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .punta-stub-route strong {
+    margin-top: 0.12rem;
+    font-family: var(--font-serif, serif);
+    font-size: 1rem;
+    font-style: italic;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+  }
+
+  .punta-stub-route em {
+    margin-top: 0.18rem;
+    color: rgb(var(--color-text-main) / 0.55);
+    font-family: var(--font-serif, serif);
+    font-size: 0.43rem;
+    font-style: italic;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .punta-stub-details {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.75fr);
+    gap: 0.4rem 0.5rem;
+    margin-top: 0.55rem;
+  }
+
+  .punta-stub-passenger {
+    grid-column: 1 / -1;
+  }
+
+  .punta-stub-details strong {
+    margin-top: 0.1rem;
+    overflow: hidden;
+    font-family: var(--font-serif, serif);
+    font-size: 0.66rem;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .punta-stub-barcode {
+    display: block;
+    width: 100%;
+    height: 0.95rem;
+    margin-top: 0.55rem;
+    background: repeating-linear-gradient(to right, rgb(var(--color-text-main) / 0.65) 0 1px, transparent 1px 2px, rgb(var(--color-text-main) / 0.65) 2px 4px, transparent 4px 5px, rgb(var(--color-text-main) / 0.65) 5px 6px, transparent 6px 9px);
+    opacity: 0.75;
+  }
+
+  .punta-stamp {
+    position: absolute;
+    top: 47%;
+    left: min(10.8rem, 42%);
+    z-index: 4;
+    display: block;
+    width: 4.85rem;
+    height: 4.85rem;
+    filter: drop-shadow(0 0.04rem 0 rgb(116 50 44 / 0.16));
+    mix-blend-mode: multiply;
+    opacity: var(--punta-stamp-opacity, 1);
+    pointer-events: none;
+    transform: translate3d(var(--punta-stamp-x, 0), var(--punta-stamp-y, 0), 0) rotate(var(--punta-stamp-rotate, -9deg)) scale(var(--punta-stamp-scale, 1));
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .punta-stamp--dark {
+    display: none;
+  }
+
+  :global(.dark) .punta-stamp--light {
+    display: none;
+  }
+
+  :global(.dark) .punta-stamp--dark {
+    display: block;
+    filter: drop-shadow(0 0.04rem 0 rgb(255 255 255 / 0.16));
+    mix-blend-mode: screen;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .punta-stamp {
+      transform: rotate(-9deg) scale(1);
+    }
+  }
+
+  .punta-tag {
+    position: absolute;
+    right: 0.85rem;
+    bottom: 8%;
+    z-index: 3;
+    display: flex;
+    width: 9.25rem;
+    min-height: 7.55rem;
+    flex-direction: column;
+    padding: 1.4rem 1rem 0.85rem;
+    border: 1px solid rgb(var(--color-border-main) / 0.38);
+    background:
+      radial-gradient(circle at 26% 12%, rgb(255 255 255 / 0.52) 0 0.035rem, transparent 0.055rem) 0 0 / 0.42rem 0.42rem,
+      linear-gradient(145deg, rgb(var(--color-bg-muted) / 0.96), rgb(var(--color-bg-main) / 0.78));
+    box-shadow: 0 0.85rem 1.35rem rgb(40 35 25 / 0.13), inset 0 1px rgb(255 255 255 / 0.42);
+    clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%, 0 18%);
+    opacity: var(--punta-tag-opacity, 0);
+    transform: translate3d(var(--punta-tag-x, 5rem), var(--punta-tag-y, 1rem), 0) rotate(var(--punta-tag-rotate, 8deg));
+    transform-origin: 80% 12%;
+    will-change: transform, opacity;
+  }
+
+  .punta-tag::before {
+    position: absolute;
+    top: -1.45rem;
+    left: 0.7rem;
+    width: 2.1rem;
+    height: 2.3rem;
+    border: 1px solid rgb(var(--color-text-main) / 0.26);
+    border-bottom: 0;
+    border-radius: 999px 999px 0 0;
+    content: '';
+    transform: rotate(-18deg);
+  }
+
+  .punta-tag-hole {
+    position: absolute;
+    top: 0.62rem;
+    left: 0.66rem;
+    width: 0.52rem;
+    height: 0.52rem;
+    border: 1px solid rgb(var(--color-border-main) / 0.42);
+    border-radius: 999px;
+    background: rgb(var(--color-bg-main));
+    box-shadow: inset 0 0.06rem 0.1rem rgb(40 35 25 / 0.12);
+  }
+
+  .punta-tag-label { margin-bottom: 1.1rem; font-size: 0.48rem; }
+
+  .punta-tag strong {
+    max-width: 6rem;
+    font-family: var(--font-serif, serif);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.05;
+  }
+
+  .punta-tag > span:last-child {
+    margin-top: auto;
+    color: rgb(var(--color-text-main) / 0.47);
+    font-family: var(--font-serif, serif);
+    font-size: 0.63rem;
+    font-style: italic;
+  }
+
+  :global(.dark) .punta-ticket-main,
+  :global(.dark) .punta-ticket-stub {
+    background: #242424;
+  }
+
+  :global(.dark) .punta-ticket-main {
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.28), 4px 14px 18px rgb(0 0 0 / 0.24), 9px 26px 33px rgb(0 0 0 / 0.1);
+  }
+
+  :global(.dark) .punta-ticket-stub {
+    background: transparent;
+    box-shadow: 0 2px 4px rgb(0 0 0 / calc(0.28 * var(--punta-shadow-opacity))), 4px 14px 18px rgb(0 0 0 / calc(0.24 * var(--punta-shadow-opacity))), 9px 26px 33px rgb(0 0 0 / calc(0.1 * var(--punta-shadow-opacity)));
+  }
+
+  :global(.dark) .punta-ticket-stub-surface {
+    background: #242424;
+  }
+
+  :global(.dark) .punta-passport {
+    z-index: 0;
+  }
+
+  :global(.dark) .punta-ticket {
+    z-index: 2;
+  }
+
+  :global(.dark) .punta-flight-photo {
+    background: #242424;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.28), 4px 14px 18px rgb(0 0 0 / 0.24), 9px 26px 33px rgb(0 0 0 / 0.1);
+  }
+
+  :global(.dark) .punta-flight-photo figcaption {
+    color: rgb(241 238 230 / 0.72);
+  }
+
+  :global(.dark) .punta-passport-cover-image {
+    filter: drop-shadow(0 3px 5px rgb(0 0 0 / 0.38)) drop-shadow(5px 16px 20px rgb(0 0 0 / 0.32)) drop-shadow(10px 30px 38px rgb(0 0 0 / 0.18));
+  }
+
+  :global(.dark) .punta-ticket-main::after,
+  :global(.dark) .punta-ticket-stub-surface::after {
+    box-shadow: none;
+  }
+
+  :global(.dark) .punta-ticket-main::after {
+    box-shadow: inset 0 0 16px rgb(0 0 0 / 0.16);
+  }
+
+  .travel-timeline-end {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 2rem;
+    padding-bottom: 0.5rem;
+  }
+
+  @media (max-width: 767px) {
+    .travel-timeline {
+      display: block;
+    }
+
+    .travel-timeline-card {
+      padding-top: 1.8rem;
+    }
+
+    .travel-timeline-rail-slot {
+      display: none;
+    }
+
+    .travel-timeline-entries::before,
+    .travel-timeline-line-progress {
+      top: 0.125rem;
+    }
+
+    .travel-timeline-entry:first-of-type .travel-timeline-marker {
+      top: -0.2rem;
+    }
+
+    .travel-timeline-entry:not(:first-of-type) .travel-timeline-marker {
+      top: -0.325rem;
+    }
+
+    .travel-timeline-marker::after {
+      position: absolute;
+      top: -0.85rem;
+      left: calc(100% + 0.5rem);
+      padding: 0.12rem 0.48rem;
+      border: 1px solid rgb(var(--color-border-main) / 0.32);
+      border-radius: 999px;
+      background: rgb(var(--color-bg-main));
+      color: rgb(var(--color-text-main) / 0.82);
+      content: attr(data-marker-date);
+      font-family: var(--font-serif, serif);
+      font-size: 0.82rem;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate3d(-0.35rem, 0, 0) scale(0.96);
+      transform-origin: left center;
+      transition: opacity 180ms ease, transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .travel-timeline-entry.is-date-visible .travel-timeline-marker {
+      z-index: 5;
+    }
+
+    .travel-timeline-entry.is-date-visible .travel-timeline-marker::after {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    .travel-timeline-entry:not(:first-of-type) .travel-timeline-marker::after {
+      top: -0.27rem;
+      left: calc(100% + 0.65rem);
+    }
+
+    .travel-timeline-entry:first-of-type .travel-timeline-marker::after {
+      top: 50%;
+      left: calc(100% + 0.65rem);
+      transform: translate3d(-0.35rem, -50%, 0) scale(0.96);
+    }
+
+    .travel-timeline-entry:first-of-type.is-date-visible .travel-timeline-marker::after {
+      transform: translate3d(0, -50%, 0) scale(1);
+    }
+
+    .punta-ticket-main {
+      padding-right: 0.8rem;
+      padding-left: 2.55rem;
+    }
+
+    .punta-scene-objects {
+      min-height: 26.75rem;
+    }
+
+    .punta-ticket {
+      --punta-stub-width: 6rem;
+      top: 13.5rem;
+      left: 0;
+    }
+
+    .punta-ticket-route {
+      grid-template-columns: minmax(3.2rem, 1fr) minmax(4.25rem, 0.9fr) minmax(3.2rem, 1fr);
+      gap: 0.2rem;
+    }
+
+    .punta-route-path > .punta-route-plane {
+      width: clamp(1.65rem, 38%, 2.1rem);
+    }
+
+    .punta-ticket-airport strong {
+      font-size: 1.3rem;
+      white-space: nowrap;
+    }
+
+    .punta-ticket-airport small {
+      font-size: 0.42rem;
+    }
+
+    .punta-stub-route em {
+      font-size: 0.34rem;
+      letter-spacing: -0.02em;
+    }
+
+    .punta-ticket-route .punta-ticket-airport:last-child {
+      padding-right: 0.7rem;
+    }
+
+    .punta-stamp {
+      top: 20%;
+      left: 42%;
+      width: 3.3rem;
+      height: 3.3rem;
+    }
+  }
+
+  @media (max-width: 359px) {
+    .punta-ticket-main {
+      padding-right: 0.55rem;
+      padding-left: 2.1rem;
+    }
+
+    .punta-ticket {
+      --punta-stub-width: 5rem;
+    }
+
+    .punta-ticket-route {
+      grid-template-columns: minmax(2.4rem, 1fr) minmax(3.5rem, 0.85fr) minmax(2.4rem, 1fr);
+      gap: 0.1rem;
+    }
+
+    .punta-route-path > .punta-route-plane {
+      width: 1.65rem;
+    }
+
+    .punta-ticket-airport strong {
+      font-size: 1.1rem;
+    }
+
+    .punta-ticket-airport small {
+      font-size: 0.34rem;
+      letter-spacing: -0.02em;
+    }
+
+    .punta-stub-route em {
+      font-size: 0.3rem;
+      letter-spacing: -0.04em;
+    }
+
+    .punta-ticket-route .punta-ticket-airport:last-child {
+      padding-right: 0.55rem;
+    }
+  }
+</style>

@@ -2,6 +2,9 @@
 title: "Spotify Car Thing's Second Chapter"
 excerpt: "How a discontinued car accessory inspired an open-source project to save thousands of devices from the landfill through creative engineering."
 publishDate: "2024-01-15"
+image:
+  src: "/blog/art/spotify-car-things.webp"
+  alt: "Painterly artwork selected for Spotify Car Thing's Second Chapter"
 isFeatured: true
 seo:
   image:

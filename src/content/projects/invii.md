@@ -2,6 +2,9 @@
 title: "Invii - Restaurant Management Platform"
 description: "A comprehensive suite of tools designed to modernize restaurant operations through innovative technology solutions."
 publishDate: "2021-01-15"
+image:
+  src: "/projects/art/invii.webp"
+  alt: "Painterly artwork selected for the Invii project"
 isFeatured: true
 seo:
   image:

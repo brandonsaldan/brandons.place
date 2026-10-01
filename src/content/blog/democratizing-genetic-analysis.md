@@ -2,6 +2,9 @@
 title: "Democratizing Genetic Analysis"
 excerpt: "How a missing $12 report led to building an open-source platform for genetic analysis, attracting attention from industry pioneers."
 publishDate: "2023-06-13"
+image:
+  src: "/blog/art/democratizing-genetic-analysis.webp"
+  alt: "Painterly artwork selected for Democratizing Genetic Analysis"
 isFeatured: true
 seo:
   image:

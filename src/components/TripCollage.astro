@@ -1,0 +1,346 @@
+---
+type Slide = { label: string; image: string | null; caption: string; alt?: string };
+type Trip = { name: string; scene: string; slides?: Slide[] };
+const { trip } = Astro.props as { trip: Trip };
+const slides = trip.slides ?? [];
+---
+
+<div class:list={['trip-collage', `trip-collage--${trip.scene}`]} data-trip-collage aria-label={`${trip.name} collage`}>
+  {trip.scene === 'notebook' && (
+    <div class="collage-stage nf-stage">
+      {slides.map((slide, index) => <figure class:list={['nf-photo', `nf-photo--${index + 1}`, 'photo-object']}>
+        {slide.image ? <img src={slide.image} alt={slide.alt ?? slide.caption} loading="lazy" decoding="async" /> : <span class="photo-placeholder">{slide.caption}</span>}
+        <figcaption>{slide.caption}</figcaption>
+      </figure>)}
+    </div>
+  )}
+
+  {trip.scene === 'foldout' && (
+    <div class="collage-stage eu-stage">
+      {slides.filter((slide) => slide.image).map((slide, index) => <figure class:list={['eu-photo', `eu-photo--${index + 1}`, 'photo-object']}>
+        <img src={slide.image!} alt={slide.caption} loading="lazy" decoding="async" /><figcaption>{slide.caption}</figcaption>
+      </figure>)}
+    </div>
+  )}
+
+  {trip.scene === 'tampa-scrapbook' && (
+    <div class="collage-stage tampa-stage">
+      {slides.map((slide, index) => <figure class:list={['tampa-photo', `tampa-photo--${index + 1}`, 'photo-object']}>
+        {slide.image ? <img src={slide.image} alt={slide.alt ?? slide.caption} loading="lazy" decoding="async" /> : <span class="photo-placeholder">{slide.caption}</span>}
+        <figcaption>{slide.caption}</figcaption>
+      </figure>)}
+    </div>
+  )}
+
+  {trip.scene === 'ship-log' && (
+    <div class="collage-stage bahamas-stage">
+      {slides.map((slide, index) => <figure class:list={['bahamas-photo', `bahamas-photo--${index + 1}`, 'photo-object']}>
+        {slide.image ? <img src={slide.image} alt={slide.alt ?? slide.caption} loading="lazy" decoding="async" /> : <span class="photo-placeholder">{slide.caption}</span>}<figcaption>{slide.caption}</figcaption>
+      </figure>)}
+    </div>
+  )}
+
+  {trip.scene === 'scorecard' && (
+    <div class="collage-stage catskills-stage">
+      {slides.map((slide, index) => <figure class:list={['catskills-photo', `catskills-photo--${index + 1}`, 'photo-object']}>
+        {slide.image ? <img src={slide.image} alt={slide.alt ?? slide.caption} loading="lazy" decoding="async" /> : <span class="photo-placeholder">{slide.caption}</span>}<figcaption>{slide.caption}</figcaption>
+      </figure>)}
+    </div>
+  )}
+
+  {trip.scene === 'port-pass' && (
+    <div class="collage-stage caribbean-stage">
+      {slides.map((slide, index) => <figure class:list={['caribbean-photo', `caribbean-photo--${index + 1}`, 'photo-object']}>
+        {slide.image ? <img src={slide.image} alt={slide.alt ?? slide.caption} loading="lazy" decoding="async" /> : <span class="photo-placeholder">{slide.caption}</span>}<figcaption>{slide.caption}</figcaption>
+      </figure>)}
+    </div>
+  )}
+</div>
+
+<script>
+  const initTripCollages = () => {
+    const timeline = document.querySelector('[data-travel-timeline]');
+    if (!(timeline instanceof HTMLElement) || timeline.dataset.collagesReady === 'true') return;
+    timeline.dataset.collagesReady = 'true';
+    const collages = Array.from(timeline.querySelectorAll('[data-trip-collage]'));
+    const clamp = (v: number) => Math.max(0, Math.min(1, v));
+    const phase = (p: number, start: number, end: number) => {
+      const t = clamp((p - start) / (end - start));
+      return t * t * (3 - 2 * t);
+    };
+    const pose = (root: Element, selector: string, x: number, y: number, rotate: number, opacity: number, scale = 1) => {
+      const element = root.querySelector(selector);
+      if (!(element instanceof HTMLElement || element instanceof SVGElement)) return;
+      element.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${rotate.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
+      element.style.opacity = opacity.toFixed(3);
+    };
+    let frame = 0;
+    let initialized = false;
+    const update = () => {
+      frame = 0;
+      const viewportHeight = window.innerHeight;
+      collages.forEach((collage) => {
+        if (!(collage instanceof HTMLElement)) return;
+        const stage = collage.querySelector('.collage-stage');
+        if (!(stage instanceof HTMLElement)) return;
+        const rect = stage.getBoundingClientRect();
+        if (initialized && (rect.bottom < -viewportHeight * .25 || rect.top > viewportHeight * 1.25)) return;
+        const p = clamp((viewportHeight * .82 - rect.top) / (rect.height * .88));
+        const w = rect.width;
+        if (collage.classList.contains('trip-collage--notebook')) {
+          const n1 = phase(p, .02, .25), n2 = phase(p, .1, .34), n3 = phase(p, .2, .45);
+          const n4 = phase(p, .3, .55), n5 = phase(p, .4, .68), n6 = phase(p, .5, .82);
+          pose(stage, '.nf-photo--1', (1 - n1) * -w * .06, (1 - n1) * -62, -10 + n1 * 6, n1);
+          pose(stage, '.nf-photo--2', (1 - n2) * w * .06, (1 - n2) * -68, 10 - n2 * 6, n2);
+          pose(stage, '.nf-photo--3', (1 - n3) * w * .06, (1 - n3) * -74, 8 - n3 * 6, n3);
+          pose(stage, '.nf-photo--4', (1 - n4) * -w * .05, (1 - n4) * 48, -9 + n4 * 6, n4);
+          pose(stage, '.nf-photo--5', (1 - n5) * -w * .06, (1 - n5) * -56, -11 + n5 * 6, n5);
+          pose(stage, '.nf-photo--6', (1 - n6) * w * .05, (1 - n6) * -52, 11 - n6 * 6, n6);
+        }
+        if (collage.classList.contains('trip-collage--foldout')) {
+          const e1 = phase(p, .02, .25), e2 = phase(p, .1, .34), e3 = phase(p, .2, .45);
+          const e4 = phase(p, .3, .55), e5 = phase(p, .4, .68), e6 = phase(p, .5, .82);
+          pose(stage, '.eu-photo--1', (1 - e1) * -w * .06, (1 - e1) * -62, -10 + e1 * 6, e1);
+          pose(stage, '.eu-photo--4', (1 - e2) * w * .06, (1 - e2) * -68, 10 - e2 * 6, e2);
+          pose(stage, '.eu-photo--2', (1 - e3) * w * .06, (1 - e3) * -74, 10 - e3 * 6, e3);
+          pose(stage, '.eu-photo--5', (1 - e4) * -w * .05, (1 - e4) * 48, -10 + e4 * 6, e4);
+          pose(stage, '.eu-photo--3', (1 - e5) * -w * .06, (1 - e5) * -56, -11 + e5 * 6, e5);
+          pose(stage, '.eu-photo--6', (1 - e6) * w * .05, (1 - e6) * -52, 11 - e6 * 6, e6);
+        }
+        if (collage.classList.contains('trip-collage--tampa-scrapbook')) {
+          const sunset = phase(p, .04, .3);
+          const beach = phase(p, .18, .45);
+          const night = phase(p, .34, .63);
+          const concert = phase(p, .5, .78);
+          pose(stage, '.tampa-photo--1', (1 - sunset) * -w * .035, (1 - sunset) * -42, -11 + sunset * 6, sunset);
+          pose(stage, '.tampa-photo--2', (1 - beach) * w * .035, (1 - beach) * -36, 11 - beach * 6, beach);
+          pose(stage, '.tampa-photo--3', (1 - night) * -w * .035, (1 - night) * 42, -5 + night * 8, night);
+          pose(stage, '.tampa-photo--4', (1 - concert) * w * .035, (1 - concert) * 43, 5 - concert * 9, concert);
+        }
+        if (collage.classList.contains('trip-collage--ship-log')) {
+          const b1 = phase(p, .02, .27), b2 = phase(p, .12, .39), b3 = phase(p, .24, .55), b4 = phase(p, .36, .72);
+          pose(stage, '.bahamas-photo--1', (1 - b1) * -w * .06, (1 - b1) * -55, -12 + b1 * 5, b1);
+          pose(stage, '.bahamas-photo--2', (1 - b2) * w * .06, (1 - b2) * -48, 12 - b2 * 6, b2);
+          pose(stage, '.bahamas-photo--3', (1 - b3) * -w * .05, (1 - b3) * 50, -6 + b3 * 7, b3);
+          pose(stage, '.bahamas-photo--4', (1 - b4) * w * .05, (1 - b4) * 48, 5 - b4 * 10, b4);
+        }
+        if (collage.classList.contains('trip-collage--scorecard')) {
+          const k1 = phase(p, .02, .28), k2 = phase(p, .12, .4), k3 = phase(p, .25, .58), k4 = phase(p, .38, .74);
+          pose(stage, '.catskills-photo--2', (1 - k1) * -w * .04, (1 - k1) * -44, -7 + k1 * 11, k1);
+          pose(stage, '.catskills-photo--1', (1 - k2) * w * .04, (1 - k2) * -48, 6 - k2 * 9, k2);
+          pose(stage, '.catskills-photo--4', (1 - k3) * -w * .04, (1 - k3) * 44, 8 - k3 * 12, k3);
+          pose(stage, '.catskills-photo--3', (1 - k4) * w * .04, (1 - k4) * 48, -7 + k4 * 12, k4);
+        }
+        if (collage.classList.contains('trip-collage--port-pass')) {
+          const c1 = phase(p, .02, .24), c2 = phase(p, .11, .34), c3 = phase(p, .2, .46), c4 = phase(p, .3, .59), c5 = phase(p, .4, .72);
+          pose(stage, '.caribbean-photo--1', (1 - c1) * -w * .05, (1 - c1) * -54, -11 + c1 * 6, c1);
+          pose(stage, '.caribbean-photo--3', (1 - c2) * w * .05, (1 - c2) * -50, 11 - c2 * 6, c2);
+          pose(stage, '.caribbean-photo--2', (1 - c3) * -w * .05, (1 - c3) * 42, -5 + c3 * 9, c3);
+          pose(stage, '.caribbean-photo--4', (1 - c4) * w * .05, (1 - c4) * 46, 6 - c4 * 10, c4);
+          pose(stage, '.caribbean-photo--5', (1 - c5) * -w * .05, (1 - c5) * 50, -9 + c5 * 6, c5);
+        }
+      });
+      initialized = true;
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    collages.forEach((collage) => {
+      const button = collage.querySelector('[data-replay]');
+      const stage = collage.querySelector('.collage-stage');
+      if (!(button instanceof HTMLButtonElement) || !(stage instanceof HTMLElement)) return;
+      button.addEventListener('click', () => {
+        stage.classList.remove('is-replaying');
+        void stage.offsetWidth;
+        stage.classList.add('is-replaying');
+        window.setTimeout(() => { stage.classList.remove('is-replaying'); update(); }, 1600);
+      });
+    });
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    document.addEventListener('astro:before-swap', () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); }, { once: true });
+  };
+  initTripCollages();
+  document.addEventListener('astro:page-load', initTripCollages);
+</script>
+
+<style>
+  .trip-collage { display: flow-root; margin-top: 1.55rem; }
+  .collage-stage { position: relative; min-height: 32rem; isolation: isolate; color: #34413c; }
+  .nf-stage, .eu-stage, .bahamas-stage, .catskills-stage, .caribbean-stage { top: -1.5rem; margin-bottom: -1.5rem; }
+  .tampa-stage { top: -.3rem; margin-bottom: -.3rem; }
+  .collage-stage::before { position: absolute; z-index: -1; right: 6%; bottom: 1.2rem; left: 6%; height: 2rem; border-radius: 50%; background: rgb(29 33 29 / .1); filter: blur(1.5rem); content: ''; }
+  .paper-object { background: #f2efdf; box-shadow: 3px 5px 7px rgb(31 34 30 / .17), 10px 18px 22px rgb(31 34 30 / .11); }
+  .photo-object { display: flex; flex-direction: column; margin: 0; padding: .45rem .45rem .65rem; background: #faf7ec; box-shadow: 2px 4px 6px rgb(31 34 30 / .18), 8px 15px 18px rgb(31 34 30 / .12); }
+  .photo-object img, .photo-object .photo-placeholder { flex: 1; width: 100%; min-height: 0; object-fit: cover; }
+  .photo-object figcaption { padding: .4rem .15rem 0; color: #4b514a; font-family: var(--font-serif, serif); font-size: .72rem; font-style: italic; }
+  .photo-placeholder { display: grid; place-items: center; padding: .6rem; background: repeating-linear-gradient(135deg, #d4d8d0 0 11px, #c8d0c8 11px 22px); color: #58645c; font-family: var(--font-serif, serif); font-size: .82rem; font-style: italic; text-align: center; }
+  .object-kicker { font-size: .56rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
+  .collage-stage button:focus-visible { outline: 3px solid #32758a; outline-offset: 4px; }
+
+  .nf-stage { min-height: 39rem; }
+  .nf-photo { position: absolute; z-index: 3; width: 48%; height: 13rem; padding: .46rem .46rem .7rem; overflow: hidden; border-radius: .12rem; background: #fffdf8; box-shadow: 0 2px 4px rgb(54 45 32 / .14), 4px 14px 18px rgb(54 45 32 / .1), 9px 26px 33px rgb(54 45 32 / .05); transform-origin: 18% 82%; }
+  .nf-photo::before, .nf-photo::after { position: absolute; inset: 0; pointer-events: none; content: ''; border-radius: inherit; }
+  .nf-photo::before { z-index: 2; opacity: .18; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.45'/%3E%3C/svg%3E"); }
+  .nf-photo::after { z-index: 2; box-shadow: inset 0 0 16px rgb(40 35 25 / .07); }
+  .nf-photo img { position: relative; z-index: 1; display: block; width: 100%; height: 10.35rem; object-fit: cover; filter: saturate(.84) contrast(.97); }
+  .nf-photo figcaption { position: relative; z-index: 3; margin-top: .38rem; color: rgb(var(--color-text-main) / .56); font-family: var(--font-serif, serif); font-size: .54rem; font-style: italic; line-height: 1; }
+  .nf-photo--1 { top: 2rem; left: 3%; z-index: 4; }.nf-photo--2 { top: 2rem; left: 49%; z-index: 7; }.nf-photo--3 { top: 12.8rem; left: 1%; z-index: 5; }.nf-photo--4 { top: 13.2rem; left: 49%; z-index: 8; }.nf-photo--5 { top: 23.6rem; left: 2%; z-index: 6; }.nf-photo--6 { top: 23.4rem; left: 48%; z-index: 9; }
+
+  .eu-stage { min-height: 39rem; }
+  .eu-photo { position: absolute; z-index: 3; width: 48%; height: 13rem; margin: 0; padding: .46rem .46rem .7rem; overflow: hidden; border-radius: .12rem; background: #fffdf8; box-shadow: 0 2px 4px rgb(54 45 32 / .14), 4px 14px 18px rgb(54 45 32 / .1), 9px 26px 33px rgb(54 45 32 / .05); transform-origin: 18% 82%; }
+  .eu-photo::before, .eu-photo::after { position: absolute; inset: 0; pointer-events: none; content: ''; border-radius: inherit; }
+  .eu-photo::before { z-index: 2; opacity: .18; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.45'/%3E%3C/svg%3E"); }
+  .eu-photo::after { z-index: 2; box-shadow: inset 0 0 16px rgb(40 35 25 / .07); }
+  .eu-photo img { position: relative; z-index: 1; display: block; width: 100%; height: 10rem; object-fit: cover; filter: saturate(.84) contrast(.97); }
+  .eu-photo figcaption { position: relative; z-index: 3; margin-top: .38rem; color: rgb(var(--color-text-main) / .56); font-family: var(--font-serif, serif); font-size: .54rem; font-style: italic; line-height: 1; }
+  .eu-photo--1 { top: 2rem; left: 3%; z-index: 4; }.eu-photo--2 { top: 12.8rem; left: 1%; z-index: 5; }.eu-photo--3 { top: 23.6rem; left: 2%; z-index: 6; }.eu-photo--4 { top: 2rem; left: 49%; z-index: 7; }.eu-photo--5 { top: 13.2rem; left: 49%; z-index: 8; }.eu-photo--6 { top: 23.4rem; left: 48%; z-index: 9; }
+
+  .tampa-stage { min-height: 35rem; }
+  .tampa-photo { position: absolute; width: 47%; height: 13.7rem; margin: 0; padding: .46rem .46rem .7rem; overflow: hidden; border-radius: .12rem; background: #fffdf8; box-shadow: 0 2px 4px rgb(54 45 32 / .14), 4px 14px 18px rgb(54 45 32 / .1), 9px 26px 33px rgb(54 45 32 / .05); transform-origin: 18% 82%; }
+  .tampa-photo::before, .tampa-photo::after { position: absolute; inset: 0; pointer-events: none; content: ''; border-radius: inherit; }
+  .tampa-photo::before { z-index: 2; opacity: .18; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.45'/%3E%3C/svg%3E"); }
+  .tampa-photo::after { z-index: 2; box-shadow: inset 0 0 16px rgb(40 35 25 / .07); }
+  .tampa-photo img { position: relative; z-index: 1; display: block; width: 100%; height: 10.65rem; object-fit: cover; filter: saturate(.84) contrast(.97); }
+  .tampa-photo figcaption { position: relative; z-index: 3; margin-top: .38rem; color: rgb(var(--color-text-main) / .56); font-family: var(--font-serif, serif); font-size: .54rem; font-style: italic; line-height: 1; }
+  .tampa-photo--1 { top: .8rem; left: 9%; z-index: 2; width: 49%; height: 13.5rem; }
+  .tampa-photo--2 { top: 3.8rem; left: 49%; z-index: 3; width: 47%; height: 13.2rem; }
+  .tampa-photo--2 img { height: 10.15rem; object-position: center 36%; }
+  .tampa-photo--3 { top: 13.7rem; left: 3%; z-index: 4; width: 53%; height: 13.5rem; }
+  .tampa-photo--4 { top: 18.2rem; left: 45%; z-index: 5; width: 51%; height: 14.1rem; }
+  .tampa-photo--4 img { height: 11.05rem; }
+  .bahamas-stage { min-height: 35rem; }
+  .bahamas-photo { position: absolute; z-index: 3; width: 48%; height: 13rem; margin: 0; padding: .46rem .46rem .7rem; overflow: hidden; border-radius: .12rem; background: #fffdf8; box-shadow: 0 2px 4px rgb(54 45 32 / .14), 4px 14px 18px rgb(54 45 32 / .1), 9px 26px 33px rgb(54 45 32 / .05); transform-origin: 18% 82%; }
+  .bahamas-photo::before, .bahamas-photo::after { position: absolute; inset: 0; pointer-events: none; content: ''; border-radius: inherit; }
+  .bahamas-photo::before { z-index: 2; opacity: .18; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.45'/%3E%3C/svg%3E"); }
+  .bahamas-photo::after { z-index: 2; box-shadow: inset 0 0 16px rgb(40 35 25 / .07); }
+  .bahamas-photo img { position: relative; z-index: 1; display: block; width: 100%; height: 10rem; object-fit: cover; filter: saturate(.84) contrast(.97); }
+  .bahamas-photo figcaption { position: relative; z-index: 3; margin-top: .38rem; color: rgb(var(--color-text-main) / .56); font-family: var(--font-serif, serif); font-size: .54rem; font-style: italic; line-height: 1; }
+  .bahamas-photo--1 { top: 2rem; left: 8%; width: 48%; height: 13.2rem; z-index: 9; }
+  .bahamas-photo--2 { top: 2.8rem; left: 55%; width: 42%; height: 12.7rem; z-index: 8; }
+  .bahamas-photo--3 { top: 14rem; left: 3%; width: 60%; height: 14.5rem; z-index: 7; }
+  .bahamas-photo--4 { top: 19rem; left: 54%; width: 44%; height: 13rem; z-index: 6; }
+
+  .catskills-stage { min-height: 33.5rem; }
+  .catskills-photo { position: absolute; z-index: 3; width: 48%; height: 13rem; margin: 0; padding: .46rem .46rem .7rem; overflow: hidden; border-radius: .12rem; background: #fffdf8; box-shadow: 0 2px 4px rgb(54 45 32 / .14), 4px 14px 18px rgb(54 45 32 / .1), 9px 26px 33px rgb(54 45 32 / .05); transform-origin: 18% 82%; }
+  .catskills-photo::before, .catskills-photo::after { position: absolute; inset: 0; pointer-events: none; content: ''; border-radius: inherit; }
+  .catskills-photo::before { z-index: 2; opacity: .18; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.45'/%3E%3C/svg%3E"); }
+  .catskills-photo::after { z-index: 2; box-shadow: inset 0 0 16px rgb(40 35 25 / .07); }
+  .catskills-photo img { position: relative; z-index: 1; display: block; width: 100%; height: 10rem; object-fit: cover; filter: saturate(.84) contrast(.97); }
+  .catskills-photo figcaption { position: relative; z-index: 3; margin-top: .38rem; color: rgb(var(--color-text-main) / .56); font-family: var(--font-serif, serif); font-size: .54rem; font-style: italic; line-height: 1; }
+  .catskills-photo--1 { top: 3rem; left: 49%; width: 48%; height: 13.3rem; z-index: 5; }
+  .catskills-photo--2 { top: 2rem; left: 5%; width: 47%; height: 13.3rem; z-index: 4; }
+  .catskills-photo--3 { top: 17.5rem; left: 48%; width: 49%; height: 13.4rem; z-index: 6; }
+  .catskills-photo--4 { top: 16rem; left: 4%; width: 50%; height: 13.7rem; z-index: 7; }
+
+  .caribbean-stage { min-height: 42.5rem; }
+  .caribbean-photo { position: absolute; z-index: 3; margin: 0; padding: .46rem .46rem .7rem; overflow: hidden; border-radius: .12rem; background: #fffdf8; box-shadow: 0 2px 4px rgb(54 45 32 / .14), 4px 14px 18px rgb(54 45 32 / .1), 9px 26px 33px rgb(54 45 32 / .05); transform-origin: 18% 82%; }
+  .caribbean-photo::before, .caribbean-photo::after { position: absolute; inset: 0; pointer-events: none; content: ''; border-radius: inherit; }
+  .caribbean-photo::before { z-index: 2; opacity: .18; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.45'/%3E%3C/svg%3E"); }
+  .caribbean-photo::after { z-index: 2; box-shadow: inset 0 0 16px rgb(40 35 25 / .07); }
+  .caribbean-photo img { position: relative; z-index: 1; display: block; width: 100%; height: 10rem; object-fit: cover; filter: saturate(.84) contrast(.97); }
+  .caribbean-photo figcaption { position: relative; z-index: 3; margin-top: .38rem; color: rgb(var(--color-text-main) / .56); font-family: var(--font-serif, serif); font-size: .54rem; font-style: italic; line-height: 1; }
+  .caribbean-photo--1 { top: 2rem; left: 5%; width: 44%; height: 13.2rem; z-index: 9; }
+  .caribbean-photo--2 { top: 14rem; left: 3%; width: 46%; height: 13.2rem; z-index: 8; }
+  .caribbean-photo--3 { top: 3rem; left: 51%; width: 46%; height: 18rem; z-index: 7; }
+  .caribbean-photo--4 { top: 20.5rem; left: 49%; width: 48%; height: 18.5rem; z-index: 5; }
+  .caribbean-photo--5 { top: 26rem; left: 6%; width: 44%; height: 13.2rem; z-index: 6; }
+
+  :global(.dark) .photo-object {
+    background-color: #242424;
+    color: #f1eee6;
+    box-shadow: 0 2px 4px rgb(0 0 0 / .28), 4px 14px 18px rgb(0 0 0 / .24), 9px 26px 33px rgb(0 0 0 / .1);
+  }
+  :global(.dark) .photo-object figcaption { color: rgb(241 238 230 / .72); }
+  :global(.dark) .nf-photo, :global(.dark) .eu-photo, :global(.dark) .tampa-photo,
+  :global(.dark) .bahamas-photo, :global(.dark) .catskills-photo, :global(.dark) .caribbean-photo {
+    background-color: #242424;
+    color: #f1eee6;
+    box-shadow: 0 2px 4px rgb(0 0 0 / .28), 4px 14px 18px rgb(0 0 0 / .24), 9px 26px 33px rgb(0 0 0 / .1);
+  }
+  :global(.dark) .nf-photo figcaption, :global(.dark) .eu-photo figcaption,
+  :global(.dark) .tampa-photo figcaption, :global(.dark) .bahamas-photo figcaption,
+  :global(.dark) .catskills-photo figcaption, :global(.dark) .caribbean-photo figcaption {
+    color: rgb(241 238 230 / .72);
+  }
+  :global(.dark) .nf-photo::before, :global(.dark) .eu-photo::before,
+  :global(.dark) .tampa-photo::before, :global(.dark) .bahamas-photo::before,
+  :global(.dark) .catskills-photo::before, :global(.dark) .caribbean-photo::before {
+    opacity: .07;
+    mix-blend-mode: screen;
+  }
+  :global(.dark) .nf-photo::after, :global(.dark) .eu-photo::after,
+  :global(.dark) .tampa-photo::after, :global(.dark) .bahamas-photo::after,
+  :global(.dark) .catskills-photo::after, :global(.dark) .caribbean-photo::after {
+    box-shadow: inset 0 0 16px rgb(0 0 0 / .16);
+  }
+
+  .collage-stage button:focus-visible { outline: 3px solid #32758a; outline-offset: 3px; }
+
+  @media (max-width: 650px) {
+    .nf-stage { min-height: 37rem; }.nf-photo { width: 48%; height: 12rem; }.nf-photo img { height: 9rem; }.nf-photo--1 { top: 1.8rem; left: 2%; }.nf-photo--2 { top: 2rem; left: 50%; }.nf-photo--3 { top: 11.8rem; left: 0; }.nf-photo--4 { top: 12rem; left: 50%; }.nf-photo--5 { top: 21.8rem; left: 1%; }.nf-photo--6 { top: 22.6rem; left: 49%; }
+    .eu-stage { min-height: 37rem; }.eu-photo { width: 48%; height: 12rem; }.eu-photo img { height: 9rem; }.eu-photo--1 { top: 1.8rem; left: 2%; }.eu-photo--2 { top: 11.8rem; left: 0; }.eu-photo--3 { top: 21.8rem; left: 1%; }.eu-photo--4 { top: 2rem; left: 50%; }.eu-photo--5 { top: 12rem; left: 50%; }.eu-photo--6 { top: 22.6rem; left: 49%; }
+    .tampa-stage { min-height: 30rem; }
+    .tampa-photo { height: 11.8rem; }
+    .tampa-photo img { height: 8.75rem; }
+    .tampa-photo--1 { top: .8rem; left: 6%; width: 50%; }
+    .tampa-photo--2 { top: 3.5rem; left: 49%; width: 49%; height: 11.4rem; }
+    .tampa-photo--2 img { height: 8.35rem; }
+    .tampa-photo--3 { top: 12.3rem; left: 2%; width: 54%; height: 11.7rem; }
+    .tampa-photo--3 img { height: 8.65rem; }
+    .tampa-photo--4 { top: 15rem; left: 45%; width: 53%; height: 12.2rem; }
+    .tampa-photo--4 img { height: 9.15rem; }
+    .bahamas-stage { min-height: 30rem; }
+    .bahamas-photo { height: 11.8rem; }
+    .bahamas-photo img { height: 8.8rem; }
+    .bahamas-photo--1 { top: 1.8rem; left: 7%; width: 50%; height: 11rem; }
+    .bahamas-photo--2 { top: 2.8rem; left: 54%; width: 44%; height: 10.8rem; }
+    .bahamas-photo--3 { top: 12.5rem; left: 2%; width: 61%; height: 12rem; }
+    .bahamas-photo--4 { top: 16.2rem; left: 53%; width: 45%; height: 11.2rem; }
+    .catskills-stage { min-height: 28rem; }
+    .catskills-photo { height: 11.8rem; }
+    .catskills-photo img { height: 8.8rem; }
+    .catskills-photo--1 { top: 2.5rem; left: 49%; width: 49%; height: 11.2rem; }
+    .catskills-photo--2 { top: 1.8rem; left: 5%; width: 48%; height: 11.2rem; }
+    .catskills-photo--3 { top: 13.7rem; left: 48%; width: 50%; height: 11.3rem; }
+    .catskills-photo--4 { top: 12.5rem; left: 3%; width: 52%; height: 11.6rem; }
+    .caribbean-stage { min-height: 38.5rem; }
+    .caribbean-photo { height: 12.5rem; }
+    .caribbean-photo img { height: 9.5rem; }
+    .caribbean-photo--1 { top: 1.8rem; left: 4%; width: 45%; height: 11.8rem; }
+    .caribbean-photo--2 { top: 12.5rem; left: 2%; width: 47%; height: 11.8rem; }
+    .caribbean-photo--3 { top: 2.7rem; left: 51%; width: 46%; height: 16rem; }
+    .caribbean-photo--4 { top: 18.8rem; left: 49%; width: 48%; height: 16rem; }
+    .caribbean-photo--5 { top: 23.2rem; left: 5%; width: 45%; height: 11.8rem; }
+  }
+  @media (max-width: 420px) {
+    .nf-stage, .eu-stage, .bahamas-stage, .catskills-stage, .caribbean-stage { top: -.9rem; margin-bottom: -.9rem; }
+    .nf-stage, .eu-stage { min-height: 32.5rem; }
+    .object-kicker { font-size: .47rem; }.photo-object figcaption { font-size: .62rem; }.nf-stage { min-height: 34rem; }.nf-photo { height: 10.8rem; }.nf-photo img { height: 7.9rem; }.nf-photo--1 { top: 1.4rem; left: 1%; }.nf-photo--2 { top: 1.6rem; left: 50%; }.nf-photo--3 { top: 10.2rem; left: 0; }.nf-photo--4 { top: 10.4rem; left: 50%; }.nf-photo--5 { top: 19rem; left: 0; }.nf-photo--6 { top: 18.8rem; left: 49%; }.eu-stage { min-height: 34rem; }.eu-photo { height: 10.8rem; width: 48%; }.eu-photo img { height: 7.9rem; }.eu-photo--1 { top: 1.4rem; left: 1%; }.eu-photo--2 { top: 10.2rem; left: 0; }.eu-photo--3 { top: 19rem; left: 0; }.eu-photo--4 { top: 1.6rem; left: 50%; }.eu-photo--5 { top: 10.4rem; left: 50%; }.eu-photo--6 { top: 18.8rem; left: 49%; }.tampa-stage { min-height: 27rem; }.tampa-photo { height: 10.3rem; }.tampa-photo img { height: 7.35rem; }.tampa-photo--1 { top: .6rem; left: 6%; width: 51%; }.tampa-photo--2 { top: 3rem; left: 49%; width: 49%; height: 10.2rem; }.tampa-photo--2 img { height: 7.25rem; }.tampa-photo--3 { top: 10.9rem; left: 1%; width: 55%; height: 10.5rem; }.tampa-photo--3 img { height: 7.55rem; }.tampa-photo--4 { top: 13.6rem; left: 45%; width: 54%; height: 11rem; }.tampa-photo--4 img { height: 8.05rem; }
+    .bahamas-stage { min-height: 28rem; }
+    .bahamas-photo { height: 10.3rem; }
+    .bahamas-photo img { height: 7.4rem; }
+    .bahamas-photo--1 { top: 1.4rem; left: 7%; width: 50%; height: 10.3rem; }
+    .bahamas-photo--2 { top: 2.8rem; left: 54%; width: 44%; height: 10.3rem; }
+    .bahamas-photo--3 { top: 11.4rem; left: 2%; width: 61%; height: 11.3rem; }
+    .bahamas-photo--4 { top: 14.6rem; left: 53%; width: 45%; height: 10.3rem; }
+    .catskills-stage { min-height: 25.5rem; }
+    .catskills-photo { height: 10.6rem; }
+    .catskills-photo img { height: 7.7rem; }
+    .catskills-photo--1 { top: 2rem; left: 49%; width: 49%; height: 10.2rem; }
+    .catskills-photo--2 { top: 1.4rem; left: 5%; width: 48%; height: 10.2rem; }
+    .catskills-photo--3 { top: 12.3rem; left: 48%; width: 50%; height: 10.2rem; }
+    .catskills-photo--4 { top: 11.3rem; left: 3%; width: 52%; height: 10.4rem; }
+    .caribbean-stage { min-height: 33.5rem; }
+    .caribbean-photo { height: 11rem; }
+    .caribbean-photo img { height: 8rem; }
+    .caribbean-photo--1 { top: 1.5rem; left: 4%; width: 45%; height: 10.3rem; }
+    .caribbean-photo--2 { top: 10.9rem; left: 2%; width: 47%; height: 10.3rem; }
+    .caribbean-photo--3 { top: 2.2rem; left: 51%; width: 46%; height: 14rem; }
+    .caribbean-photo--4 { top: 16.6rem; left: 49%; width: 48%; height: 14rem; }
+    .caribbean-photo--5 { top: 20.3rem; left: 5%; width: 45%; height: 10.3rem; }
+    .nf-stage, .eu-stage { min-height: 32.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .collage-stage *, .collage-stage *::before, .collage-stage *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+</style>

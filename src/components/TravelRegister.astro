@@ -1,0 +1,53 @@
+---
+import type { Journey } from '../data/travel-data';
+
+type Props = {
+  journeys: Journey[];
+};
+
+const { journeys } = Astro.props;
+const groupedJourneys = Array.from(
+  journeys.reduce((groups, journey) => {
+    const year = journey.date?.split('-')[1] ?? 'Undated';
+    const group = groups.get(year) ?? [];
+    group.push(journey);
+    groups.set(year, group);
+    return groups;
+  }, new Map<string, Journey[]>())
+);
+---
+
+<div class="travel-register">
+  <div class="border-y border-main/20">
+    {groupedJourneys.map(([year, yearJourneys]) => (
+      <section class="grid gap-4 border-b border-main/15 py-5 last:border-b-0 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-8 sm:py-6">
+        <h3 class="font-serif text-lg italic text-main/65">{year}</h3>
+        <div class="relative border-l border-main/20 pl-5">
+          {yearJourneys.map((journey) => (
+            <div class="relative flex min-w-0 items-baseline gap-2 border-b border-main/10 py-2.5 text-sm first:pt-0 last:border-b-0 last:pb-0">
+              <span
+                class:list={[
+                  'absolute -left-[1.6rem] top-3 h-2 w-2 rounded-full border-2 border-main',
+                  journey.mode === 'air' ? 'bg-blue-500/70' : 'bg-cyan-500/70'
+                ]}
+                aria-hidden="true"
+              ></span>
+              <span class="min-w-0">
+                <span>{journey.from}</span>
+                <span class="mx-1 text-main/35">→</span>
+                <span>{journey.to}</span>
+              </span>
+              <span class="ml-auto flex-none font-serif text-xs italic text-main/45">
+                {journey.mode === 'air' ? 'flight' : 'sea'}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <p class="mt-4 text-xs leading-relaxed text-main/45">
+    Air routes are marked in blue and sea journeys in cyan. Road travel is intentionally omitted from the register because the record is too extensive and repetitive to map meaningfully.
+  </p>
+</div>

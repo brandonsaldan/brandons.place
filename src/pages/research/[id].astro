@@ -1,0 +1,142 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import { formatResearchDate, researchCitation } from '../../utils/research-utils';
+
+export async function getStaticPaths() {
+    return (await getCollection('research')).map((paper) => ({
+        params: { id: paper.id }, props: { paper }
+    }));
+}
+
+type Props = { paper: CollectionEntry<'research'> };
+const { paper } = Astro.props;
+const { title, shortTitle, subtitle, publishDate, paperType, pageCount, doi, pdfUrl, repositories, frameworks, abstractLabel, excerpt, researchContext } = paper.data;
+const { Content } = await render(paper);
+const citation = researchCitation(paper);
+const pageURL = new URL(`/research/${paper.id}/`, Astro.site).href;
+const pdfURL = new URL(pdfUrl, Astro.site).href;
+const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'ScholarlyArticle',
+    headline: title,
+    author: { '@type': 'Person', name: 'Brandon Saldan' },
+    dateCreated: publishDate.toISOString().slice(0, 10),
+    description: excerpt,
+    url: pageURL,
+    identifier: { '@type': 'PropertyValue', propertyID: 'DOI', value: doi },
+    sameAs: [`https://doi.org/${doi}`, ...Object.values(repositories)],
+    encoding: { '@type': 'MediaObject', contentUrl: pdfURL, encodingFormat: 'application/pdf' },
+    keywords: frameworks.join(', '),
+    inLanguage: 'en'
+};
+const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2 hover:decoration-solid';
+---
+
+<BaseLayout title={paper.data.seo?.title ?? shortTitle} description={paper.data.seo?.description ?? excerpt} pageType="article" showHeader={false}>
+    <Fragment slot="head">
+        <meta name="citation_title" content={title} />
+        <meta name="citation_author" content="Brandon Saldan" />
+        <meta name="citation_publication_date" content={publishDate.toISOString().slice(0, 10).replaceAll('-', '/')} />
+        <meta name="citation_doi" content={doi} />
+        <meta name="citation_pdf_url" content={pdfURL} />
+        <meta name="citation_abstract_html_url" content={pageURL} />
+        <script type="application/ld+json" set:html={JSON.stringify(structuredData).replaceAll('<', '\\u003c')} />
+    </Fragment>
+
+    <article>
+        <header class="mb-8 sm:mb-12">
+            <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">
+                {shortTitle}<span class="sr-only">: </span>
+                <span class="block mt-4 text-xl leading-snug font-normal sm:text-2xl">{subtitle}</span>
+            </h1>
+        </header>
+
+        <div class="border-y border-main/15 py-6 sm:py-8">
+            <div class="grid gap-7 sm:grid-cols-3 sm:gap-10">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Author</p>
+                    <p class="mt-2 text-sm leading-relaxed">Brandon Saldan</p>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Published</p>
+                    <p class="mt-2 text-sm leading-relaxed">{formatResearchDate(publishDate)}</p>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Persistent identifier</p>
+                    <a class={`mt-2 block break-all text-sm ${linkClasses}`} href={`https://doi.org/${doi}`} target="_blank" rel="noreferrer">doi:{doi}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-10 grid gap-12 sm:mt-14 sm:grid-cols-[minmax(0,1fr)_14rem] sm:gap-16">
+            <div class="min-w-0">
+                <h2 class="mb-5 text-2xl font-serif italic sm:text-3xl">Abstract</h2>
+                <div class="max-w-none prose prose-main sm:prose-lg">
+                    <Content />
+                </div>
+                <div class="mt-10 max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 sm:mt-12">
+                    <p class="mb-2 text-xs uppercase tracking-[0.16em] text-main/45">Context</p>
+                    <p class="italic">{researchContext}</p>
+                </div>
+            </div>
+
+            <aside class="self-start sm:sticky sm:top-8">
+                <div class="border-t-2 border-main pt-4">
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access this paper</p>
+                    <Button class="mt-4 w-full" href={pdfUrl} target="_blank" rel="noreferrer">Read PDF <span class="ml-2 text-xs not-italic">↗</span></Button>
+                    <div class="mt-5 divide-y divide-main/15 border-y border-main/15">
+                        <a class={`block py-3 text-sm ${linkClasses}`} href={`https://doi.org/${doi}`} target="_blank" rel="noreferrer">Open DOI <span class="float-right">↗</span></a>
+                        <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.kcworks} target="_blank" rel="noreferrer">KCWorks <span class="float-right">↗</span></a>
+                        <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.researchGate} target="_blank" rel="noreferrer">ResearchGate <span class="float-right">↗</span></a>
+                        <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.academia} target="_blank" rel="noreferrer">Academia.edu <span class="float-right">↗</span></a>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-xs uppercase tracking-[0.16em] text-main/50">Paper details</p>
+                        <dl class="mt-4 space-y-4 text-sm leading-relaxed">
+                            <div><dt class="text-main/50">Format</dt><dd>{paperType}</dd></div>
+                            <div><dt class="text-main/50">Length</dt><dd>{pageCount} Pages</dd></div>
+                            <div><dt class="text-main/50">Keywords</dt><dd>{frameworks.join(' · ')}</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <div class="mt-12 sm:mt-16">
+            <details>
+                <summary class="w-fit cursor-pointer font-serif text-lg italic hover:underline hover:underline-offset-2">Cite this paper</summary>
+                <div class="mt-5 max-w-2xl rounded-sm bg-muted px-5 py-4 sm:px-6">
+                    <p class="text-sm leading-relaxed" data-citation-text>{citation}</p>
+                </div>
+                <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-4">
+                    <Button type="button" class="hidden" data-copy-citation>Copy citation</Button>
+                    <a class:list={['text-sm', linkClasses]} href={`/research/${paper.id}.bib`} download={`${paper.id}.bib`}>Download BibTeX</a>
+                    <span class="text-sm text-neutral-600 dark:text-neutral-400" role="status" aria-live="polite" data-copy-status></span>
+                </div>
+            </details>
+        </div>
+    </article>
+</BaseLayout>
+
+<script>
+    function initializeCitation() {
+        const button = document.querySelector<HTMLButtonElement>('[data-copy-citation]');
+        const citation = document.querySelector<HTMLElement>('[data-citation-text]');
+        const status = document.querySelector<HTMLElement>('[data-copy-status]');
+        if (!button || !citation || !status || !navigator.clipboard?.writeText || button.dataset.initialized) return;
+        button.dataset.initialized = 'true';
+        button.classList.remove('hidden');
+        button.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(citation.textContent?.trim() ?? '');
+                status.textContent = 'Citation copied.';
+            } catch {
+                status.textContent = 'Select the citation above to copy it.';
+            }
+        });
+    }
+    initializeCitation();
+    document.addEventListener('astro:page-load', initializeCitation);
+</script>

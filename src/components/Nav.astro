@@ -43,6 +43,10 @@ const navLinks = siteConfig.headerNavLinks || [];
         .menu {
             @apply flex-col gap-1 absolute -top-2.5 -left-2.5 max-w-64 px-3 pt-16 pb-10 z-20 bg-main border border-dashed border-main invisible opacity-0;
             width: calc(100% + 1.25rem);
+            z-index: 120;
+        }
+        .menu-toggle {
+            z-index: 130;
         }
         .menu.is-visible {
             @apply visible opacity-100;

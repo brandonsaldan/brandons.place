@@ -1,0 +1,27 @@
+---
+type Props = { index?: number; image?: { src: string; alt?: string }; href: string };
+
+const { index = 0, image, href } = Astro.props;
+---
+
+<article class="group/preview grid gap-8 border-t border-main/20 py-8 first:border-t-0 first:pt-0 sm:grid-cols-[15rem_minmax(0,1fr)] sm:gap-10 sm:py-10">
+    <div class="h-full">
+        <a class="block select-none" href={href} draggable="false" aria-label="Open entry">
+            {
+                image ? (
+                    <img class="relative aspect-[4/3] w-full object-cover transition-opacity duration-200 group-hover/preview:opacity-80 sm:aspect-auto sm:h-56" src={image.src} alt={image.alt ?? ''} draggable="false" />
+                ) : (
+                    <div class="relative aspect-[4/3] w-full overflow-hidden bg-muted transition-opacity duration-200 group-hover/preview:opacity-80 sm:aspect-auto sm:h-56">
+                        <div class="absolute -left-8 top-1/2 h-px w-[130%] rotate-[-20deg] bg-main/20"></div>
+                        <div class="absolute left-1/3 top-[-20%] h-[150%] w-px rotate-[18deg] bg-main/15"></div>
+                        <div class="absolute bottom-4 right-4 h-12 w-12 rounded-full border border-main/20"></div>
+                        <span class="absolute bottom-3 left-4 font-serif text-sm italic text-main/35">Plate {String(index + 1).padStart(2, '0')}</span>
+                    </div>
+                )
+            }
+        </a>
+    </div>
+    <div>
+        <slot />
+    </div>
+</article>
