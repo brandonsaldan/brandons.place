@@ -3,7 +3,7 @@ title: "The Foreign Athlete Pipeline: International Recruiting in American Colle
 shortTitle: "The Foreign Athlete Pipeline"
 subtitle: "International Recruiting in American College Athletics as a Geopolitical and National Security Issue, 1952–2026"
 researchContext: "Produced as part of undergraduate coursework at the University of North Carolina at Charlotte in AMST 3050: History of the NCAA."
-frameworks: ["Dependency theory", "Securitization theory", "Soft power"]
+frameworks: ["Dependency Theory", "Securitization Theory", "Soft Power"]
 doi: "10.17613/07azx-8yw93"
 repositories:
   kcworks: "https://works.hcommons.org/records/07azx-8yw93"
@@ -15,7 +15,7 @@ image:
 pageCount: 25
 excerpt: "Tracing international recruitment in American college athletics from the Cold War to 2026, this paper examines the intersection of athletic labor, immigration law, and national security."
 publishDate: "2026-05-05"
-paperType: "Timeline research paper"
+paperType: "Research Paper"
 pdfUrl: "/papers/SaldanTheForeignAthletePipeline.pdf"
 readingTime: 20
 isFeatured: true

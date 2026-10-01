@@ -43,8 +43,8 @@ const mappedJourneys = journeys.filter(j => j.mode === 'air' || j.mode === 'sea'
 ---
 
 <div class="space-y-6">
-  <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm pb-4 border-b border-neutral-200 dark:border-neutral-800">
-    <span class="font-serif italic text-neutral-600 dark:text-neutral-400">Journey Types:</span>
+  <div class="flex flex-wrap items-center gap-4 border-y border-main/20 py-3 text-xs sm:gap-6 sm:text-sm">
+    <span class="font-serif italic text-main/60">Journey types</span>
     <div class="flex items-center gap-2">
       <div class="w-8 h-0.5" style="border-top: 2px dashed #3b82f6;"></div>
       <span>Flight</span>
@@ -57,18 +57,18 @@ const mappedJourneys = journeys.filter(j => j.mode === 'air' || j.mode === 'sea'
 
   <div
     id="travel-map"
-    class="w-full h-96 sm:h-[500px] border border-neutral-200 dark:border-neutral-800 rounded-sm overflow-hidden"
+    class="w-full h-[26rem] bg-muted border-y border-main/20 overflow-hidden sm:h-[34rem]"
     data-journeys={JSON.stringify(mappedJourneys)}
   ></div>
 
   <details class="group">
-    <summary class="cursor-pointer text-sm font-serif italic text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors list-none flex items-center gap-2">
+    <summary class="flex cursor-pointer list-none items-center gap-2 text-sm font-serif italic text-main/60 transition-colors hover:text-main">
       <span class="transform transition-transform group-open:rotate-90">▶</span>
       Journey Details ({mappedJourneys.length} {mappedJourneys.length === 1 ? 'journey' : 'journeys'})
     </summary>
     <div class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
       {mappedJourneys.map((journey) => (
-        <div class="flex items-center gap-2 p-2 text-sm border border-neutral-200 dark:border-neutral-800 rounded-sm hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors">
+        <div class="flex items-center gap-2 border-t border-main/15 py-3 text-sm transition-colors hover:border-main/40">
           <div
             class="w-3 h-3 rounded-full flex-shrink-0"
             class:list={[
