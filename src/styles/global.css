@@ -32,6 +32,34 @@
     }
 }
 
+@layer components {
+    .music-record, .vinyl-disc {
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: repeating-radial-gradient(circle, rgb(var(--color-text-main) / .72) 0 2px, rgb(var(--color-text-main) / .88) 3px 4px);
+        box-shadow: 0 4px 15px rgb(0 0 0 / .18);
+    }
+
+    .music-record { width: 76%; aspect-ratio: 1; }
+
+    .music-record span, .vinyl-label {
+        aspect-ratio: 1;
+        border: 5px solid rgb(var(--color-bg-main));
+        border-radius: 50%;
+        background: rgb(var(--color-bg-muted));
+    }
+
+    .music-record span { width: 24%; }
+
+    .music-record--small {
+        background: repeating-radial-gradient(circle, rgb(var(--color-text-main) / .72) 0 1px, rgb(var(--color-text-main) / .88) 1.5px 2px);
+        box-shadow: 0 1px 4px rgb(0 0 0 / .18);
+    }
+
+    .music-record--small span { border-width: 1px; }
+}
+
 @layer utilities {
     .rotate-2 {
       transform: rotate(2deg);

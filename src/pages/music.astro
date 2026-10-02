@@ -1,0 +1,427 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Listening"
+  description="A live look at what Brandon Saldan is listening to, from the records in rotation to the latest track."
+  showHeader={false}
+>
+  <div data-music-page>
+    <header class="mb-4 sm:mb-9">
+      <h1 class="mb-3 text-2xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Listening</h1>
+      <p class="max-w-2xl text-base leading-relaxed sm:text-lg">
+        There’s usually something playing. Here are the albums I keep returning to, the artists in rotation, and a few of the songs I’ve had on lately.
+      </p>
+    </header>
+
+    <section aria-label="Current listening" class="border-b border-dashed border-main/35 pb-7 sm:pb-10">
+      <div class="grid items-center gap-5 sm:grid-cols-[17rem_minmax(0,1fr)] sm:gap-8">
+        <button type="button" data-vinyl-toggle class="vinyl-composition group relative mx-auto block aspect-square w-full max-w-[19rem] cursor-pointer text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-main sm:mx-0 sm:max-w-[17rem]" aria-label="Pull the record out" aria-pressed="false">
+          <span class="vinyl-disc absolute right-[1%] top-1/2 z-0 grid aspect-square w-[68%] place-items-center rounded-full" aria-hidden="true">
+            <span class="vinyl-label block aspect-square w-[55%]"></span>
+          </span>
+          <span class="music-sleeve absolute left-[2%] top-1/2 z-10 block aspect-square w-[76%] border border-main/15 bg-muted p-1 shadow-[-4px_5px_0_rgb(var(--color-text-main)/0.08)]" aria-hidden="true">
+            <span class="relative grid h-full w-full place-items-center overflow-hidden bg-main/5">
+              <span data-current-fallback class="music-record"><span></span></span>
+              <img data-current-image class="absolute inset-0 hidden h-full w-full object-cover" alt="" />
+            </span>
+          </span>
+        </button>
+        <div class="min-w-0">
+          <p class="mb-3 text-[0.65rem] font-medium uppercase tracking-[0.16em] text-main/55" data-playing-indicator>Tuning in</p>
+          <h2 data-current-title class="font-serif text-3xl leading-[1.08] sm:text-5xl">Loading the record...</h2>
+          <p data-current-artist class="mt-3 text-base leading-relaxed sm:text-lg">One moment.</p>
+          <p data-current-album class="mt-1 font-serif italic text-main/55"></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid gap-6 border-b border-dashed border-main/35 py-7 sm:grid-cols-2 sm:gap-10 sm:py-9">
+      <div>
+        <p class="text-[0.65rem] font-medium uppercase tracking-[0.16em] text-main/55">All time</p>
+        <p data-total-scrobbles class="mt-1 font-serif text-3xl italic sm:text-4xl">—</p>
+        <p class="mt-1 text-sm text-main/60">listens logged</p>
+      </div>
+      <div>
+        <p class="text-[0.65rem] font-medium uppercase tracking-[0.16em] text-main/55">Since</p>
+        <p data-registered class="mt-1 font-serif text-3xl italic sm:text-4xl">—</p>
+        <p class="mt-1 text-sm text-main/60">and counting</p>
+      </div>
+    </div>
+
+    <section class="mt-12 sm:mt-16" aria-labelledby="rotation-heading">
+      <div class="mb-6 flex flex-col gap-5 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 id="rotation-heading" class="font-serif text-2xl italic sm:text-3xl">On Repeat</h2>
+        </div>
+        <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm" role="group" aria-label="Chart period">
+          <button type="button" data-music-period="7day" aria-pressed="false" class="music-period">7 days</button>
+          <button type="button" data-music-period="1month" aria-pressed="true" class="music-period">Month</button>
+          <button type="button" data-music-period="12month" aria-pressed="false" class="music-period">Year</button>
+          <button type="button" data-music-period="overall" aria-pressed="false" class="music-period">All time</button>
+        </div>
+      </div>
+      <p data-chart-status class="text-sm text-main/55" role="status" aria-live="polite">Loading this month’s records...</p>
+      <div data-top-albums class="mt-6 grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-10"></div>
+    </section>
+
+    <section class="mt-12 sm:mt-16" aria-labelledby="artists-heading">
+      <div class="mb-6 flex items-baseline justify-between gap-4 border-b border-dashed border-main/35 pb-4">
+        <h2 id="artists-heading" class="font-serif text-2xl italic sm:text-3xl">In Rotation</h2>
+        <span class="font-serif text-sm italic text-main/50" data-artist-period>this month</span>
+      </div>
+      <ol data-top-artists class="grid gap-x-10 sm:grid-cols-2"></ol>
+      <p data-artist-status class="hidden text-sm text-main/55"></p>
+    </section>
+
+    <section class="mt-12 sm:mt-16" aria-labelledby="recent-heading">
+      <div class="mb-6 flex items-baseline justify-between gap-4 border-b border-dashed border-main/35 pb-4">
+        <h2 id="recent-heading" class="font-serif text-2xl italic sm:text-3xl">Recents</h2>
+        <span class="font-serif text-sm italic text-main/50">recent plays</span>
+      </div>
+      <ol data-recent-tracks class="divide-y divide-dashed divide-main/20"></ol>
+      <p data-recent-status class="hidden text-sm text-main/55"></p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .music-sleeve { transform: translateY(-50%) rotate(-2deg); }
+  .vinyl-disc {
+    transform: translateY(-50%);
+    transition: transform .45s ease;
+  }
+  .vinyl-composition.is-open .vinyl-disc { transform: translate(8%, -50%); }
+  @media (hover: hover) {
+    .vinyl-composition:hover .vinyl-disc { transform: translate(8%, -50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vinyl-disc { transition: none; }
+  }
+  .music-period { border-bottom: 1px dashed transparent; padding-bottom: 2px; color: rgb(var(--color-text-main) / .55); }
+  .music-period:hover, .music-period[aria-pressed='true'] { border-color: currentColor; color: rgb(var(--color-text-main)); }
+  .music-period:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  :global(.album-flip) { perspective: 900px; }
+  :global(.album-flip-inner) {
+    transform-style: preserve-3d;
+    transition: transform .65s cubic-bezier(.2,.7,.2,1);
+  }
+  :global(.album-card.is-flipped .album-flip-inner) { transform: rotateY(180deg); }
+  :global(.album-flip-face) {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  :global(.album-flip-back) { transform: rotateY(180deg); }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    :global(.album-card:hover .album-flip-inner) { transform: rotateY(8deg) translateY(-3px); }
+    :global(.album-card.is-flipped:hover .album-flip-inner) { transform: rotateY(172deg) translateY(-3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.album-flip-inner) { transition: none; }
+  }
+</style>
+
+<script>
+  import type { MusicAlbum, MusicAlbumDetail, MusicResponse, MusicTrack, MusicPeriod } from '../data/music-types';
+
+  const periodLabels: Record<MusicPeriod, string> = {
+    '7day': 'this week',
+    '1month': 'this month',
+    '12month': 'this year',
+    overall: 'all time',
+  };
+  let refreshTimer: number | undefined;
+  let requestId = 0;
+  const albumDetails = new Map<string, MusicAlbumDetail | null>();
+  const pendingAlbumDetails = new Map<string, Promise<MusicAlbumDetail | null>>();
+  const flippedAlbums = new Set<string>();
+
+  function text(el: Element | null, value: string) {
+    if (el) el.textContent = value;
+  }
+
+  function timeAgo(iso: string | null): string {
+    if (!iso) return '';
+    const minutes = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+    if (minutes < 2) return 'just now';
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.round(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.round(hours / 24);
+    return `${days}d ago`;
+  }
+
+  function renderArtwork(imageUrl: string | null, size: 'album' | 'track'): HTMLElement {
+    const sleeve = document.createElement('div');
+    sleeve.className = size === 'album'
+      ? 'aspect-square border border-main/15 bg-muted p-1 shadow-[-4px_5px_0_rgb(var(--color-text-main)/0.08)]'
+      : 'h-12 w-12 shrink-0 border border-main/15 bg-muted p-px shadow-[2px_2px_0_rgb(var(--color-text-main)/0.08)]';
+    sleeve.setAttribute('aria-hidden', 'true');
+
+    const artwork = document.createElement('div');
+    artwork.className = 'relative grid h-full w-full place-items-center overflow-hidden bg-main/5';
+    const record = document.createElement('span');
+    record.className = size === 'track' ? 'music-record music-record--small' : 'music-record';
+    record.append(document.createElement('span'));
+    artwork.append(record);
+
+    if (imageUrl) {
+      const image = document.createElement('img');
+      image.className = 'absolute inset-0 h-full w-full object-cover';
+      image.alt = '';
+      image.loading = 'lazy';
+      image.onerror = () => image.remove();
+      image.src = imageUrl;
+      artwork.append(image);
+    }
+
+    sleeve.append(artwork);
+    return sleeve;
+  }
+
+  function albumKey(album: MusicAlbum): string {
+    return JSON.stringify([album.artist, album.title]);
+  }
+
+  async function getAlbumDetail(album: MusicAlbum): Promise<MusicAlbumDetail | null> {
+    const key = albumKey(album);
+    if (albumDetails.has(key)) return albumDetails.get(key) ?? null;
+    const pending = pendingAlbumDetails.get(key);
+    if (pending) return pending;
+
+    const request = fetch(`/api/music-album.json?${new URLSearchParams({ artist: album.artist, album: album.title })}`)
+      .then(async (response) => {
+        if (!response.ok) throw new Error('Album details unavailable');
+        return await response.json() as MusicAlbumDetail;
+      })
+      .catch(() => null)
+      .then((detail) => {
+        albumDetails.set(key, detail);
+        pendingAlbumDetails.delete(key);
+        return detail;
+      });
+    pendingAlbumDetails.set(key, request);
+    return request;
+  }
+
+  function renderAlbum(album: MusicAlbum, period: MusicPeriod): HTMLElement {
+    const key = albumKey(album);
+    const item = document.createElement('article');
+    item.className = 'album-card relative min-w-0';
+
+    const scene = document.createElement('div');
+    scene.className = 'album-flip relative aspect-square';
+    const inner = document.createElement('div');
+    inner.className = 'album-flip-inner relative block h-full w-full';
+    const front = renderArtwork(album.image, 'album');
+    front.classList.add('album-flip-face', 'absolute', 'inset-0');
+
+    const back = document.createElement('div');
+    back.className = 'album-flip-face album-flip-back absolute inset-0 border border-main/15 bg-muted p-1 shadow-[4px_5px_0_rgb(var(--color-text-main)/0.08)]';
+    back.setAttribute('aria-hidden', 'true');
+    const backContent = document.createElement('div');
+    backContent.className = 'flex h-full w-full flex-col items-center justify-center overflow-hidden bg-main/5 px-3 py-3 text-center';
+    const topRule = document.createElement('span');
+    topRule.className = 'mb-4 w-10 border-t border-main/30 sm:mb-5';
+    topRule.setAttribute('aria-hidden', 'true');
+    const count = document.createElement('p');
+    count.className = 'font-serif text-4xl leading-none italic sm:text-5xl';
+    count.textContent = '…';
+    const countCaption = document.createElement('p');
+    countCaption.className = 'mt-2 text-[0.55rem] uppercase tracking-[0.14em] text-main/55 sm:text-[0.65rem]';
+    countCaption.textContent = 'all-time plays';
+    const bottomRule = document.createElement('span');
+    bottomRule.className = 'mt-4 w-10 border-t border-main/30 sm:mt-5';
+    bottomRule.setAttribute('aria-hidden', 'true');
+    backContent.append(topRule, count, countCaption, bottomRule);
+    back.append(backContent);
+    inner.append(front, back);
+    scene.append(inner);
+
+    const meta = document.createElement('p');
+    meta.className = 'mt-4 text-[0.65rem] font-medium uppercase tracking-[0.16em] text-main/45';
+    meta.textContent = `${album.plays.toLocaleString()} plays`;
+    const title = document.createElement('h3');
+    title.className = 'mt-1.5 font-serif text-lg leading-tight sm:text-xl';
+    title.textContent = album.title;
+    const artist = document.createElement('p');
+    artist.className = 'mt-1 text-sm leading-snug text-main/60';
+    artist.textContent = album.artist;
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'absolute inset-0 z-20 w-full cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-main';
+    button.setAttribute('aria-label', `Flip ${album.title} by ${album.artist} for liner notes`);
+    button.setAttribute('aria-pressed', 'false');
+
+    function applyDetail(detail: MusicAlbumDetail | null) {
+      const allTime = detail?.allTimePlays ?? (period === 'overall' ? album.plays : null);
+      count.textContent = allTime === null ? '—' : allTime.toLocaleString();
+      button.setAttribute('aria-label', item.classList.contains('is-flipped')
+        ? `Show cover for ${album.title}`
+        : `Flip ${album.title} by ${album.artist} for liner notes`);
+    }
+
+    function showDetail() {
+      if (albumDetails.has(key)) applyDetail(albumDetails.get(key) ?? null);
+      else getAlbumDetail(album).then((detail) => {
+        if (item.isConnected) applyDetail(detail);
+      });
+    }
+
+    button.addEventListener('click', () => {
+      const flipped = item.classList.toggle('is-flipped');
+      button.setAttribute('aria-pressed', String(flipped));
+      back.setAttribute('aria-hidden', String(!flipped));
+      if (flipped) {
+        flippedAlbums.add(key);
+        button.setAttribute('aria-label', `Loading liner notes for ${album.title}`);
+        showDetail();
+      } else {
+        flippedAlbums.delete(key);
+        button.setAttribute('aria-label', `Flip ${album.title} by ${album.artist} for liner notes`);
+      }
+    });
+
+    item.append(scene, meta, title, artist, button);
+    if (flippedAlbums.has(key)) {
+      item.classList.add('is-flipped');
+      button.setAttribute('aria-pressed', 'true');
+      back.setAttribute('aria-hidden', 'false');
+      button.setAttribute('aria-label', `Loading liner notes for ${album.title}`);
+      showDetail();
+    }
+    return item;
+  }
+
+  function renderTrack(track: MusicTrack): HTMLElement {
+    const item = document.createElement('li');
+    item.className = 'flex items-center gap-4 py-3';
+    const details = document.createElement('span');
+    details.className = 'min-w-0 flex-1';
+    const title = document.createElement('span');
+    title.className = 'block truncate font-serif text-lg leading-tight';
+    title.textContent = track.title;
+    const artist = document.createElement('span');
+    artist.className = 'mt-0.5 block truncate text-sm text-main/60';
+    artist.textContent = track.artist;
+    details.append(title, artist);
+    const time = document.createElement('span');
+    time.className = 'shrink-0 text-right text-xs text-main/50';
+    time.textContent = track.nowPlaying ? 'playing now' : timeAgo(track.playedAt);
+    item.append(renderArtwork(track.image, 'track'), details, time);
+    return item;
+  }
+
+  function render(page: HTMLElement, data: MusicResponse) {
+    const track = data.recentTracks[0];
+    text(page.querySelector('[data-playing-indicator]'), track?.nowPlaying ? '● Playing Now' : 'Last Played');
+    text(page.querySelector('[data-current-title]'), track?.title ?? 'A little quiet here');
+    text(page.querySelector('[data-current-artist]'), track?.artist ?? 'No recent tracks yet.');
+    text(page.querySelector('[data-current-album]'), track?.album ?? '');
+    const currentImage = page.querySelector<HTMLImageElement>('[data-current-image]');
+    if (currentImage) {
+      currentImage.onerror = () => currentImage.classList.add('hidden');
+      if (track?.image) {
+        currentImage.src = track.image;
+        currentImage.classList.remove('hidden');
+      } else {
+        currentImage.removeAttribute('src');
+        currentImage.classList.add('hidden');
+      }
+    }
+    text(page.querySelector('[data-total-scrobbles]'), data.totalScrobbles.toLocaleString());
+    text(page.querySelector('[data-registered]'), data.registeredAt
+      ? new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(data.registeredAt))
+      : '—');
+    text(page.querySelector('[data-chart-status]'), data.topAlbums.length ? '' : 'No album plays in this period yet.');
+    text(page.querySelector('[data-artist-period]'), periodLabels[data.period]);
+    const albums = page.querySelector('[data-top-albums]');
+    albums?.replaceChildren(...data.topAlbums.map((album) => renderAlbum(album, data.period)));
+    const artists = page.querySelector('[data-top-artists]');
+    artists?.replaceChildren(...data.topArtists.map((artist, index) => {
+      const item = document.createElement('li');
+      item.className = 'flex items-baseline gap-3 border-b border-dashed border-main/20 py-3';
+      const rank = document.createElement('span');
+      rank.className = 'w-7 shrink-0 text-xs text-main/45';
+      rank.textContent = String(index + 1).padStart(2, '0');
+      const name = document.createElement('span');
+      name.className = 'min-w-0 flex-1 font-serif text-lg leading-tight';
+      name.textContent = artist.name;
+      const plays = document.createElement('span');
+      plays.className = 'shrink-0 text-xs text-main/50';
+      plays.textContent = `${artist.plays.toLocaleString()} plays`;
+      item.append(rank, name, plays);
+      return item;
+    }));
+    page.querySelector('[data-recent-tracks]')?.replaceChildren(...data.recentTracks.map(renderTrack));
+    const artistStatus = page.querySelector('[data-artist-status]');
+    text(artistStatus, data.topArtists.length ? '' : 'No artists in this period yet.');
+    artistStatus?.classList.toggle('hidden', Boolean(data.topArtists.length));
+    const recentStatus = page.querySelector('[data-recent-status]');
+    text(recentStatus, data.recentTracks.length ? '' : 'No recent tracks yet.');
+    recentStatus?.classList.toggle('hidden', Boolean(data.recentTracks.length));
+  }
+
+  function initMusicPage() {
+    const page = document.querySelector<HTMLElement>('[data-music-page]');
+    if (!page || page.dataset.initialized) return;
+    page.dataset.initialized = 'true';
+    let period: MusicPeriod = '1month';
+
+    page.querySelector<HTMLButtonElement>('[data-vinyl-toggle]')?.addEventListener('click', (event) => {
+      const button = event.currentTarget as HTMLButtonElement;
+      const isOpen = button.classList.toggle('is-open');
+      button.setAttribute('aria-pressed', String(isOpen));
+      button.setAttribute('aria-label', isOpen ? 'Slide the record back into the sleeve' : 'Pull the record out');
+    });
+
+    async function load() {
+      const thisRequest = ++requestId;
+      try {
+        const response = await fetch(`/api/music.json?period=${period}`);
+        if (!response.ok) throw new Error('Music unavailable');
+        const data = await response.json() as MusicResponse;
+        if (thisRequest !== requestId || !page.isConnected) return;
+        render(page, data);
+      } catch {
+        if (thisRequest !== requestId || !page.isConnected) return;
+        if (!page.querySelector('[data-top-albums]')?.children.length) {
+          text(page.querySelector('[data-playing-indicator]'), 'The feed is quiet');
+          text(page.querySelector('[data-current-title]'), 'Back soon');
+          text(page.querySelector('[data-current-artist]'), 'The live feed isn’t available right now.');
+          text(page.querySelector('[data-chart-status]'), 'The listening charts will appear here when the feed is connected.');
+          const artistStatus = page.querySelector('[data-artist-status]');
+          text(artistStatus, 'The artist chart will appear here when the feed is connected.');
+          artistStatus?.classList.remove('hidden');
+          const recentStatus = page.querySelector('[data-recent-status]');
+          text(recentStatus, 'Recent tracks will appear here when the feed is connected.');
+          recentStatus?.classList.remove('hidden');
+        } else {
+          text(page.querySelector('[data-chart-status]'), 'Couldn’t refresh right now. Showing the last available chart.');
+        }
+      }
+    }
+
+    page.querySelectorAll<HTMLButtonElement>('[data-music-period]').forEach((button) => {
+      button.addEventListener('click', () => {
+        period = button.dataset.musicPeriod as MusicPeriod;
+        page.querySelectorAll('[data-music-period]').forEach((choice) => {
+          choice.setAttribute('aria-pressed', String(choice === button));
+        });
+        load();
+      });
+    });
+    load();
+    refreshTimer = window.setInterval(load, 60_000);
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    if (refreshTimer) window.clearInterval(refreshTimer);
+    refreshTimer = undefined;
+    requestId++;
+  });
+  document.addEventListener('astro:page-load', initMusicPage);
+  initMusicPage();
+</script>

@@ -65,6 +65,10 @@ const siteConfig: SiteConfig = {
       text: "Travel",
       href: "/travel",
     },
+    {
+      text: "Listening",
+      href: "/music",
+    },
   ],
   footerNavLinks: [
     {

@@ -3,7 +3,7 @@ import type { APIRoute } from 'astro';
 import { researchBibTeX } from '../../utils/research-utils';
 
 export async function getStaticPaths() {
-    return (await getCollection('research')).map((paper) => ({
+    return (await getCollection('research')).map((paper: CollectionEntry<'research'>) => ({
         params: { id: paper.id }, props: { paper }
     }));
 }

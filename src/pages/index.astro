@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import Hero from '../components/Hero.astro';
+import ListeningPreview from '../components/ListeningPreview.astro';
 import PostPreview from '../components/PostPreview.astro';
 import ProjectPreview from '../components/ProjectPreview.astro';
 import PreviewBlock from '../components/PreviewBlock.astro';
@@ -88,4 +89,5 @@ const featuredResearch = research.filter(({ data }) => data.isFeatured);
             </div>
         )
     }
+    <ListeningPreview />
 </BaseLayout>
