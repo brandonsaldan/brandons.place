@@ -12,6 +12,7 @@ const trips = [
     detail: 'Punta Cana',
     mode: 'air',
     scene: 'punta',
+    intro: 'My first flight and real trip. I was too young to remember much, but I do remember trying to order chocolate milk at a restaurant. What arrived was milk with chocolate sticks in it, and after a few unsuccessful attempts by my parents to explain in English what I meant, I finally offered, “leche chocolate!” an imperfect bit of Spanish I had probably picked up from watching Dora the Explorer. I don’t actually remember whether that worked either, but apparently my attempt got a laugh out of the restaurant staff.',
   },
   {
     name: 'Newfoundland',
@@ -150,7 +151,7 @@ const journeyGroups = Array.from(
   image={{ src: '/og/og-main.png', alt: 'Travel' }}
   showHeader={false}
 >
-  <h1 class="mb-3 text-2xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Travel</h1>
+  <h1 class="mb-3 text-4xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Travel</h1>
   <p class="mb-10 max-w-3xl text-base leading-relaxed sm:mb-14 sm:text-lg">
     I like going places. Here are a few trips that stand out, along with the places I’ve been and the ones I’d still like to see.
   </p>
@@ -159,14 +160,9 @@ const journeyGroups = Array.from(
     <h2 id="trips-heading" class="sr-only">Trips that stand out</h2>
 
     <div class="travel-timeline" data-travel-timeline>
-      <div class="travel-timeline-rail-slot">
-        <aside class="travel-timeline-rail" aria-label="Travel timeline">
-          <div class="travel-timeline-sticky">
-            <span class="travel-timeline-count mb-3 block text-[0.65rem] font-medium uppercase tracking-[0.16em] text-main/45" data-timeline-count>Trip 01 / {String(timelineTrips.length).padStart(2, '0')}</span>
-            <span class="travel-timeline-date mt-2 block font-serif text-2xl italic leading-none sm:text-3xl" data-timeline-date>{timelineTrips[0].date}</span>
-            <span class="travel-timeline-progress mt-5 block h-px bg-main/15"><span></span></span>
-          </div>
-        </aside>
+      <div class="travel-timeline-status sr-only" aria-live="polite">
+        <span data-timeline-count>Trip 01 / {String(timelineTrips.length).padStart(2, '0')}</span>
+        <span data-timeline-date>{timelineTrips[0].date}</span>
       </div>
 
       <div class="travel-timeline-entries">
@@ -180,15 +176,13 @@ const journeyGroups = Array.from(
             <time class="sr-only">{trip.date}</time>
             <span class="travel-timeline-marker" data-marker-date={trip.date} aria-hidden="true"></span>
             <div class="travel-timeline-card">
+              <h3 class="font-serif text-3xl leading-[1.05] sm:text-4xl">{trip.name}</h3>
+              <p class="trip-place text-sm leading-relaxed sm:text-base">{trip.places}</p>
+              <p class="trip-detail font-serif text-sm italic leading-relaxed text-main/50">{trip.detail}</p>
+              <p class="trip-intro font-serif text-[0.94rem] italic leading-[1.4]">{trip.intro}</p>
               {trip.scene === 'punta' ? (
                 <div class="punta-scene" data-punta-scene>
                   <div class="punta-scene-stage">
-                    <h3 class="font-serif text-3xl leading-[1.05] sm:text-4xl">{trip.name}</h3>
-                    <p class="trip-place text-sm leading-relaxed sm:text-base">{trip.places}</p>
-                    <p class="trip-detail font-serif text-sm italic leading-relaxed text-main/50">{trip.detail}</p>
-                    <div class="punta-scene-intro">
-                      <p>My first flight and real trip. I was too young to remember much, but I do remember trying to order chocolate milk at a restaurant. What arrived was milk with chocolate sticks in it, and after a few unsuccessful attempts by my parents to explain in English what I meant, I finally offered, “leche chocolate!” an imperfect bit of Spanish I had probably picked up from watching Dora the Explorer. I don’t actually remember whether that worked either, but apparently my attempt got a laugh out of the restaurant staff.</p>
-                    </div>
                     <div class="punta-scene-objects">
                       <div class="punta-passport" aria-hidden="true">
                         <img class="punta-passport-cover-image" src="/photos/punta-cana-passport.webp" alt="" decoding="async" />
@@ -250,13 +244,7 @@ const journeyGroups = Array.from(
                   </div>
                 </div>
               ) : (
-              <>
-              <h3 class="font-serif text-3xl leading-[1.05] sm:text-4xl">{trip.name}</h3>
-              <p class="trip-place text-sm leading-relaxed sm:text-base">{trip.places}</p>
-              <p class="trip-detail font-serif text-sm italic leading-relaxed text-main/50">{trip.detail}</p>
-              <p class="trip-intro max-w-[28rem] font-serif text-[0.94rem] italic leading-[1.4]">{trip.intro}</p>
-              <TripCollage trip={trip} />
-              </>
+                <TripCollage trip={trip} />
               )}
             </div>
           </article>
@@ -384,14 +372,12 @@ const journeyGroups = Array.from(
       if (entry !== activeEntry) {
         entries.forEach((item) => item.classList.toggle('is-active', item === entry));
         activeEntry = entry;
-        if (window.matchMedia('(max-width: 767px)').matches) {
-          if (dateCueEntry instanceof HTMLElement) dateCueEntry.classList.remove('is-date-visible');
-          entry.classList.add('is-date-visible');
-          dateCueEntry = entry;
-          dateCueScrollY = window.scrollY;
-          dateCueVisible = true;
-          holdFirstDateOnUpwardScroll = entry === entries[0] && scrollDirection < 0;
-        }
+        if (dateCueEntry instanceof HTMLElement) dateCueEntry.classList.remove('is-date-visible');
+        entry.classList.add('is-date-visible');
+        dateCueEntry = entry;
+        dateCueScrollY = window.scrollY;
+        dateCueVisible = true;
+        holdFirstDateOnUpwardScroll = entry === entries[0];
         const index = entries.indexOf(entry) + 1;
         date.textContent = entry.dataset.timelineDate ?? '';
         count.textContent = `Trip ${String(index).padStart(2, '0')} / ${String(entries.length).padStart(2, '0')}`;
@@ -420,6 +406,9 @@ const journeyGroups = Array.from(
       endMarker.classList.toggle('is-reached', endRect.top + endRect.height / 2 <= playhead);
       if (currentEntry instanceof HTMLElement) setActive(currentEntry);
       if (dateCueEntry instanceof HTMLElement) {
+        if (dateCueEntry === entries[0] && scrollDirection < 0) {
+          holdFirstDateOnUpwardScroll = true;
+        }
         if (holdFirstDateOnUpwardScroll && scrollDirection > 0) {
           holdFirstDateOnUpwardScroll = false;
           dateCueScrollY = window.scrollY;
@@ -462,9 +451,16 @@ const journeyGroups = Array.from(
         const tornStub = scene.querySelector('.punta-ticket-stub--torn');
         const anchorSurface = anchorStub?.querySelector('.punta-ticket-stub-surface');
         const tornSurface = tornStub?.querySelector('.punta-ticket-stub-surface');
+        const objects = scene.querySelector('.punta-scene-objects');
+        const ticketElement = scene.querySelector('.punta-ticket');
+        const ticketScale = window.innerWidth >= 651 && objects instanceof HTMLElement && ticketElement instanceof HTMLElement
+          ? Math.max(1, (objects.clientWidth - 16) / ticketElement.offsetWidth)
+          : 1;
 
         scene.style.setProperty('--punta-ticket-y', `${Math.round((1 - ticket) * 112)}px`);
         scene.style.setProperty('--punta-ticket-rotate', `${(5.5 - ticket * 6.7).toFixed(2)}deg`);
+        scene.style.setProperty('--punta-ticket-scale', ticketScale.toFixed(3));
+        scene.style.setProperty('--punta-ticket-height', `${Math.round((ticketElement instanceof HTMLElement ? ticketElement.offsetHeight : 160) * ticketScale)}px`);
         scene.style.setProperty('--punta-ticket-opacity', ticket.toFixed(3));
         scene.style.setProperty('--punta-stamp-x', `${Math.round((1 - stamp) * 18)}px`);
         scene.style.setProperty('--punta-stamp-y', `${Math.round((1 - stamp) * -28)}px`);
@@ -525,36 +521,7 @@ const journeyGroups = Array.from(
 
 <style>
   .travel-timeline {
-    display: grid;
-    grid-template-columns: minmax(8rem, 0.3fr) minmax(0, 1fr);
-    gap: 2rem;
-  }
-
-  .travel-timeline-rail {
-    min-width: 0;
-  }
-
-  .travel-timeline-rail-slot {
-    display: contents;
-  }
-
-  .travel-timeline-sticky {
-    position: sticky;
-    top: 1.5rem;
-    padding-top: 0.35rem;
-  }
-
-  .travel-timeline-progress {
-    position: relative;
-    width: 85.714%;
-    overflow: hidden;
-  }
-
-  .travel-timeline-progress > span {
     display: block;
-    height: 100%;
-    width: 100%;
-    background: rgb(var(--color-text-main) / 0.5);
   }
 
   .travel-timeline-entries {
@@ -625,6 +592,53 @@ const journeyGroups = Array.from(
     border-color: rgb(var(--color-border-main) / 0.4);
   }
 
+  .travel-timeline-marker::after {
+    position: absolute;
+    top: -0.85rem;
+    left: calc(100% + 0.5rem);
+    padding: 0.12rem 0.48rem;
+    border: 1px solid rgb(var(--color-border-main) / 0.32);
+    border-radius: 999px;
+    background: rgb(var(--color-bg-main));
+    color: rgb(var(--color-text-main) / 0.82);
+    content: attr(data-marker-date);
+    font-family: var(--font-serif, serif);
+    font-size: 0.82rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate3d(-0.35rem, 0, 0) scale(0.96);
+    transform-origin: left center;
+    transition: opacity 180ms ease, transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .travel-timeline-entry.is-date-visible .travel-timeline-marker {
+    z-index: 5;
+  }
+
+  .travel-timeline-entry.is-date-visible .travel-timeline-marker::after {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  .travel-timeline-entry:not(:first-of-type) .travel-timeline-marker::after {
+    top: -0.27rem;
+    left: calc(100% + 0.65rem);
+  }
+
+  .travel-timeline-entry:first-of-type .travel-timeline-marker::after {
+    top: 50%;
+    left: calc(100% + 0.65rem);
+    transform: translate3d(-0.35rem, -50%, 0) scale(0.96);
+  }
+
+  .travel-timeline-entry:first-of-type.is-date-visible .travel-timeline-marker::after {
+    transform: translate3d(0, -50%, 0) scale(1);
+  }
+
   .travel-timeline-entry:first-of-type .travel-timeline-card {
     border-top: 0;
   }
@@ -637,14 +651,19 @@ const journeyGroups = Array.from(
     margin-top: 0.25rem;
   }
 
-  .trip-intro,
-  .punta-scene-intro {
+  .trip-intro {
     margin-top: 0.5rem;
   }
 
   .travel-timeline-entry--punta {
     min-height: 0;
     padding-bottom: 1.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .travel-timeline-entry--punta .travel-timeline-card {
+      padding-top: 2.35rem;
+    }
   }
 
   .travel-timeline-entry--notebook {
@@ -679,23 +698,16 @@ const journeyGroups = Array.from(
     overflow: visible;
   }
 
-  .punta-scene-intro {
-    max-width: 26rem;
-    padding-top: 0;
-  }
-
-  .punta-scene-intro p {
-    margin: 0;
-    font-family: var(--font-serif, serif);
-    font-size: 0.94rem;
-    font-style: italic;
-    line-height: 1.4;
-  }
-
   .punta-scene-objects {
     position: relative;
     margin-top: 1.55rem;
     min-height: 29.5rem;
+  }
+
+  @media (min-width: 651px) {
+    .punta-scene-objects {
+      min-height: max(29.5rem, calc(19.25rem + var(--punta-ticket-height, 10rem) + 2rem));
+    }
   }
 
   .punta-passport {
@@ -733,9 +745,24 @@ const journeyGroups = Array.from(
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.42' numOctaves='3' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.72'/%3E%3C/svg%3E");
     background-position: 0 0, 0 0;
     background-size: 100% 100%, 192px 192px;
-    border-radius: 0.8rem;
+    -webkit-mask-image: url('/photos/punta-cana-passport.webp');
+    mask-image: url('/photos/punta-cana-passport.webp');
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), inset 0 0.2rem 0.65rem rgb(0 0 0 / 0.2);
     opacity: 0.2;
+  }
+
+  @media (min-width: 651px) {
+    .punta-passport {
+      top: 3.5rem;
+      width: 48%;
+      transform-origin: 100% 0;
+    }
   }
 
   .punta-flight-photo {
@@ -790,6 +817,7 @@ const journeyGroups = Array.from(
     position: relative;
     z-index: 3;
     margin-top: 0.38rem;
+    padding: 0.4rem 0.15rem 0;
     color: rgb(var(--color-text-main) / 0.56);
     font-family: var(--font-serif, serif);
     font-size: 0.54rem;
@@ -797,18 +825,41 @@ const journeyGroups = Array.from(
     line-height: 1;
   }
 
+  @media (min-width: 651px) {
+    .punta-flight-photo {
+      display: flex;
+      width: 48%;
+      height: 18rem;
+      flex-direction: column;
+      aspect-ratio: auto;
+    }
+
+    .punta-flight-photo img {
+      flex: 1;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: auto;
+    }
+  }
+
   .punta-ticket {
     --punta-stub-width: 7.25rem;
     position: absolute;
-    top: 16.25rem;
+    top: 19.25rem;
     left: 0.5rem;
     z-index: 2;
     width: min(100% - 1rem, 30rem);
     min-height: 10rem;
     opacity: var(--punta-ticket-opacity, 1);
-    transform: translate3d(0, var(--punta-ticket-y, 0), 0) rotate(var(--punta-ticket-rotate, -1.2deg));
+    transform: translate3d(0, var(--punta-ticket-y, 0), 0) rotate(var(--punta-ticket-rotate, -1.2deg)) scale(var(--punta-ticket-scale, 1));
     transform-origin: 26% 80%;
     will-change: transform, opacity;
+  }
+
+  @media (min-width: 651px) {
+    .punta-ticket {
+      transform-origin: 0 0;
+    }
   }
 
 .punta-ticket-main {
@@ -1286,16 +1337,8 @@ const journeyGroups = Array.from(
   }
 
   @media (max-width: 767px) {
-    .travel-timeline {
-      display: block;
-    }
-
     .travel-timeline-card {
       padding-top: 1.8rem;
-    }
-
-    .travel-timeline-rail-slot {
-      display: none;
     }
 
     .travel-timeline-entries::before,
@@ -1309,53 +1352,6 @@ const journeyGroups = Array.from(
 
     .travel-timeline-entry:not(:first-of-type) .travel-timeline-marker {
       top: -0.325rem;
-    }
-
-    .travel-timeline-marker::after {
-      position: absolute;
-      top: -0.85rem;
-      left: calc(100% + 0.5rem);
-      padding: 0.12rem 0.48rem;
-      border: 1px solid rgb(var(--color-border-main) / 0.32);
-      border-radius: 999px;
-      background: rgb(var(--color-bg-main));
-      color: rgb(var(--color-text-main) / 0.82);
-      content: attr(data-marker-date);
-      font-family: var(--font-serif, serif);
-      font-size: 0.82rem;
-      font-style: italic;
-      font-weight: 400;
-      line-height: 1;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transform: translate3d(-0.35rem, 0, 0) scale(0.96);
-      transform-origin: left center;
-      transition: opacity 180ms ease, transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-
-    .travel-timeline-entry.is-date-visible .travel-timeline-marker {
-      z-index: 5;
-    }
-
-    .travel-timeline-entry.is-date-visible .travel-timeline-marker::after {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-
-    .travel-timeline-entry:not(:first-of-type) .travel-timeline-marker::after {
-      top: -0.27rem;
-      left: calc(100% + 0.65rem);
-    }
-
-    .travel-timeline-entry:first-of-type .travel-timeline-marker::after {
-      top: 50%;
-      left: calc(100% + 0.65rem);
-      transform: translate3d(-0.35rem, -50%, 0) scale(0.96);
-    }
-
-    .travel-timeline-entry:first-of-type.is-date-visible .travel-timeline-marker::after {
-      transform: translate3d(0, -50%, 0) scale(1);
     }
 
     .punta-ticket-main {

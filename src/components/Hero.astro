@@ -1,7 +1,6 @@
 ---
 import { marked } from 'marked';
 import Button from './Button.astro';
-import PhotoGallery from './PhotoGallery.astro';
 import siteConfig from '../data/site-config';
 
 const hero = siteConfig.hero;
@@ -9,7 +8,7 @@ const hero = siteConfig.hero;
 
 {
     (hero?.title || hero?.image?.src || hero?.text || (hero?.actions && hero.actions.length > 0)) && (
-        <section class="w-full flex flex-col gap-8 mb-6 sm:mb-24">
+        <section class="flex w-full flex-col gap-8">
             {hero.title && <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">{hero.title}</h1>}
             {hero.image?.src && (
                 <figure>
@@ -26,9 +25,5 @@ const hero = siteConfig.hero;
                 </div>
             )}
         </section>
-
-        <div class="relative -mx-4 md:-mx-8 w-screen mt-6 sm:mt-20" style="left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-            <PhotoGallery />
-        </div>
     )
 }

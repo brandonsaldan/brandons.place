@@ -41,7 +41,7 @@ function coverArt(images: LastFmImage[] | undefined): string | null {
       return url.toString();
     }
   } catch {
-    // Missing or malformed artwork should not break the page.
+    // unavailable
   }
   return null;
 }

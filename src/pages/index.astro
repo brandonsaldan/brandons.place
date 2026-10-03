@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import Hero from '../components/Hero.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
 import ListeningPreview from '../components/ListeningPreview.astro';
 import PostPreview from '../components/PostPreview.astro';
 import ProjectPreview from '../components/ProjectPreview.astro';
@@ -21,13 +22,14 @@ const research = (await getCollection('research')).sort(sortItemsByDateDesc);
 const featuredResearch = research.filter(({ data }) => data.isFeatured);
 ---
 
-<BaseLayout description={siteConfig.description} image={siteConfig.image}>
-    <Hero />
+<BaseLayout description={siteConfig.description} image={siteConfig.image} homeLayout>
+    <Hero slot="intro" />
+    <PhotoGallery slot="gallery" />
     {
         featuredProjects?.length > 0 && (
             <div class="mb-16 sm:mb-24">
                 <div class="flex items-baseline justify-between mb-8 sm:mb-12">
-                    <h2 class="text-xl font-serif italic sm:text-2xl">Selected Projects</h2>
+                    <h2 class="text-3xl font-serif italic sm:text-2xl">Selected Projects</h2>
                     <span class="text-base font-serif italic text-neutral-500 dark:text-neutral-500">
                         {featuredProjects.length} {featuredProjects.length === 1 ? 'project' : 'projects'}
                     </span>
@@ -49,7 +51,7 @@ const featuredResearch = research.filter(({ data }) => data.isFeatured);
         featuredResearch?.length > 0 && (
             <div class="mb-16 sm:mb-24">
                 <div class="flex items-baseline justify-between mb-8 sm:mb-12">
-                    <h2 class="text-xl font-serif italic sm:text-2xl">Recent Research</h2>
+                    <h2 class="text-3xl font-serif italic sm:text-2xl">Recent Research</h2>
                     <span class="text-base font-serif italic text-neutral-500 dark:text-neutral-500">
                         {featuredResearch.length} {featuredResearch.length === 1 ? 'paper' : 'papers'}
                     </span>
@@ -71,7 +73,7 @@ const featuredResearch = research.filter(({ data }) => data.isFeatured);
         featuredPosts?.length > 0 && (
             <div class="mb-16 sm:mb-24">
                 <div class="flex items-baseline justify-between mb-8 sm:mb-12">
-                    <h2 class="text-xl font-serif italic sm:text-2xl">Recent Writing</h2>
+                    <h2 class="text-3xl font-serif italic sm:text-2xl">Recent Writing</h2>
                     <span class="text-base font-serif italic text-neutral-500 dark:text-neutral-500">
                         {featuredPosts.length} {featuredPosts.length === 1 ? 'post' : 'posts'}
                     </span>

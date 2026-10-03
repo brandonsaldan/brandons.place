@@ -9,6 +9,11 @@ export type Link = {
   href: string;
 };
 
+export type HeaderLink = Link & {
+  section?: 'work' | 'personal';
+  showOnHome?: boolean;
+};
+
 export type Hero = {
   title?: string;
   text?: string;
@@ -23,7 +28,7 @@ export type SiteConfig = {
   description: string;
   image?: Image;
   portrait?: Image;
-  headerNavLinks?: Link[];
+  headerNavLinks?: HeaderLink[];
   footerNavLinks?: Link[];
   socialLinks?: Link[];
   hero?: Hero;
@@ -52,22 +57,27 @@ const siteConfig: SiteConfig = {
     {
       text: "Projects",
       href: "/projects",
+      section: 'work',
     },
     {
       text: "Research",
       href: "/research",
+      section: 'work',
     },
     {
       text: "Blog",
       href: "/blog",
+      section: 'work',
     },
     {
       text: "Travel",
       href: "/travel",
+      section: 'personal',
     },
     {
       text: "Listening",
       href: "/music",
+      section: 'personal',
     },
   ],
   footerNavLinks: [

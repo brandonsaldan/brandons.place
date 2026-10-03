@@ -1,0 +1,116 @@
+---
+import NavLink from './NavLink.astro';
+import siteConfig from '../data/site-config';
+
+const links = (siteConfig.headerNavLinks || []).filter((link) => link.showOnHome !== false);
+---
+
+<nav class="home-nav relative pb-12 pt-4 sm:pb-20 md:pt-8" aria-label="Primary navigation">
+    <div class="relative mx-auto w-full max-w-3xl">
+        <button
+            type="button"
+            class="home-menu-toggle relative z-30 -ml-1 flex h-8 w-8 items-center justify-center md:hidden"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="home-menu-items"
+        >
+            <span class="home-menu-icon relative h-px w-6 bg-current" aria-hidden="true"></span>
+        </button>
+        <ul id="home-menu-items" class="home-menu flex gap-6">
+            {links.map((link) => (
+                <li class="py-1">
+                    <NavLink
+                        class="font-serif text-xl text-main hover:underline hover:underline-offset-2 hover:decoration-1 md:text-base"
+                        href={link.href}
+                    >{link.text}</NavLink>
+                </li>
+            ))}
+        </ul>
+    </div>
+</nav>
+
+<style>
+    @media (max-width: 767px) {
+        .home-menu {
+            position: absolute;
+            z-index: 20;
+            top: -.625rem;
+            left: -.625rem;
+            width: min(16rem, calc(100vw - 2rem));
+            flex-direction: column;
+            gap: .25rem;
+            padding: 4rem .75rem 2.5rem;
+            border: 1px dashed rgb(var(--color-border-main));
+            background: rgb(var(--color-bg-main));
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .25s, visibility .25s;
+        }
+        .home-nav.is-open .home-menu { opacity: 1; visibility: visible; }
+        .home-menu-toggle { z-index: 30; }
+        .home-menu-icon { transition: width .2s; }
+        .home-menu-icon::before, .home-menu-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1.5rem;
+            height: 1px;
+            background: currentColor;
+            transform: translateX(-50%);
+            transition: transform .2s, margin .2s;
+        }
+        .home-menu-icon::before { margin-top: -.375rem; }
+        .home-menu-icon::after { margin-top: .375rem; }
+        .home-nav.is-open .home-menu-icon { width: 0; }
+        .home-nav.is-open .home-menu-icon::before { margin-top: 0; transform: translateX(-50%) rotate(45deg); }
+        .home-nav.is-open .home-menu-icon::after { margin-top: 0; transform: translateX(-50%) rotate(-45deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .home-menu, .home-menu-icon, .home-menu-icon::before, .home-menu-icon::after { transition: none; }
+    }
+</style>
+
+<script>
+    let cleanupHomeNav: (() => void) | undefined;
+
+    function initHomeNav() {
+        cleanupHomeNav?.();
+        const nav = document.querySelector<HTMLElement>('.home-nav');
+        const button = nav?.querySelector<HTMLButtonElement>('.home-menu-toggle');
+        const menu = nav?.querySelector<HTMLElement>('.home-menu');
+        if (!nav || !button || !menu) return;
+
+        const setOpen = (open: boolean) => {
+            nav.classList.toggle('is-open', open);
+            button.setAttribute('aria-expanded', String(open));
+            button.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        };
+        const toggle = () => setOpen(!nav.classList.contains('is-open'));
+        const close = () => setOpen(false);
+        const onKeydown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && nav.classList.contains('is-open')) {
+                close();
+                button.focus();
+            }
+        };
+        const onOutsideClick = (event: MouseEvent) => {
+            if (!nav.contains(event.target as Node)) close();
+        };
+
+        button.addEventListener('click', toggle);
+        document.addEventListener('keydown', onKeydown);
+        document.addEventListener('click', onOutsideClick);
+        menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', close));
+        cleanupHomeNav = () => {
+            button.removeEventListener('click', toggle);
+            document.removeEventListener('keydown', onKeydown);
+            document.removeEventListener('click', onOutsideClick);
+            menu.querySelectorAll('a').forEach((link) => link.removeEventListener('click', close));
+        };
+    }
+
+    document.addEventListener('astro:before-swap', () => { cleanupHomeNav?.(); cleanupHomeNav = undefined; });
+    document.addEventListener('astro:page-load', initHomeNav);
+    initHomeNav();
+</script>

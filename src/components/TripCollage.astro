@@ -276,6 +276,29 @@ const slides = trip.slides ?? [];
 
   .collage-stage button:focus-visible { outline: 3px solid #32758a; outline-offset: 3px; }
 
+  @media (min-width: 651px) {
+    .nf-stage { min-height: 44rem; }
+    .eu-stage { min-height: 44rem; }
+    .tampa-stage { min-height: 38rem; }
+    .bahamas-stage { min-height: 39rem; }
+    .catskills-stage { min-height: 38rem; }
+    .caribbean-stage { min-height: 46rem; }
+
+    .nf-photo, .eu-photo, .tampa-photo, .bahamas-photo, .catskills-photo, .caribbean-photo {
+      width: 48% !important;
+      height: 18rem !important;
+      aspect-ratio: auto;
+    }
+
+    .bahamas-photo--2, .bahamas-photo--4 { left: 52%; }
+
+    .nf-photo img, .eu-photo img, .tampa-photo img, .bahamas-photo img,
+    .catskills-photo img, .caribbean-photo img {
+      height: auto !important;
+      min-height: 0;
+    }
+  }
+
   @media (max-width: 650px) {
     .nf-stage { min-height: 37rem; }.nf-photo { width: 48%; height: 12rem; }.nf-photo img { height: 9rem; }.nf-photo--1 { top: 1.8rem; left: 2%; }.nf-photo--2 { top: 2rem; left: 50%; }.nf-photo--3 { top: 11.8rem; left: 0; }.nf-photo--4 { top: 12rem; left: 50%; }.nf-photo--5 { top: 21.8rem; left: 1%; }.nf-photo--6 { top: 22.6rem; left: 49%; }
     .eu-stage { min-height: 37rem; }.eu-photo { width: 48%; height: 12rem; }.eu-photo img { height: 9rem; }.eu-photo--1 { top: 1.8rem; left: 2%; }.eu-photo--2 { top: 11.8rem; left: 0; }.eu-photo--3 { top: 21.8rem; left: 1%; }.eu-photo--4 { top: 2rem; left: 50%; }.eu-photo--5 { top: 12rem; left: 50%; }.eu-photo--6 { top: 22.6rem; left: 49%; }
