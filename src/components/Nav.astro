@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 
 type Props = { railOnly?: boolean };
 const { railOnly = false } = Astro.props;
+const panelId = railOnly ? 'site-index-panel-rail' : 'site-index-panel';
 
 const [projects, research, blog] = await Promise.all([
     getCollection('projects'),
@@ -46,18 +47,18 @@ const isInSection = (href: string) => {
     <div class="h-8 xl:hidden">
         <button
             type="button"
-            class="index-trigger inline-flex h-8 items-center gap-3 border-b border-dashed border-main/50 font-serif text-lg italic hover:border-solid focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-main xl:hidden"
+            class="index-trigger relative z-30 -ml-1 flex h-8 w-8 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-main xl:hidden"
             aria-expanded="false"
-            aria-controls="site-index-panel"
-            aria-label="Open site index"
+            aria-controls={panelId}
+            aria-label="Open menu"
         >
-            Index <span class="index-trigger-mark text-base not-italic text-main/50" aria-hidden="true">+</span>
+            <span class="index-menu-icon relative h-px w-6 bg-current" aria-hidden="true"></span>
         </button>
     </div>
 
     <button type="button" class="index-backdrop" aria-label="Close site index" tabindex="-1"></button>
 
-    <div id="site-index-panel" class="index-panel">
+    <div id={panelId} class="index-panel">
         <div class="index-heading">
             <span class="index-eyebrow">Site index</span>
             <button type="button" class="index-close" aria-label="Close site index">Close <span aria-hidden="true">×</span></button>
@@ -249,8 +250,23 @@ const isInSection = (href: string) => {
         outline: 2px solid rgb(var(--color-text-main));
         outline-offset: 3px;
     }
-    .index-trigger-mark { transition: transform .25s; }
-    .site-index.is-open .index-trigger-mark { transform: rotate(45deg); }
+    .index-menu-icon { transition: width .2s; }
+    .index-menu-icon::before, .index-menu-icon::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 1.5rem;
+        height: 1px;
+        background: currentColor;
+        transform: translateX(-50%);
+        transition: transform .2s, margin .2s;
+    }
+    .index-menu-icon::before { margin-top: -.375rem; }
+    .index-menu-icon::after { margin-top: .375rem; }
+    .site-index.is-open .index-menu-icon { width: 0; }
+    .site-index.is-open .index-menu-icon::before { margin-top: 0; transform: translateX(-50%) rotate(45deg); }
+    .site-index.is-open .index-menu-icon::after { margin-top: 0; transform: translateX(-50%) rotate(-45deg); }
     @media (min-width: 1280px) {
         .index-panel {
             position: sticky;
@@ -276,7 +292,7 @@ const isInSection = (href: string) => {
         .site-index.rail-only { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
-        .index-panel, .index-backdrop, .index-link, .index-link::before, .index-trigger-mark { transition: none; }
+        .index-panel, .index-backdrop, .index-link, .index-link::before, .index-menu-icon, .index-menu-icon::before, .index-menu-icon::after { transition: none; }
     }
 </style>
 
@@ -314,6 +330,8 @@ const isInSection = (href: string) => {
         folderDetails.forEach((folder) => {
             const href = folder.dataset.indexFolder;
             if (!href) return;
+            const isActiveSection = folder.open;
+            if (isActiveSection) return;
             if (Object.prototype.hasOwnProperty.call(folderState, href)) {
                 folder.open = folderState[href];
             }

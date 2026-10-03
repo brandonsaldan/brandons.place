@@ -39,7 +39,8 @@ const { showHeader = true, homeLayout = false, ...head } = Astro.props;
             {homeLayout ? (
                 <>
                     <div class="home-intro">
-                        <HomeNav />
+                        <div class="home-mobile-nav"><Nav /></div>
+                        <div class="home-desktop-nav"><HomeNav /></div>
                         {showHeader && <Header />}
                         <main class="w-full"><slot name="intro" /></main>
                     </div>
@@ -74,6 +75,7 @@ const { showHeader = true, homeLayout = false, ...head } = Astro.props;
     }
     .site-content, .site-footer-content { min-width: 0; }
     .home-intro { width: 100%; max-width: 48rem; margin-inline: auto; }
+    .home-mobile-nav { display: none; }
     .home-gallery {
         position: relative;
         z-index: 2;
@@ -85,6 +87,10 @@ const { showHeader = true, homeLayout = false, ...head } = Astro.props;
     .home-content { padding-top: 2.5rem; }
     @media (max-width: 639px) {
         .home-content { padding-top: 2.25rem; }
+    }
+    @media (max-width: 1279px) {
+        .home-mobile-nav { display: block; }
+        .home-desktop-nav { display: none; }
     }
     @media (min-width: 640px) {
         .home-gallery { margin-top: 4rem; }
