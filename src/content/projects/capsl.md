@@ -12,69 +12,28 @@ seo:
     alt: "Capsl supplement personalization interface"
 ---
 
-<img src="/projects/capsl/capsl-1.png" alt="Capsl supplement personalization interface" class="rounded-lg w-full" />
+<img src="/projects/capsl/capsl-1.png" alt="Capsl supplement personalization interface" class="w-full" />
 
-**Project Overview:**
-Capsl is an experimental supplement personalization platform that enables users to create custom vitamin and supplement blends tailored to their individual needs. Through an intuitive questionnaire-driven interface, users can receive personalized supplement recommendations and manage their subscription through a comprehensive customer dashboard.
+Capsl is an experimental supplement personalization platform that enables users to create custom vitamin and supplement blends tailored to their individual needs. The experience combines a questionnaire-driven recommendation flow with subscription management, account tools, and a cohesive product identity.
 
 ## Objectives
 
-1. Create an engaging and intuitive supplement personalization experience
-2. Develop a comprehensive e-commerce platform for subscription management
-3. Design a cohesive brand identity and packaging system
-4. Build a scalable frontend architecture for future expansion
+The project set out to make supplement personalization feel approachable while supporting the operational complexity of a subscription commerce product. The main objectives were to create an engaging recommendation experience, develop a complete subscription workflow, design a consistent brand and packaging system, and establish a frontend architecture that could support future expansion.
 
-## Technical Challenges & Solutions
+## Personalization & Commerce
 
-1. **Personalization System:**
+The personalization flow uses branching questions to guide users toward a custom blend. Recommendations update as the user moves through the experience, with validation and progress feedback keeping the process clear. The product concept also included a blend visualization and detailed supplement information so that users could understand the reasoning behind each recommendation.
 
-- Engineered dynamic questionnaire flow with branching logic
-- Implemented real-time supplement recommendation engine
-- Created intuitive visualization of supplement combinations
-- Developed responsive form validation system
+The commerce experience was designed around the full subscription lifecycle. It included account creation, secure payment processing, subscription management, order history, order tracking, and supplement schedule management. Supporting inventory and profile interfaces provided the operational foundation needed to run the service.
 
-2. **E-commerce Integration:**
+## User Experience & Architecture
 
-- Built seamless subscription management interface
-- Implemented secure payment processing workflow
-- Created efficient order tracking system
-- Designed inventory management interface
+Capsl treated onboarding as the first part of the product rather than a separate form. The responsive interface introduced the service gradually, preserved progress through the questionnaire, and carried the same visual language into the customer dashboard. Responsive validation and account management patterns were designed to work across desktop and mobile contexts.
 
-3. **User Experience:**
-
-- Developed intuitive onboarding process
-- Created responsive dashboard interface
-- Implemented progress tracking system
-- Built comprehensive account management features
-
-## Key Features
-
-1. **Personalization Platform:**
-
-- Dynamic health questionnaire
-- Real-time supplement recommendations
-- Custom blend visualization
-- Detailed supplement information
-
-2. **Customer Dashboard:**
-
-- Subscription management
-- Order history and tracking
-- Profile and preferences
-- Supplement schedule management
-
-## Technology Stack
-
-- Frontend: Next.js, TailwindCSS
-- Design: Figma
-- Version Control: Git
-- Authentication: Supabase
-- Database: Supabase
+The prototype used Next.js and TailwindCSS for the frontend, Figma for design, Supabase for authentication and data, and Git for version control. These choices kept the experiment focused on the customer experience while leaving room for a more complete commerce backend later.
 
 ## Outcome
 
-While Capsl was developed as an experimental project and is not intended for launch, it successfully demonstrates the potential of personalized supplement services and showcases innovative approaches to e-commerce personalization. The project served as a valuable learning experience in both frontend development and digital product design.
+Capsl was developed as an experiment and was not intended for launch. It demonstrated how personalized recommendations, subscription commerce, and packaging could work together in a single product experience, while also serving as a practical exercise in frontend architecture and digital product design.
 
-## Project Status
-
-Development completed after one month.
+Development concluded after one month.

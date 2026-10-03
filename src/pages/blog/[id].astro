@@ -3,96 +3,96 @@ import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
-import PostPreview from '../../components/PostPreview.astro';
-import { sortItemsByDateDesc } from '../../utils/data-utils';
-import { slugify } from '../../utils/common-utils';
 
 export async function getStaticPaths() {
-    const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
-    const postCount = posts.length;
-    return posts.map((post, index) => ({
+    return (await getCollection('blog')).map((post) => ({
         params: { id: post.id },
-        props: {
-            post,
-            prevPost: index + 1 !== postCount ? posts[index + 1] : null,
-            nextPost: index !== 0 ? posts[index - 1] : null
-        }
+        props: { post }
     }));
 }
 
-type Props = { post: CollectionEntry<'blog'>; prevPost: CollectionEntry<'blog'>; nextPost: CollectionEntry<'blog'> };
+type Props = { post: CollectionEntry<'blog'> };
 
-const { href } = Astro.url;
-const { post, prevPost, nextPost } = Astro.props;
-const { title, publishDate, updatedDate, excerpt, tags = [], seo } = post.data;
+const { post } = Astro.props;
+const { title, publishDate, updatedDate, excerpt, seo } = post.data;
 const { Content } = await render(post);
+const readingTime = Math.max(1, Math.ceil((post.body || '').trim().split(/\s+/).filter(Boolean).length / 200));
+const repositoryByPost: Record<string, { label: string; href: string }> = {
+    'democratizing-genetic-analysis': { label: 'Codex', href: 'https://github.com/brandonsaldan/codex' },
+    'spotify-car-things-second-chapter': { label: 'Nocturne', href: 'https://github.com/usenocturne' }
+};
+const subjectByPost: Record<string, string> = {
+    'democratizing-genetic-analysis': 'Genetic Analysis',
+    'spotify-car-things-second-chapter': 'Hardware Revitalization'
+};
+const relatedRepository = repositoryByPost[post.id];
+const subject = subjectByPost[post.id];
 ---
 
 <BaseLayout title={seo?.title ?? title} description={seo?.description ?? excerpt} image={seo?.image} pageType="article" showHeader={false}>
     <article class="mb-16 sm:mb-24">
-        <header class="mb-8">
-            <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">{title}</h1>
-            <div class="mt-4 text-sm">
-                <FormattedDate date={publishDate} />
-                {
-                    updatedDate && (
-                        <>
-                            {' '}
-                            <span>
-                                (Updated on <FormattedDate date={updatedDate} />)
-                            </span>
-                        </>
-                    )
-                }
-            </div>
+        <header class="mb-8 sm:mb-12">
+            <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">
+                {title}
+                {excerpt && <span class="mt-4 block text-xl leading-snug font-normal sm:text-2xl">{excerpt}</span>}
+            </h1>
         </header>
-        <div class="max-w-none prose prose-main sm:prose-lg">
-            <Content />
+
+        <div class="border-y border-main/15 py-6 sm:py-8">
+            <div class="grid grid-cols-2 gap-7 sm:grid-cols-3 sm:gap-10">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Author</p>
+                    <p class="mt-2 text-sm leading-relaxed">Brandon Saldan</p>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Published</p>
+                    <p class="mt-2 text-sm leading-relaxed"><FormattedDate date={publishDate} /></p>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Reading time</p>
+                    <p class="mt-2 text-sm leading-relaxed">{readingTime} Min Read</p>
+                </div>
+            </div>
+            {updatedDate && (
+                <p class="mt-5 border-t border-main/10 pt-5 text-sm leading-relaxed text-main/60">
+                    Updated <FormattedDate date={updatedDate} />
+                </p>
+            )}
         </div>
-        <div class="mt-8 flex flex-wrap items-center gap-6 text-sm justify-between sm:mt-12 sm:text-base">
-            {
-                tags.length > 0 && (
-                    <div class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
-                        {tags.map((tag) => (
-                            <a class="text-main hover:underline" href={`/tags/${slugify(tag)}`}>
-                                #{tag}
-                            </a>
-                        ))}
+
+        <div class="mt-10 grid gap-12 sm:mt-14 sm:grid-cols-[minmax(0,1fr)_14rem] sm:gap-16">
+            <div class="min-w-0 max-w-none prose prose-main sm:prose-lg">
+                <Content />
+            </div>
+
+            <aside class="self-start sm:sticky sm:top-8">
+                <div class="border-t-2 border-main pt-4">
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access related project</p>
+                    <Button class="mt-4 w-full" href={relatedRepository.href} target="_blank" rel="noreferrer">View {relatedRepository.label} <span class="ml-2 text-xs not-italic">↗</span></Button>
+                    <div class="mt-5 border-t border-main/15"></div>
+                    <div class="mt-4">
+                        <p class="text-xs uppercase tracking-[0.16em] text-main/50">Post details</p>
+                        <dl class="mt-4 space-y-4 text-sm leading-relaxed">
+                            <div><dt class="text-main/50">Format</dt><dd>Blog Post</dd></div>
+                            <div><dt class="text-main/50">Subject</dt><dd>{subject}</dd></div>
+                        </dl>
                     </div>
-                )
-            }
-            <Button class="copy-url-button" aria-label="Copy link" data-url={href} data-tooltip-default="Copy link" data-tooltip-success="Copied">Share</Button>
+                </div>
+            </aside>
         </div>
     </article>
-    {
-        (prevPost || nextPost) && (
-            <div class="my-16 sm:my-24">
-                <h2 class="mb-12 text-xl font-serif italic sm:mb-16 sm:text-2xl">Read Next</h2>
-                {nextPost && <PostPreview post={nextPost} class="mb-10 sm:mb-12" headingLevel="h3" />}
-                {prevPost && <PostPreview post={prevPost} class="mb-10 sm:mb-12" headingLevel="h3" />}
-            </div>
-        )
-    }
 </BaseLayout>
 
-<script>
-    document.addEventListener('astro:page-load', () => {
-        const copyUrlButton = document.querySelector('.copy-url-button') as HTMLButtonElement;
-        copyUrlButton?.addEventListener('click', async () => {
-            await copyUrl(copyUrlButton);
-        });
+<style>
+    :global(.prose pre) {
+        max-width: 100%;
+        overflow-x: hidden;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
 
-        async function copyUrl(button: HTMLButtonElement) {
-            let url = button.getAttribute('data-url') || '';
-            let label = button.innerText;
-
-            await navigator.clipboard.writeText(url);
-
-            button.innerText = 'Copied';
-
-            setTimeout(() => {
-                button.innerText = label;
-            }, 2500);
-        }
-    });
-</script>
+    :global(.prose pre code) {
+        white-space: inherit;
+        overflow-wrap: inherit;
+    }
+</style>

@@ -1,45 +1,86 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ProjectPreview from '../../components/ProjectPreview.astro';
-import { sortItemsByDateDesc } from '../../utils/data-utils';
+import Button from '../../components/Button.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
 
 export async function getStaticPaths() {
-    const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
-    const projectCount = projects.length;
-    return projects.map((project, index) => ({
+    return (await getCollection('projects')).map((project) => ({
         params: { id: project.id },
-        props: {
-            project,
-            prevProject: index + 1 !== projectCount ? projects[index + 1] : null,
-            nextProject: index !== 0 ? projects[index - 1] : null
-        }
+        props: { project }
     }));
 }
 
-type Props = { project: CollectionEntry<'projects'>; prevProject: CollectionEntry<'projects'>; nextProject: CollectionEntry<'projects'> };
+type Props = { project: CollectionEntry<'projects'> };
 
-const { project, prevProject, nextProject } = Astro.props;
-const { title, description, seo } = project.data;
+const { project } = Astro.props;
+const { title: rawTitle, description, publishDate, seo } = project.data;
 const { Content } = await render(project);
+const readingTime = Math.max(1, Math.ceil((project.body || '').trim().split(/\s+/).filter(Boolean).length / 200));
+const separatorIndex = rawTitle.indexOf(' - ');
+const title = separatorIndex === -1 ? rawTitle : rawTitle.slice(0, separatorIndex);
+const subtitle = separatorIndex === -1 ? undefined : rawTitle.slice(separatorIndex + 3);
+const repositoryByProject: Record<string, string> = {
+    capsl: 'https://github.com/trycapsl',
+    codex: 'https://github.com/brandonsaldan/codex',
+    invii: 'https://github.com/getinvii',
+    nocturne: 'https://github.com/usenocturne'
+};
+const detailsByProject: Record<string, { status: string; focus: string }> = {
+    capsl: { status: 'Experimental', focus: 'Product Design & Frontend' },
+    codex: { status: 'Dormant', focus: 'Bioinformatics & Privacy' },
+    invii: { status: 'Concluded January 2025', focus: 'Restaurant Technology' },
+    nocturne: { status: 'Active Development', focus: 'Embedded Systems & Open Source' }
+};
+const repository = repositoryByProject[project.id];
+const details = detailsByProject[project.id];
 ---
 
-<BaseLayout title={seo?.title ?? title} description={seo?.description ?? description} image={seo?.image} pageType="article" showHeader={false}>
+<BaseLayout title={seo?.title ?? rawTitle} description={seo?.description ?? description} image={seo?.image} pageType="article" showHeader={false}>
     <article class="mb-16 sm:mb-24">
-        <header class="mb-8">
-            <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">{title}</h1>
+        <header class="mb-8 sm:mb-12">
+            <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">
+                {title}
+                {subtitle && <span class="mt-4 block text-xl leading-snug font-normal sm:text-2xl">{subtitle}</span>}
+            </h1>
         </header>
-        <div class="max-w-none prose prose-main sm:prose-lg">
-            <Content />
+
+        <div class="border-y border-main/15 py-6 sm:py-8">
+            <div class="grid grid-cols-2 gap-7 sm:grid-cols-3 sm:gap-10">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Author</p>
+                    <p class="mt-2 text-sm leading-relaxed">Brandon Saldan</p>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Published</p>
+                    <p class="mt-2 text-sm leading-relaxed"><FormattedDate date={publishDate} /></p>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Reading time</p>
+                    <p class="mt-2 text-sm leading-relaxed">{readingTime} Min Read</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-10 grid gap-12 sm:mt-14 sm:grid-cols-[minmax(0,1fr)_14rem] sm:gap-16">
+            <div class="min-w-0 max-w-none prose prose-main sm:prose-lg">
+                <Content />
+            </div>
+
+            <aside class="self-start sm:sticky sm:top-8">
+                <div class="border-t-2 border-main pt-4">
+                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access this project</p>
+                    <Button class="mt-4 w-full" href={repository} target="_blank" rel="noreferrer">View on GitHub <span class="ml-2 text-xs not-italic">↗</span></Button>
+                    <div class="mt-5 border-t border-main/15"></div>
+                    <div class="mt-4">
+                        <p class="text-xs uppercase tracking-[0.16em] text-main/50">Project details</p>
+                        <dl class="mt-4 space-y-4 text-sm leading-relaxed">
+                            <div><dt class="text-main/50">Status</dt><dd>{details.status}</dd></div>
+                            <div><dt class="text-main/50">Focus</dt><dd>{details.focus}</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </aside>
         </div>
     </article>
-    {
-        (prevProject || nextProject) && (
-            <div class="my-16 sm:my-24">
-                <h2 class="mb-12 text-xl font-serif italic sm:mb-16 sm:text-2xl">View Next</h2>
-                {nextProject && <ProjectPreview project={nextProject} class="mb-10 sm:mb-12" headingLevel="h3" />}
-                {prevProject && <ProjectPreview project={prevProject} class="mb-10 sm:mb-12" headingLevel="h3" />}
-            </div>
-        )
-    }
 </BaseLayout>

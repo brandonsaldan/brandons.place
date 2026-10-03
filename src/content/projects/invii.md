@@ -12,89 +12,34 @@ seo:
     alt: "Invii platform interface"
 ---
 
-<img src="/projects/invii/invii-1.png" alt="Invii platform interface" class="rounded-lg w-full" />
+<img src="/projects/invii/invii-1.png" alt="Invii platform interface" class="w-full" />
 
-**Project Overview:**
-Invii was an innovative restaurant management platform that explored new approaches to restaurant operations in the digital age. As founder and CEO, I led the development of a comprehensive suite of tools designed to streamline business operations, enhance customer engagement, and modernize payment processing for the restaurant industry.
+Invii was a restaurant management platform built to explore how software could modernize day-to-day operations. As founder and CEO, I led the development of a suite of tools intended to streamline internal work, improve customer engagement, and create a more connected payment and reporting experience for restaurants.
 
 ## Leadership & Responsibilities
 
-1. **Product Development:**
+I led product development across the Invii landing page, internal dashboard, and customer-facing web application. I also designed and implemented the brand identity, coordinated the product direction, and connected the software work to the needs of the business.
 
-- Spearheaded the development of the Invii landing page
-- Led creation of internal dashboard interface
-- Oversaw customer-facing web application development
-- Designed and implemented the Invii brand identity
+The company required the same attention to operations as it did to product development. I managed day-to-day company activity, legal and regulatory requirements, financial planning, fundraising initiatives, and early customer acquisition. This combination of product and operational responsibility shaped the platform around the real constraints of restaurant businesses.
 
-2. **Business Operations:**
+## Platform Design
 
-- Managed day-to-day company operations
-- Ensured legal and regulatory compliance
-- Handled financial planning and execution
-- Led fundraising initiatives
-- Drove customer acquisition efforts
+The product brought restaurant operations into a single dashboard with real-time analytics, reporting, inventory management, staff scheduling, financial tracking, and forecasting. Customer-facing features included digital menu management, feedback collection, loyalty program integration, automated marketing, and customer relationship management.
 
-## Key Features
-
-1. **Business Management Tools:**
-
-- Comprehensive dashboard for restaurant operations
-- Real-time analytics and reporting
-- Inventory management system
-- Staff scheduling and management
-- Financial tracking and forecasting
-
-2. **Customer Engagement:**
-
-- Digital menu management
-- Customer feedback system
-- Loyalty program integration
-- Automated marketing tools
-- Customer relationship management
+The goal was not simply to add another set of administrative screens. Invii was designed as a shared operating layer that could connect internal decisions with the customer experience, giving restaurant teams a clearer view of how staffing, inventory, payments, and engagement affected one another.
 
 ## Technical Implementation
 
-1. **Frontend Development:**
+The frontend used React.js and Next.js with TailwindCSS for responsive interfaces and cross-platform compatibility. The backend was built with Python, with Supabase providing database services. Stripe integration supported payment workflows, while the broader architecture emphasized secure data handling, API-first design, scalable cloud infrastructure, and real-time synchronization.
 
-- Modern web application architecture
-- Responsive design principles
-- Cross-platform compatibility
-- Real-time data updates
-- Progressive web app capabilities
+## Achievements & Team
 
-2. **System Architecture:**
+Invii produced a deployed full-stack restaurant management platform, a complete brand and marketing direction, and a pilot program agreement with a Philadelphia restaurant. The project also established a scalable technical foundation and created a clearer understanding of the operational needs of the restaurant industry.
 
-- Scalable cloud infrastructure
-- Secure data handling
-- API-first design
-- Real-time synchronization
+The core team included Brandon Saldan as CEO, frontend developer, and operations lead, and Mustafa Mohamed as CTO, backend developer, and technical architect. Additional contributors supported development and design as the platform grew.
 
-## Project Achievements
+## Outcome & Status
 
-- Built and deployed full-stack restaurant management solution
-- Developed comprehensive brand identity and marketing strategy
-- Established pilot program agreement with Philadelphia restaurant
-- Created scalable technical infrastructure
-- Gained valuable insights into restaurant industry needs
-
-## Technology Stack
-
-- Frontend: React.js, Next.js
-- Styling: TailwindCSS
-- Backend: Python
-- Database: Supabase
-- Payment Processing: Stripe integration
-
-## Team Structure
-
-- Brandon Saldan: CEO, Frontend Development, Operations
-- Mustafa Mohamed: CTO, Backend Development, Technical Architecture
-- Supporting development and design team members
-
-## Outcome
-
-The three-year journey of Invii provided deep knowledge of the restaurant technology sector and modern business operations and ultimately succeeded in its goal of creating an all-in-one restaurant management platform, with a codebase nearing 100k lines of code.
-
-## Project Status
+The three-year project provided deep experience in restaurant technology, product strategy, and modern business operations. It ultimately achieved its goal of creating an all-in-one restaurant management platform, with a codebase approaching 100,000 lines of code.
 
 Operations concluded in January 2025.

@@ -12,75 +12,46 @@ seo:
     alt: "Nocturne running on Spotify Car Thing hardware"
 ---
 
-<img src="/projects/nocturne/nocturne-1.png" alt="Nocturne running on Spotify Car Thing hardware" class="rounded-lg w-full" />
+<img src="/projects/nocturne/nocturne-1.png" alt="Nocturne running on Spotify Car Thing hardware" class="w-full" />
 
-**Project Overview:**
-Nocturne is an open-source custom firmware and companion app ecosystem that repurposes the discontinued Spotify Car Thing into a standalone Bluetooth media controller. Built from the ground up by a three-person engineering team, Nocturne replaces the stock firmware with a complete embedded Linux distribution, a real-time Rust system daemon, a touch-optimized web application running on-device, and native companion apps on iOS and Android. With 700+ project sponsors and a community of 1,700+ members, Nocturne is the most advanced custom firmware available for the Spotify Car Thing.
+Nocturne is an open-source custom firmware and companion app ecosystem that repurposes the discontinued Spotify Car Thing into a standalone Bluetooth media controller. Built by a three-person engineering team, it replaces the stock firmware with a complete embedded Linux distribution, a real-time Rust system daemon, a touch-optimized web application running on the device, and native companion apps for iOS and Android. The project has more than 700 sponsors and a community of more than 1,700 members.
 
 ## Project History
 
-Nocturne has evolved significantly since its initial release, growing from a simple OS replacement into a full firmware and companion app ecosystem.
+Nocturne grew from a simple operating system replacement into a full firmware and companion app ecosystem. The earliest beta releases used a custom Debian 12 configuration on the Car Thing. A Raspberry Pi connected to the device over USB and acted as a network bridge, giving the system access to the Spotify API while the Car Thing handled the interface and media controls.
 
-**v1.0.0-beta.1 - v2.1.1-beta.5**
-The earliest versions of Nocturne ran a custom Debian 12 configuration on the Car Thing's hardware. Networking was provided externally via a Raspberry Pi integration - the Car Thing connected to the Pi over USB, which acted as a network bridge, enabling Spotify API communication. While functional, this architecture required users to have a dedicated Raspberry Pi running alongside their Car Thing, creating friction in the setup process.
+Version 3 marked a major architectural shift. The Debian base was replaced with a custom NixOS configuration, and Bluetooth tethering through a phone hotspot eliminated the Raspberry Pi requirement. This made setup substantially simpler and moved Nocturne from a hobbyist experiment toward a more polished platform.
 
-**v3.0.0**
-A major architectural shift replaced the Debian base with a custom NixOS configuration and eliminated the Raspberry Pi networking dependency entirely. Bluetooth tethering via a phone hotspot replaced the Pi bridge, dramatically simplifying the setup process and making Nocturne accessible to a much wider audience. This release marked Nocturne's transition from a hobbyist project into a polished, widely-adopted platform.
-
-**v4.0.0 (Current)**
-The current generation represents a complete reimagination of the stack. NixOS was replaced with a custom Buildroot-based embedded Linux distribution, giving the team full control over every layer of the OS. A native Rust daemon replaced the previous networking approach, and direct Bluetooth communication between the Car Thing and native iOS and Android companion apps replaced Bluetooth tethering entirely. On-device wake-word detection, A/B OTA update infrastructure, and a fully redesigned React 19 interface round out the most capable version of Nocturne yet.
+The current version replaces NixOS with a custom Buildroot-based embedded Linux distribution and gives the team control over every layer of the operating system. A native Rust daemon manages device services, direct Bluetooth communication connects the Car Thing to companion apps, and the redesigned React 19 interface runs on-device. Wake-word detection, A/B over-the-air updates, and native mobile applications complete the current system.
 
 ## Architecture
 
-Nocturne is a multi-component ecosystem spanning several interconnected systems:
+The firmware is a custom Buildroot distribution targeting the Car Thing's ARM Cortex-A53 SoC, an Amlogic S905D2 with 512MB of RAM. It includes the Weston compositor, Chromium in kiosk mode, the BlueZ Bluetooth stack, SWUpdate for A/B updates, USB RNDIS gadget networking, and on-device ONNX inference for the "Hey Nocturne" wake word.
 
-**Firmware**
-The base layer is a custom embedded Linux distribution built with Buildroot, targeting the Car Thing's ARM Cortex-A53 SoC (Amlogic S905D2) with 512MB RAM. The OS includes the Weston compositor, Chromium in kiosk mode, BlueZ Bluetooth stack, SWUpdate for A/B OTA updates, USB RNDIS gadget networking, and on-device ONNX wake-word inference for "Hey Nocturne" detection.
+The system's central bridge is `nocturned`, a Rust daemon that manages WebSocket communication on port 5000, BlueZ device management, Spotify API proxying, update orchestration, and the device lifecycle. It runs alongside four other supervised services and connects the user interface to the underlying hardware and mobile applications.
 
-**nocturned (Rust Daemon)**
-The system's core bridge - a Rust-based daemon managing WebSocket communication on port 5000, BlueZ Bluetooth device management, Spotify API proxying, OTA update orchestration, and overall device lifecycle management. Supervised alongside four other system services.
+The `nocturne-ui` application is a touch-optimized React 19 and Vite single-page application that runs inside Chromium. It provides Spotify playback control, Bluetooth pairing, hardware button mapping, swipe navigation, dynamic album art backgrounds, and over-the-air update flows. Native iOS and Android companion apps handle Bluetooth connectivity, Spotify OAuth delegation, phone media control relay, and subscription management.
 
-**nocturne-ui (React 19 + Vite)**
-A touch-optimized single-page application running on-device inside Chromium, featuring full Spotify playback control, Bluetooth pairing UI, hardware button mapping, swipe gesture navigation, dynamic album art gradient backgrounds, real-time OTA update flows, and much more.
+The communication path is UI to WebSocket to `nocturned` to Bluetooth to the companion app and finally to the Spotify API.
 
-**Companion Apps (iOS + Android)**
-Native mobile apps handling Bluetooth connectivity, Spotify OAuth delegation, phone media control relay, and subscription management. Available on the Google Play Store and iOS TestFlight.
+## Technical Challenges
 
-**Communication Chain**
-UI → WebSocket → nocturned → Bluetooth → Companion App → Spotify API
+Direct Bluetooth communication between the Car Thing and mobile devices was the project's most significant systems challenge. The solution combined BlueZ-based device management in the Rust daemon with automatic reconnection using exponential backoff and bidirectional media control relay between the embedded device and paired phones.
 
-## Technical Challenges & Solutions
+Shipping firmware updates safely required a robust over-the-air system. Nocturne uses SWUpdate with cryptographic signature verification and dual-partition A/B failover, allowing devices to recover from failed updates without becoming unusable.
 
-**Bluetooth Connectivity**
-Engineering direct Bluetooth communication between the Car Thing and mobile devices was the project's most significant technical challenge. The solution involved implementing BlueZ-based device management in the Rust daemon with automatic reconnection using exponential backoff and bidirectional media control relay between the embedded device and paired smartphones.
+Wake-word detection had to operate within the device's 512MB memory constraint, so the team integrated ONNX runtime inference models optimized for the ARM Cortex-A53. More broadly, the fixed SoC, small touch display, and limited memory required careful optimization across the firmware, daemon, and interface.
 
-**OTA Update Infrastructure**
-Shipping firmware updates safely to devices in the field required building a robust OTA system using SWUpdate with cryptographic signature verification and dual-partition A/B failover, ensuring devices can recover gracefully from failed updates.
-
-**On-Device Wake Word Detection**
-Implementing "Hey Nocturne" voice detection within the 512MB RAM constraint required integrating ONNX runtime inference models optimized for the ARM Cortex-A53 architecture.
-
-**Hardware Constraints**
-Working within the Car Thing's original hardware limitations - 512MB RAM, a fixed SoC, and a small touch display - required careful optimization across the firmware, daemon, and UI layers to deliver smooth, responsive performance.
-
-**Eliminating External Dependencies**
-Each major version of Nocturne has worked to reduce friction in the setup process - moving from a required Raspberry Pi, to Bluetooth tethering, to direct Bluetooth via companion apps. This iterative simplification was as much an engineering challenge as the underlying technical work.
+Each major version also reduced setup friction. The project moved from a required Raspberry Pi, to Bluetooth tethering, and then to direct Bluetooth communication through companion apps. That progression simplified the user experience while increasing the amount of systems engineering inside the device itself.
 
 ## Technology Stack
 
-- Firmware: Buildroot embedded Linux, kernel 4.9.113, Weston compositor, BlueZ, SWUpdate
-- Systems: Rust, WebSocket, Supervisord, ONNX inference
-- Frontend: React 19, Vite, TailwindCSS, Chromium kiosk mode
-- Mobile: iOS (TestFlight), Android (Google Play Store)
-- Hardware: ARM Cortex-A53, Amlogic S905D2 SoC, 512MB RAM
-- Version Control: Git, GitHub
+The firmware stack uses Buildroot, Linux kernel 4.9.113, Weston, BlueZ, and SWUpdate. Systems components use Rust, WebSockets, Supervisord, and ONNX inference. The frontend uses React 19, Vite, TailwindCSS, and Chromium kiosk mode. Companion software targets iOS and Android, while the hardware target is the ARM Cortex-A53 and Amlogic S905D2 platform.
 
-**Previous Stack (for historical reference)**
-- v1.0.0 - v2.1.1: Custom Debian 12, Raspberry Pi network bridge, Next.js, TailwindCSS
-- v3.0.0: Custom NixOS, Bluetooth tethering via phone hotspot
+Earlier releases used Debian 12 with a Raspberry Pi network bridge, followed by NixOS with Bluetooth tethering through a phone hotspot. Git and GitHub support the project's open-source development workflow.
 
 ## Project Status
 
-Nocturne is under active development. The project maintains an open-source community of 1,700+ members and 700+ project sponsors. Companion apps are available on the Google Play Store and iOS TestFlight.
+Nocturne remains under active development. The project maintains an open-source community of more than 1,700 members and more than 700 sponsors, with companion apps available through Google Play and iOS TestFlight.
 
 The project is open source and available on [GitHub](https://github.com/usenocturne).

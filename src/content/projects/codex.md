@@ -12,64 +12,30 @@ seo:
     alt: "Codex interface displaying genetic analysis"
 ---
 
-<img src="/projects/codex/codex-1.png" alt="Codex interface displaying genetic analysis" class="rounded-lg w-full" />
+<img src="/projects/codex/codex-1.png" alt="Codex interface displaying genetic analysis" class="w-full" />
 
-**Project Overview:**
-Codex is an intuitive interface for analyzing genetic data by connecting with SNPedia's wealth of genetic research. By processing raw DNA data files in the browser, users can explore their genetic variants while maintaining complete privacy of their sensitive genetic information.
+Codex is an open-source interface for analyzing genetic data through SNPedia's research database. It processes raw DNA files in the browser, allowing users to explore genetic variants without uploading sensitive information to a server. The result is a privacy-first tool that makes a complex bioinformatics workflow easier to understand.
 
 ## Objectives
 
-1. Create a privacy-focused platform for analyzing personal genetic data
-2. Build efficient integration with SNPedia's research database
-3. Develop intuitive interface for exploring genetic information
-4. Ensure data security through client-side processing
+Codex was designed to give people more control over their genetic data. The project focused on client-side processing, an efficient connection to SNPedia, a clear interface for exploring genetic information, and a storage model that kept personal data local to the user's device.
 
-## Technical Challenges & Solutions
+## Privacy-First Architecture
 
-1. **Privacy-First Architecture:**
+Raw DNA files are parsed and analyzed in the browser rather than sent to a central application server. IndexedDB provides local storage for the working dataset, so the application can preserve progress without creating a remote copy of a user's genetic information. This architecture made privacy a core product behavior instead of an afterthought.
 
-- Implemented client-side processing of raw DNA files
-- Built using IndexedDB for local-only data storage
-- Eliminated need for server-side storage of genetic data
-- Designed with privacy and data security as core principles
+The analysis flow validates uploaded files, identifies SNPs, and organizes the results into categories that are easier to review. Local processing also keeps the application useful when users need to work with a large file while maintaining control of the underlying data.
 
-2. **SNPedia Integration:**
+## SNPedia Integration
 
-- Developed efficient API integration with SNPedia's database
-- Created robust error handling for API rate limits
-- Implemented caching system for faster repeated lookups
-- Built filtering system for relevant genetic markers
+Codex connects the local dataset to SNPedia's MediaWiki API to provide context for relevant genetic markers. The integration includes filtering, caching, and error handling for rate limits, which helps the application stay responsive during repeated lookups. The interface presents the resulting information alongside the user's data rather than hiding the research process behind a single opaque result.
 
-## Key Features
+## Product Experience
 
-1. **Data Analysis:**
+The application includes a clean upload flow, real-time analysis updates, smart filtering, and categorized variant views. Users can review information related to disease predisposition, medication response, personality traits, and other documented associations. Export workflows support PDF, CSV, JSON, and XML formats for people who want to keep or share a record of their results.
 
-- Raw DNA file parsing and validation
-- SNP (Single Nucleotide Polymorphism) identification
-- Integration with SNPedia's research database
-- Categorized display of genetic variants
+Codex was built with Next.js and TailwindCSS. The data pipeline uses dna2json and IndexedDB, while PDF-lib and file-saver support report exports. The project remains open source and is available on [GitHub](https://github.com/brandonsaldan/codex), with a live demo at [codex-brandonsaldan.vercel.app](https://codex-brandonsaldan.vercel.app/).
 
-2. **User Experience:**
+## Outcome & Status
 
-- Clean, intuitive interface
-- Real-time analysis updates
-- Smart filtering and search
-- Multiple export formats (PDF, CSV, JSON, XML)
-
-## Technology Stack
-
-- Frontend: Next.js, TailwindCSS
-- Data Processing: dna2json
-- Storage: IndexedDB
-- External API: SNPedia MediaWiki API
-- Export: PDF-lib, file-saver
-
-## Outcome
-
-Codex demonstrates how modern web technologies can be used to create privacy-focused tools for personal genetic analysis. The project makes genetic information more accessible while ensuring user data remains under their control. The platform successfully processes genetic data locally, integrates with SNPedia's research database, and provides users with detailed insights into their genetic variants.
-
-## Project Status
-
-Active development with regular updates based on user feedback and SNPedia's evolving database. The project remains open source, welcoming contributions from the developer community.
-
-The project is open source and available on [GitHub](https://github.com/brandonsaldan/codex), with a live demo at [codex-brandonsaldan.vercel.app](https://codex-brandonsaldan.vercel.app/).
+Codex demonstrates how modern web technologies can make personal genetic analysis more accessible without giving up local control of sensitive data. The project is dormant and has not received a release in several years, but it remains open source and available for anyone who wants to explore, use, or extend the codebase.
