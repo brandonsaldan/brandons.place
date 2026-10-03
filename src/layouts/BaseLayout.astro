@@ -76,14 +76,19 @@ const { showHeader = true, homeLayout = false, ...head } = Astro.props;
     .home-intro { width: 100%; max-width: 48rem; margin-inline: auto; }
     .home-gallery {
         position: relative;
+        z-index: 2;
         left: 50%;
         width: 100vw;
         margin-top: 1.5rem;
         margin-left: -50vw;
     }
-    .home-content { padding-top: 2rem; }
+    .home-content { padding-top: 2.5rem; }
+    @media (max-width: 639px) {
+        .home-content { padding-top: 2.25rem; }
+    }
     @media (min-width: 640px) {
-        .home-gallery { margin-top: 5rem; }
+        .home-gallery { margin-top: 4rem; }
+        .home-content { padding-top: 4.5rem; }
     }
     @media (min-width: 1280px) {
         .site-shell {
@@ -92,7 +97,7 @@ const { showHeader = true, homeLayout = false, ...head } = Astro.props;
             grid-template-columns: 170px minmax(0, 48rem);
             column-gap: 40px;
         }
-        .site-body { padding-top: 9rem; }
+        .site-body { padding-top: 6rem; }
         .site-content, .site-footer-content { grid-column: 2; }
     }
 </style>

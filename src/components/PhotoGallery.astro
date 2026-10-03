@@ -36,11 +36,12 @@ const imageData = [
 const tripleImages = [...imageData, ...imageData, ...imageData];
 ---
 
-<div id="gallery-container" class="relative mb-10 sm:h-[28rem]">
-    <div id="gallery" data-set-size={imageData.length} class="gallery-viewport hide-scrollbar relative z-[1] flex gap-5 pt-4 pb-16 sm:gap-8 sm:pt-4 sm:pb-16">
+<div id="gallery-container" class="relative">
+    <div id="gallery" data-set-size={imageData.length} class="gallery-viewport relative h-[18.75rem] sm:h-96">
+        <div id="gallery-track" class="gallery-track absolute left-0 top-4 flex w-max gap-5 sm:gap-8">
         {tripleImages.map((imageItem, imageIndex) => (
             <div
-                class={`polaroid group relative aspect-[4/5] w-44 flex-none text-zinc-900 transition-transform duration-300 ease-out cursor-pointer dark:text-neutral-100 sm:w-72 ${
+                class={`polaroid group relative aspect-[4/5] w-56 flex-none text-zinc-900 transition-transform duration-300 ease-out cursor-pointer dark:text-neutral-100 sm:w-72 ${
                     rotations[(imageIndex % imageData.length) % rotations.length]
                 } hover:rotate-0 hover:scale-105`}
             >
@@ -73,6 +74,7 @@ const tripleImages = [...imageData, ...imageData, ...imageData];
                 </button>
             </div>
         ))}
+        </div>
     </div>
 </div>
 
@@ -193,188 +195,164 @@ const tripleImages = [...imageData, ...imageData, ...imageData];
         -webkit-text-stroke-color: rgb(241 238 230 / 0.3);
     }
 
-    .hide-scrollbar {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        -webkit-overflow-scrolling: touch;
+    .gallery-viewport {
+        overflow-x: clip;
+        overflow-y: visible;
+        touch-action: pan-y;
     }
 
-    .gallery-viewport {
-        overflow-x: hidden;
-        touch-action: pan-y;
+    .gallery-track {
+        will-change: transform;
     }
 
     .polaroid {
         z-index: 1;
     }
 
-    .hide-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
 </style>
 
 <script>
+    let cleanupGallery: (() => void) | undefined;
+
     function initGallery() {
+        cleanupGallery?.();
         const gallery = document.getElementById('gallery');
-        let animationFrame: number | undefined;
+        const track = document.getElementById('gallery-track');
+        if (!gallery || !track) return;
+
+        const polaroids = Array.from(track.querySelectorAll<HTMLElement>('.polaroid'));
+        const setSize = Number(gallery.dataset.setSize);
+        if (!polaroids[setSize]) return;
+
+        let setWidth = polaroids[setSize].offsetLeft - polaroids[0].offsetLeft;
+        let offset = setWidth;
+        let animationFrame = 0;
         let isDragging = false;
-        let startX: number;
-        let startY = 0;
-        let scrollLeft: number;
-        let touchAxis: 'horizontal' | 'vertical' | null = null;
         let wasDragged = false;
+        let startX = 0;
+        let startY = 0;
+        let startOffset = offset;
+        let touchAxis: 'horizontal' | 'vertical' | null = null;
         let lastScrollY = window.scrollY;
 
-        const container = document.getElementById('gallery-container');
-        if (!gallery || !container) return;
-
-        const polaroids = Array.from(gallery.querySelectorAll<HTMLElement>('.polaroid'));
+        const paint = () => {
+            track.style.transform = `translate3d(${-offset}px, 0, 0)`;
+        };
+        const wrap = () => {
+            if (!setWidth) return;
+            while (offset >= setWidth * 2) offset -= setWidth;
+            while (offset < 0) offset += setWidth;
+        };
+        const move = (pageX: number) => {
+            const unwrapped = startOffset - (pageX - startX) * 2;
+            offset = unwrapped;
+            wrap();
+            paint();
+            if (offset !== unwrapped) {
+                startOffset = offset;
+                startX = pageX;
+            }
+        };
         const handlePolaroidClick = (event: Event) => {
-            const polaroid = event.currentTarget as HTMLElement;
             if (wasDragged) {
                 event.preventDefault();
                 wasDragged = false;
                 return;
             }
-            polaroid.classList.toggle('is-flipped');
+            (event.currentTarget as HTMLElement).classList.toggle('is-flipped');
         };
-
-        polaroids.forEach((polaroid) => polaroid.addEventListener('click', handlePolaroidClick));
-
-        gallery.scrollLeft = gallery.scrollWidth / 3;
-
         const handleScroll = () => {
-            if (!gallery || !container || isDragging) return;
-
-            const scrollY = window.scrollY;
-            const scrollDelta = scrollY - lastScrollY;
-            lastScrollY = scrollY;
-            if (scrollDelta === 0) return;
-
-            const scrollWindow = window.innerHeight * 40;
-            const scrollRatio = scrollDelta / scrollWindow;
-            const singleSetWidth = gallery.scrollWidth / 3;
-            gallery.scrollLeft += scrollRatio * singleSetWidth;
-
-            if (gallery.scrollLeft >= singleSetWidth * 2) {
-                gallery.scrollLeft -= singleSetWidth;
-            } else if (gallery.scrollLeft <= 0) {
-                gallery.scrollLeft += singleSetWidth;
-            }
+            const delta = window.scrollY - lastScrollY;
+            lastScrollY = window.scrollY;
+            if (!delta || isDragging || !setWidth) return;
+            offset += (delta / (window.innerHeight * 40)) * setWidth;
+            wrap();
+            paint();
         };
-
         const onScroll = () => {
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-            }
-            animationFrame = requestAnimationFrame(handleScroll);
+            window.cancelAnimationFrame(animationFrame);
+            animationFrame = window.requestAnimationFrame(handleScroll);
         };
-
-        const handleMouseDown = (e: MouseEvent) => {
+        const handleMouseDown = (event: MouseEvent) => {
+            if (event.button !== 0) return;
             isDragging = true;
             wasDragged = false;
-            startX = e.pageX - gallery.offsetLeft;
-            scrollLeft = gallery.scrollLeft;
+            startX = event.pageX;
+            startOffset = offset;
         };
-
-        const handleMouseMove = (e: MouseEvent) => {
+        const handleMouseMove = (event: MouseEvent) => {
             if (!isDragging) return;
-            e.preventDefault();
-            const x = e.pageX - gallery.offsetLeft;
-            const walk = (x - startX) * 2;
-            if (Math.abs(x - startX) > 8) wasDragged = true;
-            gallery.scrollLeft = scrollLeft - walk;
-
-            handleInfiniteScroll(e.pageX);
+            event.preventDefault();
+            if (Math.abs(event.pageX - startX) > 8) wasDragged = true;
+            move(event.pageX);
         };
-
-        const handleMouseUp = () => {
-            isDragging = false;
-        };
-
-        const handleTouchStart = (e: TouchEvent) => {
+        const handleMouseUp = () => { isDragging = false; };
+        const handleTouchStart = (event: TouchEvent) => {
+            const touch = event.touches[0];
             isDragging = false;
             wasDragged = false;
-            const touch = e.touches[0];
-            startX = touch.pageX - gallery.offsetLeft;
-            startY = touch.pageY;
             touchAxis = null;
-            scrollLeft = gallery.scrollLeft;
+            startX = touch.pageX;
+            startY = touch.pageY;
+            startOffset = offset;
         };
-
-        const handleTouchMove = (e: TouchEvent) => {
+        const handleTouchMove = (event: TouchEvent) => {
             if (touchAxis === 'vertical') return;
-            const touch = e.touches[0];
-            const x = touch.pageX - gallery.offsetLeft;
-            const deltaX = x - startX;
+            const touch = event.touches[0];
+            const deltaX = touch.pageX - startX;
             const deltaY = touch.pageY - startY;
-
             if (!touchAxis) {
                 if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < 8) return;
                 touchAxis = Math.abs(deltaX) > Math.abs(deltaY) ? 'horizontal' : 'vertical';
                 if (touchAxis === 'vertical') return;
                 isDragging = true;
             }
-
-            if (touchAxis !== 'horizontal') return;
-            e.preventDefault();
-            const walk = (x - startX) * 2;
+            event.preventDefault();
             wasDragged = true;
-            gallery.scrollLeft = scrollLeft - walk;
-
-            handleInfiniteScroll(touch.pageX);
+            move(touch.pageX);
         };
-
         const handleTouchEnd = () => {
             isDragging = false;
             touchAxis = null;
         };
-
-        const handleInfiniteScroll = (pageX: number) => {
-            const singleSetWidth = gallery.scrollWidth / 3;
-            if (gallery.scrollLeft >= singleSetWidth * 2) {
-                gallery.scrollLeft -= singleSetWidth;
-                scrollLeft = gallery.scrollLeft;
-                startX = pageX - gallery.offsetLeft;
-            } else if (gallery.scrollLeft <= 0) {
-                gallery.scrollLeft += singleSetWidth;
-                scrollLeft = gallery.scrollLeft;
-                startX = pageX - gallery.offsetLeft;
-            }
+        const handleResize = () => {
+            const newWidth = polaroids[setSize].offsetLeft - polaroids[0].offsetLeft;
+            offset = setWidth ? offset / setWidth * newWidth : newWidth;
+            setWidth = newWidth;
+            wrap();
+            paint();
         };
 
+        polaroids.forEach((polaroid) => polaroid.addEventListener('click', handlePolaroidClick));
         window.addEventListener('scroll', onScroll, { passive: true });
         document.addEventListener('scroll', onScroll, { passive: true, capture: true });
-        
+        window.addEventListener('resize', handleResize);
         gallery.addEventListener('mousedown', handleMouseDown);
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
-        
-        gallery.addEventListener('touchstart', handleTouchStart, { passive: false });
+        gallery.addEventListener('touchstart', handleTouchStart, { passive: true });
         gallery.addEventListener('touchmove', handleTouchMove, { passive: false });
         gallery.addEventListener('touchend', handleTouchEnd);
         gallery.addEventListener('touchcancel', handleTouchEnd);
+        paint();
 
-        document.addEventListener('astro:before-swap', () => {
+        cleanupGallery = () => {
+            polaroids.forEach((polaroid) => polaroid.removeEventListener('click', handlePolaroidClick));
             window.removeEventListener('scroll', onScroll);
             document.removeEventListener('scroll', onScroll, true);
-            
+            window.removeEventListener('resize', handleResize);
             gallery.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
-            
             gallery.removeEventListener('touchstart', handleTouchStart);
             gallery.removeEventListener('touchmove', handleTouchMove);
             gallery.removeEventListener('touchend', handleTouchEnd);
             gallery.removeEventListener('touchcancel', handleTouchEnd);
-            polaroids.forEach((polaroid) => polaroid.removeEventListener('click', handlePolaroidClick));
-            
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-            }
-        });
+            window.cancelAnimationFrame(animationFrame);
+        };
     }
 
-    initGallery();
+    document.addEventListener('astro:before-swap', () => { cleanupGallery?.(); cleanupGallery = undefined; });
     document.addEventListener('astro:after-swap', initGallery);
+    initGallery();
 </script>
