@@ -53,7 +53,7 @@ const tripleImages = [...imageData, ...imageData, ...imageData];
                                     src={imageItem.src}
                                     alt={imageItem.title}
                                     class="h-full w-full object-cover select-none"
-                                    loading={imageIndex >= imageData.length && imageIndex < imageData.length + 5 ? 'eager' : 'lazy'}
+                                    loading={imageIndex < 3 ? 'eager' : 'lazy'}
                                     decoding="async"
                                     draggable="false"
                                 />
@@ -325,7 +325,6 @@ const tripleImages = [...imageData, ...imageData, ...imageData];
 
         polaroids.forEach((polaroid) => polaroid.addEventListener('click', handlePolaroidClick));
         window.addEventListener('scroll', onScroll, { passive: true });
-        document.addEventListener('scroll', onScroll, { passive: true, capture: true });
         window.addEventListener('resize', handleResize);
         gallery.addEventListener('mousedown', handleMouseDown);
         window.addEventListener('mousemove', handleMouseMove);
@@ -339,7 +338,6 @@ const tripleImages = [...imageData, ...imageData, ...imageData];
         cleanupGallery = () => {
             polaroids.forEach((polaroid) => polaroid.removeEventListener('click', handlePolaroidClick));
             window.removeEventListener('scroll', onScroll);
-            document.removeEventListener('scroll', onScroll, true);
             window.removeEventListener('resize', handleResize);
             gallery.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mousemove', handleMouseMove);
