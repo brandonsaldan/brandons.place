@@ -26,7 +26,7 @@ const blog = page.data;
     showHeader={false}
 >
     <h1 class="mb-3 text-4xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Blog</h1>
-    <p class="mb-12 text-base leading-relaxed sm:mb-16 sm:text-lg">Long-form writing on technology, building things, ideas, and the strange details that make modern life worth examining.</p>
+    <p class="mb-10 text-base leading-relaxed sm:mb-10 sm:text-lg">Long-form writing on technology, building things, ideas, and the strange details that make modern life worth examining.</p>
     <div>
         {blog.map((post, index) => (
             <PreviewBlock index={index} image={post.data.image} href={`/blog/${post.id}/`}>
