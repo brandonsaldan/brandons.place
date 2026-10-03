@@ -73,11 +73,13 @@ const siteConfig: SiteConfig = {
       text: "Travel",
       href: "/travel",
       section: 'personal',
+      showOnHome: false,
     },
     {
       text: "Listening",
       href: "/music",
       section: 'personal',
+      showOnHome: false,
     },
   ],
   footerNavLinks: [
