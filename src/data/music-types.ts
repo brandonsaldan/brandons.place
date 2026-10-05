@@ -14,9 +14,6 @@ export type MusicAlbum = {
   artist: string;
   image: string | null;
   plays: number;
-};
-
-export type MusicAlbumDetail = {
   allTimePlays: number | null;
 };
 

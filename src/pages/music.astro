@@ -123,7 +123,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </style>
 
 <script>
-  import type { MusicAlbum, MusicAlbumDetail, MusicResponse, MusicTrack, MusicPeriod } from '../data/music-types';
+  import type { MusicAlbum, MusicResponse, MusicTrack, MusicPeriod } from '../data/music-types';
 
   const periodLabels: Record<MusicPeriod, string> = {
     '7day': 'this week',
@@ -133,8 +133,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   };
   let refreshTimer: number | undefined;
   let requestId = 0;
-  const albumDetails = new Map<string, MusicAlbumDetail | null>();
-  const pendingAlbumDetails = new Map<string, Promise<MusicAlbumDetail | null>>();
   const flippedAlbums = new Set<string>();
 
   function text(el: Element | null, value: string) {
@@ -182,27 +180,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   function albumKey(album: MusicAlbum): string {
     return JSON.stringify([album.artist, album.title]);
-  }
-
-  async function getAlbumDetail(album: MusicAlbum): Promise<MusicAlbumDetail | null> {
-    const key = albumKey(album);
-    if (albumDetails.has(key)) return albumDetails.get(key) ?? null;
-    const pending = pendingAlbumDetails.get(key);
-    if (pending) return pending;
-
-    const request = fetch(`/api/music-album.json?${new URLSearchParams({ artist: album.artist, album: album.title })}`)
-      .then(async (response) => {
-        if (!response.ok) throw new Error('Album details unavailable');
-        return await response.json() as MusicAlbumDetail;
-      })
-      .catch(() => null)
-      .then((detail) => {
-        albumDetails.set(key, detail);
-        pendingAlbumDetails.delete(key);
-        return detail;
-      });
-    pendingAlbumDetails.set(key, request);
-    return request;
   }
 
   function renderAlbum(album: MusicAlbum, period: MusicPeriod): HTMLElement {
@@ -255,27 +232,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     button.setAttribute('aria-label', `Flip ${album.title} by ${album.artist} for liner notes`);
     button.setAttribute('aria-pressed', 'false');
 
-    function applyDetail(detail: MusicAlbumDetail | null) {
-      const allTime = detail?.allTimePlays ?? (period === 'overall' ? album.plays : null);
+    function applyDetail() {
+      const allTime = album.allTimePlays ?? (period === 'overall' ? album.plays : null);
       count.textContent = allTime === null ? '—' : allTime.toLocaleString();
       button.setAttribute('aria-label', item.classList.contains('is-flipped')
         ? `Show cover for ${album.title}`
         : `Flip ${album.title} by ${album.artist} for liner notes`);
     }
-
-    function showDetail() {
-      if (albumDetails.has(key)) applyDetail(albumDetails.get(key) ?? null);
-      else getAlbumDetail(album).then((detail) => {
-        if (item.isConnected) applyDetail(detail);
-      });
-    }
-
-    function prefetchDetail() {
-      void getAlbumDetail(album);
-    }
-
-    button.addEventListener('mouseenter', prefetchDetail);
-    button.addEventListener('focusin', prefetchDetail);
 
     button.addEventListener('click', () => {
       const flipped = item.classList.toggle('is-flipped');
@@ -283,8 +246,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       back.setAttribute('aria-hidden', String(!flipped));
       if (flipped) {
         flippedAlbums.add(key);
-        button.setAttribute('aria-label', `Loading liner notes for ${album.title}`);
-        showDetail();
+        applyDetail();
       } else {
         flippedAlbums.delete(key);
         button.setAttribute('aria-label', `Flip ${album.title} by ${album.artist} for liner notes`);
@@ -296,8 +258,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       item.classList.add('is-flipped');
       button.setAttribute('aria-pressed', 'true');
       back.setAttribute('aria-hidden', 'false');
-      button.setAttribute('aria-label', `Loading liner notes for ${album.title}`);
-      showDetail();
+      applyDetail();
     }
     return item;
   }

@@ -56,6 +56,21 @@ async function lastFm(method: string, params: Record<string, string>, apiKey: st
   return data;
 }
 
+async function allTimeAlbumPlays(album: MusicAlbum, apiKey: string): Promise<number | null> {
+  try {
+    const data = await lastFm('album.getinfo', {
+      artist: album.artist,
+      album: album.title,
+      username: USER,
+      autocorrect: '1',
+    }, apiKey);
+    const count = Number(data.album?.userplaycount);
+    return Number.isFinite(count) && count >= 0 ? count : null;
+  } catch {
+    return null;
+  }
+}
+
 export const GET: APIRoute = async ({ url }) => {
   const requestedPeriod = url.searchParams.get('period');
   const period: MusicPeriod = periods.includes(requestedPeriod as MusicPeriod)
@@ -98,7 +113,15 @@ export const GET: APIRoute = async ({ url }) => {
         artist: album.artist?.name ?? '',
         image: coverArt(album.image),
         plays: Number(album.playcount) || 0,
+        allTimePlays: null,
       }));
+
+    const albumsWithAllTimePlays = period === 'overall'
+      ? topAlbums.map((album) => ({ ...album, allTimePlays: album.plays }))
+      : await Promise.all(topAlbums.map(async (album) => ({
+        ...album,
+        allTimePlays: await allTimeAlbumPlays(album, apiKey),
+      })));
 
     const topArtists: MusicArtist[] = asArray<LastFmArtist>(artistData.topartists?.artist)
       .filter((artist) => artist.name)
@@ -116,7 +139,7 @@ export const GET: APIRoute = async ({ url }) => {
         ? new Date(registered * 1000).toISOString()
         : null,
       recentTracks,
-      topAlbums,
+      topAlbums: albumsWithAllTimePlays,
       topArtists,
     };
 
