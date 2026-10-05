@@ -270,6 +270,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     }
 
+    function prefetchDetail() {
+      void getAlbumDetail(album);
+    }
+
+    button.addEventListener('mouseenter', prefetchDetail);
+    button.addEventListener('focusin', prefetchDetail);
+
     button.addEventListener('click', () => {
       const flipped = item.classList.toggle('is-flipped');
       button.setAttribute('aria-pressed', String(flipped));
