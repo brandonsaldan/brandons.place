@@ -282,6 +282,7 @@ const socialLinks = (siteConfig.socialLinks || []).map((link) => ({
         object-fit: cover;
         filter: sepia(.12);
     }
+    :global(.dark) .postcard-stamp img { filter: sepia(.22) brightness(.8); }
     .postcard-postmark {
         position: absolute;
         z-index: 2;
