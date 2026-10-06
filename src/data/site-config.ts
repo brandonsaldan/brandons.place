@@ -77,7 +77,7 @@ const siteConfig: SiteConfig = {
     },
     {
       text: "Listening",
-      href: "/music",
+      href: "/listening",
       section: 'personal',
       showOnHome: false,
     },
