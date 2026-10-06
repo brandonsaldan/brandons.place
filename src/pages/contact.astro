@@ -1,0 +1,531 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteConfig from '../data/site-config';
+import '@fontsource/anton/latin-400.css';
+import '@fontsource/yellowtail/latin-400.css';
+
+const email = 'hello@brandonsaldan.com';
+const letterSize = 272;
+const capHeight = (letterSize * 1760) / 2048;
+const letterAdvances: Record<string, number> = { B: 980, R: 976, A: 994, N: 1020, D: 1010, O: 996, S: 945, L: 814 };
+const letterRows = [
+    { word: 'BRANDON', x: 105, baseline: 425, arch: 16, photos: ['tampa-bay-sunset', 'budapest-basilica', 'newfoundland-puffins', 'prague-astronomical-clock', 'catskills-fall', 'new-york-aerial', 'berlin-reichstag'] },
+    { word: 'SALDAN', x: 191, baseline: 712, arch: 18, photos: ['newfoundland-harbor', 'atlantic-at-sea', 'prague-street', 'wawel-cathedral-tower', 'catskills-lake-sunset', 'charles-bridge-statue'] },
+];
+const letterTracking = 10;
+const extrusionSteps = [2, 4, 6, 8, 10, 12];
+const greetingLetters = letterRows.flatMap((row, rowIndex) => {
+    const widths = [...row.word].map((char) => (letterAdvances[char] / 2048) * letterSize);
+    const total = widths.reduce((sum, width) => sum + width, 0) + letterTracking * (widths.length - 1);
+    let cursor = row.x;
+    return [...row.word].map((char, index) => {
+        const width = widths[index];
+        const center = cursor + width / 2;
+        cursor += width + letterTracking;
+        const t = (center - row.x) / total;
+        const slope = -((row.arch * Math.PI) / total) * Math.cos(Math.PI * t);
+        return {
+            id: `greetings-${rowIndex}-${index}`,
+            char,
+            width,
+            x: center,
+            y: row.baseline - row.arch * Math.sin(Math.PI * t),
+            angle: (Math.atan(slope) * 180) / Math.PI,
+            photo: `/photos/postcard/${row.photos[index]}.webp`,
+        };
+    });
+});
+const glyph = (letter: (typeof greetingLetters)[number], className: string, transform = '') =>
+    `<text class="greetings-glyph ${className}" x="${(-letter.width / 2).toFixed(1)}"${transform ? ` transform="${transform}"` : ''}>${letter.char}</text>`;
+const greetingClips = greetingLetters.map((letter) => `<clipPath id="${letter.id}-clip">${glyph(letter, '')}</clipPath>`).join('');
+const greetingLettering = greetingLetters.map((letter) => [
+    `<g transform="translate(${letter.x.toFixed(1)} ${letter.y.toFixed(1)}) rotate(${letter.angle.toFixed(2)})">`,
+    glyph(letter, 'greetings-back', 'translate(13 13)'),
+    ...extrusionSteps.map((step) => glyph(letter, 'greetings-depth', `translate(${step} ${step})`)),
+    glyph(letter, 'greetings-outline'),
+    `<image data-src="${letter.photo}" x="${(-letter.width / 2).toFixed(1)}" y="${(-capHeight).toFixed(1)}" width="${letter.width.toFixed(1)}" height="${capHeight.toFixed(1)}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${letter.id}-clip)" />`,
+    glyph(letter, 'greetings-edge'),
+    '</g>',
+].join('')).join('');
+const stamp = '/photos/north-carolina-cardinal-stamp.webp';
+const today = new Date();
+const postmarkDay = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+const socialLinks = (siteConfig.socialLinks || []).map((link) => ({
+    ...link,
+    handle: `@${new URL(link.href).pathname.split('/').filter(Boolean).pop()}`,
+}));
+---
+
+<BaseLayout
+    title="Contact"
+    description="Get in touch by email or find me elsewhere online. Always glad to hear from people working on interesting problems."
+    showHeader={false}
+>
+    <h1 class="mb-3 text-4xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Contact</h1>
+    <p class="mb-10 text-base leading-relaxed sm:text-lg">Always happy to hear from people working on interesting problems. The best way to reach me is by email, or find me anywhere listed below.</p>
+
+    <div class="postcard" data-postcard>
+        <div class="postcard-inner">
+            <section class="postcard-face postcard-back" aria-label="Postcard">
+                <svg class="postcard-heading" viewBox="90 26 240 68" aria-hidden="true">
+                    <defs><path id="postcard-arc" d="M 40 78 Q 210 18 380 78" /></defs>
+                    <text text-anchor="middle"><textPath href="#postcard-arc" startOffset="50%">POST CARD</textPath></text>
+                    <line x1="120" y1="86" x2="300" y2="86" />
+                    <line class="postcard-heading-rule" x1="140" y1="90" x2="280" y2="90" />
+                </svg>
+                <div class="postcard-message">
+                    <p class="postcard-label" aria-hidden="true">Correspondence</p>
+                    <p class="postcard-note">Whether it’s a question, an idea you’re working on, a research collaboration, or just a hello, I’d love to hear from you. I read everything and always write back.</p>
+                    <p class="postcard-signature ink font-biro">~ Brandon</p>
+                </div>
+                <div class="postcard-divider" aria-hidden="true"></div>
+                <div class="postcard-address">
+                    <span class="postcard-stamp" aria-hidden="true"><span class="postcard-stamp-paper"><img src={stamp} alt="" /></span></span>
+                    <svg class="postcard-postmark" viewBox="0 0 220 100" aria-hidden="true">
+                        <defs>
+                            <path id="postmark-top" d="M 22 50 A 32 32 0 0 1 86 50" />
+                            <path id="postmark-bottom" d="M 18 50 A 36 36 0 0 0 90 50" />
+                        </defs>
+                        <circle cx="54" cy="50" r="42" />
+                        <circle cx="54" cy="50" r="24" />
+                        <text><textPath href="#postmark-top" startOffset="50%" text-anchor="middle">CHARLOTTE, NC</textPath></text>
+                        <text><textPath href="#postmark-bottom" startOffset="50%" text-anchor="middle" data-postmark-year>{today.getFullYear()}</textPath></text>
+                        <text class="postmark-center" x="54" y="54.5" text-anchor="middle" data-postmark-day>{postmarkDay}</text>
+                        <path d="M 104 34 q 10 -7 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0" />
+                        <path d="M 104 50 q 10 -7 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0" />
+                        <path d="M 104 66 q 10 -7 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0" />
+                    </svg>
+                    <p class="postcard-label" aria-hidden="true">Address</p>
+                    <ul class="postcard-lines">
+                        <li>Brandon Saldan</li>
+                        <li class="postcard-email-line">
+                            <button type="button" class="postcard-email" data-copy-email={email} aria-label={`Copy email address ${email}`}>{email}</button>
+                            <span class="postcard-line-actions">
+                                <button type="button" data-copy-email={email}>copy</button>
+                                <span aria-hidden="true">·</span>
+                                <a href={`mailto:${email}`}>mail</a>
+                            </span>
+                            <span class="postcard-copied" data-copied aria-hidden="true">Copied</span>
+                        </li>
+                        <li class="postcard-blank-line" aria-hidden="true"></li>
+                        <li class="postcard-blank-line" aria-hidden="true"></li>
+                    </ul>
+                </div>
+            </section>
+            <section class="postcard-face postcard-front" aria-label="Postcard front: Hello from Brandon Saldan" inert>
+                <svg class="greetings-sky" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                    <defs>
+                        <filter id="greetings-grain">
+                            <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch" />
+                            <feColorMatrix type="saturate" values="0" />
+                        </filter>
+                    </defs>
+                    <rect class="greetings-paper" width="1200" height="800" />
+                    <rect class="greetings-grain" width="1200" height="800" filter="url(#greetings-grain)" />
+                </svg>
+                <span class="greetings-frame" aria-hidden="true"></span>
+                <svg class="greetings-art" viewBox="0 0 1200 800" aria-hidden="true">
+                    <defs set:html={greetingClips} />
+                    <g transform="rotate(-4 600 400)">
+                        <text class="greetings-script" x="95" y="125" font-size="100">Hello from</text>
+                        <g set:html={greetingLettering} />
+                    </g>
+                </svg>
+            </section>
+        </div>
+    </div>
+    <p class="sr-only" aria-live="polite" data-copy-status></p>
+
+    {socialLinks.length > 0 && (
+        <section aria-labelledby="contact-elsewhere" class="mb-16 mt-10 sm:mb-24">
+            <p id="contact-elsewhere" class="contact-label">Elsewhere</p>
+            <ul class="border-t border-dashed border-main/35">
+                {socialLinks.map((link) => (
+                    <li class="border-b border-dashed border-main/35">
+                        <a href={link.href} target="_blank" rel="noopener noreferrer" class="group flex items-baseline gap-4 py-3">
+                            <span class="font-serif text-lg group-hover:underline group-hover:decoration-dashed group-hover:decoration-1 group-hover:underline-offset-4">{link.text}</span>
+                            <span class="min-w-0 flex-1 truncate text-sm text-main/65">{link.handle}</span>
+                            <span class="text-sm text-main/65" aria-hidden="true">↗</span>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    )}
+</BaseLayout>
+
+<style>
+    .contact-label {
+        margin-bottom: .75rem;
+        font-size: .65rem;
+        font-weight: 500;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: rgb(var(--color-text-main) / .62);
+    }
+
+    .postcard {
+        --paper: #fffdf8;
+        --ink-stamp: rgb(150 52 38);
+        --ink-print: 124 58 46;
+        --stamp-paper: #fdfcf8;
+        perspective: 1400px;
+        transform: rotate(-1deg);
+        transition: transform .3s ease-out;
+    }
+    .postcard:hover { transform: rotate(0deg); }
+    :global(.dark) .postcard {
+        --paper: #242424;
+        --ink-stamp: rgb(226 128 108);
+        --ink-print: 212 156 136;
+        --stamp-paper: #cfcabe;
+    }
+    .postcard-inner {
+        display: grid;
+        transform-style: preserve-3d;
+        transition: transform .7s cubic-bezier(.2, .7, .2, 1);
+    }
+    .postcard.is-flipped .postcard-inner { transform: rotateY(180deg); }
+    .postcard-face {
+        position: relative;
+        grid-area: 1 / 1;
+        overflow: hidden;
+        background: var(--paper);
+        color: rgb(var(--color-text-main));
+        backface-visibility: hidden;
+        box-shadow:
+            0 2px 4px rgb(54 45 32 / .14),
+            4px 14px 18px rgb(54 45 32 / .1),
+            9px 26px 33px rgb(54 45 32 / .05);
+    }
+    :global(.dark) .postcard-face {
+        box-shadow:
+            0 2px 4px rgb(0 0 0 / .28),
+            4px 14px 18px rgb(0 0 0 / .24),
+            9px 26px 33px rgb(0 0 0 / .1);
+    }
+    .postcard-face::before {
+        position: absolute;
+        z-index: 2;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.45'/%3E%3C/svg%3E");
+        mix-blend-mode: multiply;
+        opacity: .18;
+        content: '';
+        pointer-events: none;
+    }
+
+    .postcard-back {
+        display: grid;
+        gap: 1.25rem;
+        padding: 1.5rem;
+    }
+    .postcard-divider { border-top: 1px solid rgb(var(--ink-print) / .35); }
+    .postcard-heading {
+        display: block;
+        grid-column: 1 / -1;
+        width: 100%;
+        max-width: 7rem;
+        margin-top: .5rem;
+        margin-bottom: 2.5rem;
+        overflow: visible;
+    }
+    .postcard-heading text {
+        font-family: 'Newsreader Variable', serif;
+        font-size: 25px;
+        font-weight: 500;
+        letter-spacing: .32em;
+        fill: rgb(var(--ink-print));
+    }
+    .postcard-heading line { stroke: rgb(var(--ink-print) / .55); stroke-width: 1; }
+    .postcard-heading .postcard-heading-rule { stroke: rgb(var(--ink-print) / .35); }
+    .postcard-label {
+        margin-bottom: .75rem;
+        font-size: .6rem;
+        font-weight: 500;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        color: rgb(var(--ink-print) / .85);
+    }
+    .postcard-note {
+        font-family: 'Newsreader Variable', serif;
+        font-size: 1.125rem;
+        font-style: italic;
+        line-height: 1.5;
+    }
+    .postcard-signature { margin-top: .75rem; font-size: 1.6rem; line-height: 1.2; }
+
+    .postcard-address { padding-top: .25rem; }
+    .postcard-address .postcard-label { margin-bottom: .25rem; }
+    .postcard-stamp {
+        position: absolute;
+        z-index: 1;
+        top: 1.25rem;
+        right: 1.25rem;
+        filter: drop-shadow(0 0 .4px rgb(54 45 32 / .4)) drop-shadow(0 .5px .5px rgb(54 45 32 / .12));
+        transform: rotate(2deg);
+    }
+    :global(.dark) .postcard-stamp { filter: drop-shadow(0 .5px .5px rgb(0 0 0 / .35)); }
+    .postcard-stamp-paper {
+        display: block;
+        width: 3.5rem;
+        height: 5.5rem;
+        padding: .3rem;
+        background: var(--stamp-paper);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, radial-gradient(circle, transparent .14rem, #000 .15rem) -.25rem -.25rem / .5rem .5rem;
+        mask: linear-gradient(#000 0 0) content-box, radial-gradient(circle, transparent .14rem, #000 .15rem) -.25rem -.25rem / .5rem .5rem;
+    }
+    .postcard-stamp img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: sepia(.12);
+    }
+    .postcard-postmark {
+        position: absolute;
+        z-index: 2;
+        top: 3.4rem;
+        right: 2.4rem;
+        width: 8.5rem;
+        fill: none;
+        stroke: rgb(var(--color-text-main) / .42);
+        stroke-width: 1.6;
+        transform: rotate(-9deg);
+    }
+    .postcard-postmark text {
+        fill: rgb(var(--color-text-main) / .48);
+        stroke: none;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: .14em;
+    }
+    .postcard-postmark .postmark-center { font-family: 'Newsreader Variable', serif; font-size: 12px; letter-spacing: .06em; }
+    .postcard-lines li {
+        position: relative;
+        min-height: 2.4rem;
+        padding-top: .45rem;
+        border-bottom: 1px solid rgb(var(--ink-print) / .3);
+        font-family: 'Newsreader Variable', serif;
+        font-size: 1.15rem;
+        line-height: 1.6rem;
+    }
+    .postcard-email {
+        text-align: left;
+        cursor: pointer;
+        text-decoration: underline dashed 1px transparent;
+        text-underline-offset: 4px;
+        transition: text-decoration-color .2s;
+    }
+    .postcard-email:hover { text-decoration-color: rgb(var(--color-text-main) / .45); }
+    .postcard-blank-line { display: none; }
+    .postcard-email-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        column-gap: 1rem;
+    }
+    .postcard-line-actions {
+        display: flex;
+        gap: .4rem;
+        font-size: .85rem;
+        font-style: italic;
+        color: rgb(var(--color-text-main) / .62);
+    }
+    .postcard-line-actions button, .postcard-line-actions a {
+        text-decoration: underline dashed 1px;
+        text-underline-offset: 2px;
+    }
+    .postcard-line-actions button:hover, .postcard-line-actions a:hover {
+        color: rgb(var(--color-text-main));
+        text-decoration-style: solid;
+    }
+    .postcard-email:focus-visible, .postcard-line-actions :focus-visible { outline: 2px solid rgb(var(--color-text-main)); outline-offset: 3px; }
+    .postcard-copied {
+        position: absolute;
+        top: -.35rem;
+        right: .25rem;
+        padding: .2rem .55rem;
+        border: 3px double var(--ink-stamp);
+        border-radius: .2rem;
+        font-size: .75rem;
+        font-weight: 700;
+        letter-spacing: .22em;
+        text-transform: uppercase;
+        color: var(--ink-stamp);
+        opacity: 0;
+        transform: rotate(-10deg) scale(1.6);
+        transition: opacity .15s, transform .18s cubic-bezier(.3, 1.4, .5, 1);
+        pointer-events: none;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 2.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 2.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .postcard-copied.is-stamped {
+        opacity: .9;
+        transform: rotate(-10deg) scale(1);
+    }
+
+    .postcard-front {
+        padding: .75rem;
+        transform: rotateY(180deg);
+    }
+    .greetings-sky, .greetings-art {
+        position: absolute;
+        inset: .75rem;
+        width: calc(100% - 1.5rem);
+        height: calc(100% - 1.5rem);
+    }
+    .postcard-front {
+        --gp-paper: #efe6d2;
+        --gp-ink: #2a231e;
+        --gp-accent: rgb(124 58 46);
+        --gp-depth: rgb(124 58 46);
+        --gp-frame: rgb(124 58 46);
+    }
+    :global(.dark) .postcard-front {
+        --gp-paper: #242424;
+        --gp-ink: #e6dcc8;
+        --gp-accent: rgb(212 156 136);
+        --gp-depth: rgb(132 58 46);
+        --gp-frame: rgb(212 156 136 / .5);
+    }
+    .greetings-paper { fill: var(--gp-paper); }
+    .greetings-frame {
+        position: absolute;
+        inset: calc(.75rem + clamp(.6rem, 1.8%, 1.4rem));
+        border: 2px solid var(--gp-frame);
+        opacity: .75;
+        pointer-events: none;
+    }
+    .greetings-frame::after {
+        position: absolute;
+        inset: 4px;
+        border: 1px solid var(--gp-frame);
+        content: '';
+    }
+    .greetings-grain { mix-blend-mode: multiply; opacity: .14; }
+    .greetings-art :global(.greetings-glyph) {
+        font-family: 'Anton', sans-serif;
+        font-size: 272px;
+    }
+    .greetings-art :global(.greetings-back) { fill: var(--gp-depth); stroke: var(--gp-ink); stroke-width: 5; stroke-linejoin: round; }
+    .greetings-art :global(.greetings-depth) { fill: var(--gp-depth); stroke: var(--gp-depth); stroke-width: 3; stroke-linejoin: round; }
+    .greetings-art :global(.greetings-outline) { fill: var(--gp-ink); stroke: var(--gp-ink); stroke-width: 9; stroke-linejoin: round; }
+    .greetings-art :global(.greetings-edge) { fill: none; stroke: var(--gp-paper); stroke-width: 2.5; }
+    .greetings-script {
+        font-family: 'Yellowtail', cursive;
+        fill: var(--gp-accent);
+        stroke: var(--gp-paper);
+        stroke-width: 6;
+        stroke-linejoin: round;
+        paint-order: stroke;
+    }
+
+    .ink {
+        color: transparent;
+        background: linear-gradient(165deg, rgb(54 40 28 / .9) 0%, rgb(73 56 41 / .84) 52%, rgb(105 83 62 / .72) 100%);
+        background-clip: text;
+        mix-blend-mode: multiply;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    :global(.dark) .ink {
+        background: linear-gradient(165deg, rgb(241 238 230 / .96) 0%, rgb(216 212 202 / .88) 58%, rgb(185 181 171 / .78) 100%);
+        background-clip: text;
+        mix-blend-mode: screen;
+        -webkit-background-clip: text;
+    }
+
+    @media (min-width: 640px) {
+        .postcard-inner { aspect-ratio: 3 / 2; }
+        .postcard-back {
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            grid-template-rows: auto minmax(0, 1fr);
+            column-gap: 1.75rem;
+            row-gap: 1.25rem;
+            padding: 1.75rem;
+        }
+        .postcard-divider { border-top: 0; border-left: 1px solid rgb(var(--ink-print) / .35); }
+        .postcard-message, .postcard-address { display: flex; flex-direction: column; }
+        .postcard-note { margin-top: auto; font-size: 1.25rem; }
+        .postcard-signature { margin-bottom: auto; font-size: 1.85rem; }
+        .postcard-address { padding-top: 0; }
+        .postcard-lines { margin-top: auto; margin-bottom: .75rem; }
+        .postcard-blank-line { display: block; }
+        .postcard-heading { max-width: 12.5rem; margin: 1.25rem auto 0; }
+        .postcard-stamp { top: 1.75rem; right: 1.75rem; }
+        .postcard-stamp-paper { width: 4.5rem; height: 7rem; }
+        .postcard-postmark { top: 3.6rem; right: 2.75rem; width: 12.5rem; }
+    }
+    @media (hover: none), (pointer: coarse) {
+        .postcard-face { backface-visibility: visible; transition: opacity .2s ease; }
+        .postcard-front { opacity: 0; }
+        .postcard.is-flipped .postcard-back { opacity: 0; }
+        .postcard.is-flipped .postcard-front { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .postcard, .postcard-inner, .postcard-copied { transition: none; }
+    }
+</style>
+
+<script>
+    function initContact() {
+        const card = document.querySelector<HTMLElement>('[data-postcard]');
+        if (!card || card.dataset.initialized) return;
+        card.dataset.initialized = 'true';
+        const back = card.querySelector<HTMLElement>('.postcard-back')!;
+        const front = card.querySelector<HTMLElement>('.postcard-front')!;
+        const copyButtons = card.querySelectorAll<HTMLButtonElement>('[data-copy-email]');
+        const copied = card.querySelector<HTMLElement>('[data-copied]');
+        const status = document.querySelector<HTMLElement>('[data-copy-status]');
+        let stampTimer: number | undefined;
+
+        const loadFront = () => {
+            front.querySelectorAll<SVGImageElement>('image[data-src]').forEach((image) => {
+                image.setAttribute('href', image.dataset.src || '');
+                image.removeAttribute('data-src');
+            });
+        };
+        card.addEventListener('pointerenter', loadFront, { once: true });
+        card.addEventListener('focusin', loadFront, { once: true });
+
+        const flip = () => {
+            loadFront();
+            const flipped = card.classList.toggle('is-flipped');
+            back.inert = flipped;
+            front.inert = !flipped;
+        };
+
+        card.addEventListener('click', (event) => {
+            if ((event.target as HTMLElement).closest('button, a')) return;
+            flip();
+        });
+        const now = new Date();
+        const day = card.querySelector('[data-postmark-day]');
+        const year = card.querySelector('[data-postmark-year]');
+        if (day) day.textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+        if (year) year.textContent = String(now.getFullYear());
+
+        const copy = async (address: string) => {
+            try {
+                await navigator.clipboard.writeText(address);
+            } catch {
+                window.location.href = `mailto:${address}`;
+                return;
+            }
+            if (status) status.textContent = 'Email address copied';
+            copied?.classList.remove('is-stamped');
+            void copied?.offsetWidth;
+            copied?.classList.add('is-stamped');
+            window.clearTimeout(stampTimer);
+            stampTimer = window.setTimeout(() => {
+                copied?.classList.remove('is-stamped');
+                if (status) status.textContent = '';
+            }, 2200);
+        };
+        copyButtons.forEach((button) => button.addEventListener('click', () => copy(button.dataset.copyEmail || '')));
+    }
+
+    document.addEventListener('astro:page-load', initContact);
+</script>
