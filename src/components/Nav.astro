@@ -60,7 +60,7 @@ const isInSection = (href: string) => {
 
     <div id={panelId} class="index-panel">
         <div class="index-heading">
-            <span class="index-eyebrow">Contents</span>
+            <a href="/" class="index-eyebrow">brandonsaldan.com</a>
             <button type="button" class="index-close" aria-label="Close contents">Close <span aria-hidden="true">×</span></button>
         </div>
         {groups.map((group) => (
@@ -159,6 +159,7 @@ const isInSection = (href: string) => {
         line-height: 1.2;
         color: rgb(var(--color-text-main));
     }
+    .index-eyebrow:hover { text-decoration: underline; text-underline-offset: 2px; }
     .index-group-label {
         font-size: .65rem;
         font-weight: 500;
@@ -254,7 +255,7 @@ const isInSection = (href: string) => {
     .index-panel:has(.index-link:not(.is-current):is(:hover, :focus-visible)) .index-link.is-current::before {
         transform: translateY(-50%) scaleX(0);
     }
-    .index-link:focus-visible, .index-close:focus-visible, .index-backdrop:focus-visible {
+    .index-link:focus-visible, .index-eyebrow:focus-visible, .index-close:focus-visible, .index-backdrop:focus-visible {
         outline: 2px solid rgb(var(--color-text-main));
         outline-offset: 3px;
     }
