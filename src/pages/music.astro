@@ -56,13 +56,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <h2 id="rotation-heading" class="font-serif text-2xl italic sm:text-3xl">On Repeat</h2>
         </div>
         <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm" role="group" aria-label="Chart period">
-          <button type="button" data-music-period="7day" aria-pressed="false" class="music-period">7 days</button>
+          <button type="button" data-music-period="7day" aria-pressed="false" class="music-period">7 Days</button>
           <button type="button" data-music-period="1month" aria-pressed="true" class="music-period">Month</button>
           <button type="button" data-music-period="12month" aria-pressed="false" class="music-period">Year</button>
-          <button type="button" data-music-period="overall" aria-pressed="false" class="music-period">All time</button>
+          <button type="button" data-music-period="overall" aria-pressed="false" class="music-period">All Time</button>
         </div>
       </div>
-      <p data-chart-status class="text-sm text-main/55" role="status" aria-live="polite">Loading this month’s records...</p>
+      <p data-chart-status class="text-sm text-main/55" role="status" aria-live="polite">Loading This Month’s Records...</p>
       <div data-top-albums class="mt-6 grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-10"></div>
     </section>
 
@@ -96,8 +96,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   @media (hover: hover) {
     .vinyl-composition:hover .vinyl-disc { transform: translate(8%, -50%); }
   }
+  .vinyl-disc::after {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+      transparent 0deg 15deg,
+      rgb(var(--color-bg-main) / .14) 40deg,
+      transparent 65deg 195deg,
+      rgb(var(--color-bg-main) / .18) 220deg,
+      transparent 245deg
+    );
+    opacity: 0;
+    transition: opacity .6s ease;
+    content: '';
+    pointer-events: none;
+  }
+  .vinyl-composition.is-playing .vinyl-disc::after {
+    opacity: 1;
+    animation: vinyl-spin 4.5s linear infinite;
+  }
+  @keyframes vinyl-spin {
+    to { transform: rotate(1turn); }
+  }
   @media (prefers-reduced-motion: reduce) {
     .vinyl-disc { transition: none; }
+    .vinyl-composition.is-playing .vinyl-disc::after { animation: none; }
   }
   .music-period { border-bottom: 1px dashed transparent; padding-bottom: 2px; color: rgb(var(--color-text-main) / .55); }
   .music-period:hover, .music-period[aria-pressed='true'] { border-color: currentColor; color: rgb(var(--color-text-main)); }
@@ -277,14 +301,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     details.append(title, artist);
     const time = document.createElement('span');
     time.className = 'shrink-0 text-right text-xs text-main/50';
-    time.textContent = track.nowPlaying ? 'playing now' : timeAgo(track.playedAt);
+    time.textContent = track.nowPlaying ? 'now playing' : timeAgo(track.playedAt);
     item.append(renderArtwork(track.image, 'track'), details, time);
     return item;
   }
 
   function render(page: HTMLElement, data: MusicResponse) {
     const track = data.recentTracks[0];
-    text(page.querySelector('[data-playing-indicator]'), track?.nowPlaying ? '● Playing Now' : 'Last Played');
+    text(page.querySelector('[data-playing-indicator]'), track?.nowPlaying ? 'Now Playing' : 'Last Played');
+    page.querySelector('[data-vinyl-toggle]')?.classList.toggle('is-playing', Boolean(track?.nowPlaying));
     text(page.querySelector('[data-current-title]'), track?.title ?? 'A little quiet here');
     text(page.querySelector('[data-current-artist]'), track?.artist ?? 'No recent tracks yet.');
     text(page.querySelector('[data-current-album]'), track?.album ?? '');
