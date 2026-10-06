@@ -30,7 +30,7 @@ const folderEntries = {
 
 const navLinks = siteConfig.headerNavLinks || [];
 const groups = [
-    { label: '', links: navLinks.filter((link) => !link.section) },
+    { label: 'About', links: [...navLinks.filter((link) => !link.section), ...(siteConfig.footerNavLinks || [])] },
     { label: 'Work', links: navLinks.filter((link) => link.section === 'work') },
     { label: 'Personal', links: navLinks.filter((link) => link.section === 'personal') },
 ].filter((group) => group.links.length > 0);
@@ -43,25 +43,25 @@ const isInSection = (href: string) => {
 };
 ---
 
-<nav class:list={['site-index relative pb-12 pt-4 sm:pb-8 md:pt-8 xl:pb-0 xl:pt-0', { 'rail-only': railOnly }]} aria-label="Site index">
+<nav class:list={['site-index relative pb-12 pt-4 sm:pb-8 md:pt-8 xl:pb-0 xl:pt-0', { 'rail-only': railOnly }]} aria-label="Contents">
     <div class="h-8 xl:hidden">
         <button
             type="button"
             class="index-trigger relative z-30 -ml-1 flex h-8 w-8 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-main xl:hidden"
             aria-expanded="false"
             aria-controls={panelId}
-            aria-label="Open menu"
+            aria-label="Open contents"
         >
             <span class="index-menu-icon relative h-px w-6 bg-current" aria-hidden="true"></span>
         </button>
     </div>
 
-    <button type="button" class="index-backdrop" aria-label="Close site index" tabindex="-1"></button>
+    <button type="button" class="index-backdrop" aria-label="Close contents" tabindex="-1"></button>
 
     <div id={panelId} class="index-panel">
         <div class="index-heading">
-            <span class="index-eyebrow">Site index</span>
-            <button type="button" class="index-close" aria-label="Close site index">Close <span aria-hidden="true">×</span></button>
+            <span class="index-eyebrow">Contents</span>
+            <button type="button" class="index-close" aria-label="Close contents">Close <span aria-hidden="true">×</span></button>
         </div>
         {groups.map((group) => (
             <div class="index-group">
@@ -77,7 +77,7 @@ const isInSection = (href: string) => {
                                         <summary>
                                             <a
                                                 href={link.href}
-                                                class:list={['index-link', { 'is-current': sectionCurrent }]}
+                                                class:list={['index-link', { 'is-current': isCurrent(link.href) }]}
                                                 aria-current={isCurrent(link.href) ? 'page' : undefined}
                                             >{link.text}</a>
                                             <span class="index-folder-mark" aria-hidden="true">+</span>
@@ -89,7 +89,6 @@ const isInSection = (href: string) => {
                                                         href={child.href}
                                                         class:list={['index-link index-sub-link', { 'is-current': isCurrent(child.href) }]}
                                                         aria-current={isCurrent(child.href) ? 'page' : undefined}
-                                                        title={child.text}
                                                     >{child.text}</a>
                                                 </li>
                                             ))}
@@ -150,20 +149,28 @@ const isInSection = (href: string) => {
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
-        padding-bottom: 1rem;
+        padding-bottom: .55rem;
         border-bottom: 1px dashed rgb(var(--color-border-main) / .32);
     }
-    .index-eyebrow, .index-group-label {
-        font-size: .625rem;
+    .index-eyebrow {
+        font-family: 'Newsreader Variable', serif;
+        font-size: 1.125rem;
+        font-style: italic;
+        line-height: 1.2;
+        color: rgb(var(--color-text-main));
+    }
+    .index-group-label {
+        font-size: .65rem;
         font-weight: 500;
         letter-spacing: .16em;
         text-transform: uppercase;
-        color: rgb(var(--color-text-main) / .48);
+        color: rgb(var(--color-text-main) / .62);
     }
     .index-close {
         font-family: 'Newsreader Variable', serif;
         font-size: .9rem;
         font-style: italic;
+        line-height: 1.2;
         color: rgb(var(--color-text-main) / .62);
     }
     .index-close:hover { color: rgb(var(--color-text-main)); }
@@ -192,6 +199,7 @@ const isInSection = (href: string) => {
     }
     .index-folder > summary::-webkit-details-marker { display: none; }
     .index-folder > summary > .index-link { flex: 1; }
+    li > .index-link { width: 100%; }
     .index-folder-mark {
         padding: .2rem .1rem .2rem .3rem;
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -205,22 +213,12 @@ const isInSection = (href: string) => {
         transform: rotate(45deg);
     }
     .index-sublist {
-        margin: .1rem 0 .2rem .9rem;
-        padding-left: .65rem;
-        border-left: 1px solid rgb(var(--color-border-main) / .28);
+        margin: .1rem 0 .2rem 1rem;
+        padding-left: .42rem;
+        border-left: 1px dashed rgb(var(--color-border-main) / .22);
     }
     .index-sublist > li + li {
-        position: relative;
-        margin-top: .18rem;
-        padding-top: .18rem;
-    }
-    .index-sublist > li + li::before {
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 1rem;
-        border-top: 1px solid rgb(var(--color-border-main) / .13);
-        content: '';
+        margin-top: .36rem;
     }
     .index-sub-link {
         width: 100%;
@@ -232,19 +230,29 @@ const isInSection = (href: string) => {
         white-space: normal;
     }
     .index-link::before {
-        content: '';
+        display: block;
         position: absolute;
         top: 50%;
         left: 0;
-        width: .55rem;
-        border-top: 1px solid currentColor;
+        width: .65rem;
+        height: 1.25rem;
+        font-family: 'Newsreader Variable', serif;
+        font-size: 1.25rem;
+        font-weight: 400;
+        line-height: 1;
+        color: currentColor;
+        content: '~';
         transform: translateY(-50%) scaleX(0);
         transform-origin: left;
         transition: transform .2s;
     }
     .index-link:hover, .index-link:focus-visible, .index-link.is-current { color: rgb(var(--color-text-main)); }
+    .index-link.is-current { font-style: italic; }
     .index-link:hover::before, .index-link:focus-visible::before, .index-link.is-current::before {
         transform: translateY(-50%) scaleX(1);
+    }
+    .index-panel:has(.index-link:not(.is-current):is(:hover, :focus-visible)) .index-link.is-current::before {
+        transform: translateY(-50%) scaleX(0);
     }
     .index-link:focus-visible, .index-close:focus-visible, .index-backdrop:focus-visible {
         outline: 2px solid rgb(var(--color-text-main));
@@ -271,9 +279,11 @@ const isInSection = (href: string) => {
         .index-panel {
             position: sticky;
             inset: 2rem auto auto 0;
-            width: 170px;
+            width: calc(170px + .8rem);
             max-height: calc(100vh - 4rem);
-            padding: 0;
+            margin-inline: -.4rem;
+            padding: 0 .4rem .4rem;
+            overflow-y: auto;
             border: 0;
             background: transparent;
             box-shadow: none;
@@ -284,7 +294,6 @@ const isInSection = (href: string) => {
         .index-close, .index-backdrop { display: none; }
         .index-group { padding: .55rem 0; }
         .index-link { font-size: 1.05rem; }
-        .index-panel { overflow: visible; }
         .index-sublist { width: auto; }
         .index-sub-link { font-size: .94rem; }
     }
@@ -299,14 +308,12 @@ const isInSection = (href: string) => {
 <script>
     let cleanupIndex: (() => void) | undefined;
 
-    function initIndex() {
-        cleanupIndex?.();
-        const nav = document.querySelector<HTMLElement>('.site-index');
-        const trigger = nav?.querySelector<HTMLButtonElement>('.index-trigger');
-        const panel = nav?.querySelector<HTMLElement>('.index-panel');
-        const closeButton = nav?.querySelector<HTMLButtonElement>('.index-close');
-        const backdrop = nav?.querySelector<HTMLButtonElement>('.index-backdrop');
-        if (!nav || !trigger || !panel || !closeButton || !backdrop) return;
+    function setupIndex(nav: HTMLElement) {
+        const trigger = nav.querySelector<HTMLButtonElement>('.index-trigger');
+        const panel = nav.querySelector<HTMLElement>('.index-panel');
+        const closeButton = nav.querySelector<HTMLButtonElement>('.index-close');
+        const backdrop = nav.querySelector<HTMLButtonElement>('.index-backdrop');
+        if (!trigger || !panel || !closeButton || !backdrop) return;
 
         const folderStateKey = 'brandons-place:index-folders';
         const readFolderState = (): Record<string, boolean> => {
@@ -339,11 +346,11 @@ const isInSection = (href: string) => {
 
         const wideScreen = window.matchMedia('(min-width: 1280px)');
         function setOpen(open: boolean, restoreFocus = false) {
-            nav?.classList.toggle('is-open', open);
+            nav.classList.toggle('is-open', open);
             trigger?.setAttribute('aria-expanded', String(open));
-            trigger?.setAttribute('aria-label', open ? 'Close site index' : 'Open site index');
+            trigger?.setAttribute('aria-label', open ? 'Close contents' : 'Open contents');
             if (open) window.setTimeout(() => {
-                if (nav?.classList.contains('is-open')) panel?.querySelector<HTMLAnchorElement>('a')?.focus();
+                if (nav.classList.contains('is-open')) panel?.querySelector<HTMLAnchorElement>('a')?.focus();
             }, 360);
             else if (restoreFocus) trigger?.focus();
         }
@@ -377,7 +384,7 @@ const isInSection = (href: string) => {
         panel.querySelectorAll('a').forEach((link) => link.addEventListener('click', handleLinkClick));
         document.addEventListener('keydown', handleKeydown);
         wideScreen.addEventListener('change', handleViewport);
-        cleanupIndex = () => {
+        return () => {
             trigger.removeEventListener('click', toggle);
             closeButton.removeEventListener('click', close);
             backdrop.removeEventListener('click', close);
@@ -387,6 +394,12 @@ const isInSection = (href: string) => {
             document.removeEventListener('keydown', handleKeydown);
             wideScreen.removeEventListener('change', handleViewport);
         };
+    }
+
+    function initIndex() {
+        cleanupIndex?.();
+        const cleanups = Array.from(document.querySelectorAll<HTMLElement>('.site-index')).map(setupIndex);
+        cleanupIndex = () => cleanups.forEach((cleanup) => cleanup?.());
     }
 
     document.addEventListener('astro:before-swap', () => { cleanupIndex?.(); cleanupIndex = undefined; });

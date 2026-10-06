@@ -25,7 +25,7 @@ const readingTime = Math.ceil(wordCount / wordsPerMinute);
         {showMeta && <div class="mt-1 text-sm leading-normal">
             <FormattedDate date={publishDate} />
             {updatedDate && <> <span>(Updated on <FormattedDate date={updatedDate} />)</span></>}
-            {readingTime > 0 && <> · <span>{readingTime} min read</span></>}
+            {readingTime > 0 && <> · <span>{readingTime} Mins</span></>}
         </div>}
         {excerpt && <div class="mt-3 text-sm leading-normal">{excerpt}</div>}
     </div>
