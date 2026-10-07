@@ -87,6 +87,10 @@ const siteConfig: SiteConfig = {
       text: "Contact",
       href: "/contact",
     },
+    {
+      text: "Résumé",
+      href: "/resume",
+    },
   ],
   socialLinks: [
     {

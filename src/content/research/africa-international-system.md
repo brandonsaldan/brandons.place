@@ -13,7 +13,6 @@ image:
   src: "/research/africa-international-system.webp"
   alt: "Painterly landscape of a waterfront settlement beneath a mountain"
 pageCount: 15
-abstractLabel: "Overview"
 excerpt: "This paper analyzes Africa's position in the international system through major IR and political economy frameworks, then evaluates structural constraints and strategic pathways for greater agency in a multipolar environment."
 publishDate: "2025-05-07"
 paperType: "Research Paper"

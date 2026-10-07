@@ -55,7 +55,6 @@ const research = defineCollection({
         }),
         image: z.object({ src: z.string(), alt: z.string().optional() }).optional(),
         pageCount: z.number().int().positive(),
-        abstractLabel: z.enum(['Abstract', 'Overview']).default('Abstract'),
         excerpt: z.string().optional(),
         publishDate: z.coerce.date(),
         paperType: z.string(),

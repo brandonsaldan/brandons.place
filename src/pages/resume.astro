@@ -1,0 +1,678 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import { certifications, education, experience, honors, lenses, projects, skills, volunteering, type ResumeEntry, type ResumeNote } from '../data/resume';
+import { sortItemsByDateDesc } from '../utils/data-utils';
+
+const description = 'Experience, education, research, and projects across technology, data, and policy.';
+const research = (await getCollection('research')).sort(sortItemsByDateDesc);
+
+const now = new Date();
+const duration = (entry: ResumeEntry) => {
+    if (!entry.start) return undefined;
+    const [startYear, startMonth] = entry.start.split('-').map(Number);
+    const [endYear, endMonth] = entry.end ? entry.end.split('-').map(Number) : [now.getUTCFullYear(), now.getUTCMonth() + 1];
+    if (endYear * 12 + endMonth > now.getUTCFullYear() * 12 + now.getUTCMonth() + 1) return undefined;
+    const months = (endYear - startYear) * 12 + (endMonth - startMonth) + 1;
+    const years = Math.floor(months / 12);
+    const rest = months % 12;
+    return [years && `${years} yr${years > 1 ? 's' : ''}`, rest && `${rest} mo${rest > 1 ? 's' : ''}`].filter(Boolean).join(' ');
+};
+
+const sections: { id: string; label: string; entries: ResumeEntry[] }[] = [
+    { id: 'experience', label: 'Experience', entries: experience },
+    { id: 'education', label: 'Education', entries: education },
+    { id: 'projects', label: 'Projects', entries: projects },
+    { id: 'volunteering', label: 'Volunteering', entries: volunteering },
+];
+
+type NumberedNote = ResumeNote & { number: number; lenses: string };
+let noteCount = 0;
+const pointParts = new Map<ResumeEntry, { parts: (string | NumberedNote)[]; notes: NumberedNote[] }[]>();
+for (const entry of sections.flatMap((section) => section.entries)) {
+    pointParts.set(entry, (entry.points ?? []).map((point) => {
+        const anchored = (entry.notes ?? [])
+            .filter((note) => point.includes(note.after))
+            .map((note) => ({ note, at: point.indexOf(note.after) + note.after.length }))
+            .sort((a, b) => a.at - b.at)
+            .map(({ note, at }) => ({ ...note, at, number: ++noteCount, lenses: entry.lenses.join(' ') }));
+        const parts: (string | NumberedNote)[] = [];
+        let from = 0;
+        for (const note of anchored) {
+            parts.push(point.slice(from, note.at), note);
+            from = note.at;
+        }
+        parts.push(point.slice(from));
+        return { parts, notes: anchored };
+    }));
+}
+const allNotes = [...pointParts.values()].flat().flatMap((point) => point.notes);
+
+const papers = await Promise.all(research.map(async (paper) => {
+    const year = paper.data.publishDate.getUTCFullYear();
+    const doiUrl = `https://doi.org/${paper.data.doi}`;
+    const key = `saldan${year}${paper.data.shortTitle.toLowerCase().replace(/^(the|an?) /, '').match(/[a-z]+/)?.[0] ?? ''}`;
+    const apa = `Saldan, B. (${year}). ${paper.data.title} [${paper.data.paperType}]. University of North Carolina at Charlotte. ${doiUrl}`;
+    const bibtex = [
+        `@misc{${key},`,
+        `  author       = {Saldan, Brandon},`,
+        `  title        = {{${paper.data.title.replace(/(\d)-(\d)/g, '$1--$2')}}},`,
+        `  year         = {${year}},`,
+        `  howpublished = {${paper.data.paperType}, University of North Carolina at Charlotte},`,
+        `  doi          = {${paper.data.doi}},`,
+        `  url          = {${doiUrl}}`,
+        `}`,
+    ].join('\n');
+    const { Content } = await render(paper);
+    return { paper, year, doiUrl, apa, bibtex, Content };
+}));
+---
+
+<BaseLayout title="Résumé" description={description} showHeader={false}>
+    <div class="resume-heading">
+        <h1 class="text-4xl leading-tight font-serif italic sm:text-4xl">Résumé</h1>
+        <Button href="/BrandonSaldanResume.pdf" download="Brandon Saldan Résumé.pdf">Download PDF</Button>
+    </div>
+    <p class="mb-8 text-base leading-relaxed sm:text-lg">{description} For anything not listed here, <a class="resume-inline-link" href="/contact">get in touch</a>.</p>
+
+    <div class="resume-bar">
+        <nav class="resume-lenses" aria-label="Focus the résumé">
+            <span class="resume-lenses-label">Reading for</span>
+            <ul>
+                <li><a href="/resume" data-resume-lens="" aria-current="true">Everything</a></li>
+                {lenses.map((lens) => <li><a href={`/resume?for=${lens.id}`} data-resume-lens={lens.id}>{lens.label}</a></li>)}
+            </ul>
+        </nav>
+        <div class="resume-actions">
+            <button type="button" class="resume-inline-link" data-resume-toggle aria-pressed="false">Expand all</button>
+        </div>
+    </div>
+
+    <div class="resume-document mb-16 sm:mb-24" data-resume-document>
+        {sections.slice(0, 3).map((section) => (
+            <section class="resume-section" id={`resume-${section.id}`} aria-labelledby={`resume-${section.id}-label`}>
+                <h2 id={`resume-${section.id}-label`} class="resume-label">{section.label}</h2>
+                <div class="resume-entries">
+                    {section.entries.map((entry) => (
+                        <details class="resume-entry resume-item" data-lenses={entry.lenses.join(' ')} open>
+                            <summary>
+                                <span class="resume-entry-main">
+                                    <span class="resume-title">{entry.title}</span>
+                                    <span class="resume-org">{entry.organization}{entry.location && ` · ${entry.location}`}</span>
+                                </span>
+                                <span class="resume-when">
+                                    <span class="resume-dates">{entry.dates}</span>
+                                    {duration(entry) && <span class="resume-duration">{duration(entry)}</span>}
+                                </span>
+                                <span class="resume-mark" aria-hidden="true">+</span>
+                            </summary>
+                            <div class="resume-body">
+                                {entry.points && (
+                                    <ul class="resume-points">
+                                        {pointParts.get(entry)!.map((point) => (
+                                            <li>
+                                                {point.parts.map((part) => typeof part === 'string' ? part : <a href={`#resume-note-${part.number}`} id={`resume-ref-${part.number}`} class="resume-fn" aria-expanded="false" aria-controls={`resume-inline-${part.number}`} aria-label={`Note ${part.number}`} title="Show note">{part.number}</a>)}
+                                                {point.notes.map((note) => (
+                                                    <span class="resume-footnote" id={`resume-inline-${note.number}`} hidden>
+                                                        <span class="resume-footnote-number">{note.number}</span>
+                                                        <span>{note.text}{note.href && <> <a class="resume-inline-link" href={note.href} target="_blank" rel="noopener noreferrer">{note.label ?? 'Source'} ↗</a></>}</span>
+                                                    </span>
+                                                ))}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                                {entry.href && <a class="resume-inline-link resume-more" href={entry.href}>Read more</a>}
+                            </div>
+                        </details>
+                    ))}
+                </div>
+            </section>
+        ))}
+
+        {research.length > 0 && (
+            <section class="resume-section" id="resume-publications" aria-labelledby="resume-publications-label">
+                <h2 id="resume-publications-label" class="resume-label">Publications</h2>
+                <ol class="resume-entries resume-citations">
+                    {papers.map(({ paper, year, doiUrl, apa, bibtex, Content }) => (
+                        <li class="resume-citation resume-item" data-lenses="research">
+                            Saldan, B. ({year}).
+                            <a href={`/research/${paper.id}/`}><cite>{paper.data.title}</cite></a>.
+                            {paper.data.paperType}, University of North Carolina at Charlotte.
+                            <a class="resume-doi" href={doiUrl} target="_blank" rel="noopener noreferrer">doi:{paper.data.doi}</a>
+                            <span class="resume-paper-actions">
+                                <span aria-hidden="true">·</span>
+                                <button type="button" class="resume-inline-link" aria-expanded="false" aria-controls={`resume-abstract-${paper.id}`} data-resume-panel>Abstract</button>
+                                <span aria-hidden="true">·</span>
+                                <button type="button" class="resume-inline-link" aria-expanded="false" aria-controls={`resume-cite-${paper.id}`} data-resume-panel>Cite</button>
+                            </span>
+                            <div class="resume-paper-panel resume-abstract" id={`resume-abstract-${paper.id}`} hidden><Content /></div>
+                            <div class="resume-paper-panel resume-cite" id={`resume-cite-${paper.id}`} hidden>
+                                <div class="resume-cite-format">
+                                    <div class="resume-cite-head"><span>APA</span><button type="button" class="resume-copy" data-copy={apa}>Copy</button></div>
+                                    <p>Saldan, B. ({year}). <i>{paper.data.title}</i> [{paper.data.paperType}]. University of North Carolina at Charlotte. {doiUrl}</p>
+                                </div>
+                                <div class="resume-cite-format">
+                                    <div class="resume-cite-head"><span>BibTeX</span><button type="button" class="resume-copy" data-copy={bibtex}>Copy</button></div>
+                                    <pre><code>{bibtex}</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                    ))}
+                </ol>
+            </section>
+        )}
+
+        {sections.slice(3).map((section) => (
+            <section class="resume-section" id={`resume-${section.id}`} aria-labelledby={`resume-${section.id}-label`}>
+                <h2 id={`resume-${section.id}-label`} class="resume-label">{section.label}</h2>
+                <div class="resume-entries">
+                    {section.entries.map((entry) => (
+                        <details class="resume-entry resume-item" data-lenses={entry.lenses.join(' ')} open>
+                            <summary>
+                                <span class="resume-entry-main">
+                                    <span class="resume-title">{entry.title}</span>
+                                    <span class="resume-org">{entry.organization}{entry.location && ` · ${entry.location}`}</span>
+                                </span>
+                                <span class="resume-when">
+                                    <span class="resume-dates">{entry.dates}</span>
+                                    {duration(entry) && <span class="resume-duration">{duration(entry)}</span>}
+                                </span>
+                                <span class="resume-mark" aria-hidden="true">+</span>
+                            </summary>
+                            <div class="resume-body">
+                                {entry.points && (
+                                    <ul class="resume-points">
+                                        {pointParts.get(entry)!.map((point) => (
+                                            <li>
+                                                {point.parts.map((part) => typeof part === 'string' ? part : <a href={`#resume-note-${part.number}`} id={`resume-ref-${part.number}`} class="resume-fn" aria-expanded="false" aria-controls={`resume-inline-${part.number}`} aria-label={`Note ${part.number}`} title="Show note">{part.number}</a>)}
+                                                {point.notes.map((note) => (
+                                                    <span class="resume-footnote" id={`resume-inline-${note.number}`} hidden>
+                                                        <span class="resume-footnote-number">{note.number}</span>
+                                                        <span>{note.text}{note.href && <> <a class="resume-inline-link" href={note.href} target="_blank" rel="noopener noreferrer">{note.label ?? 'Source'} ↗</a></>}</span>
+                                                    </span>
+                                                ))}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                                {entry.href && <a class="resume-inline-link resume-more" href={entry.href}>Read more</a>}
+                            </div>
+                        </details>
+                    ))}
+                </div>
+            </section>
+        ))}
+
+        <section class="resume-section" id="resume-skills" aria-labelledby="resume-skills-label">
+            <h2 id="resume-skills-label" class="resume-label">Skills</h2>
+            <div class="resume-entries resume-skills">
+                {skills.map((group) => (
+                    <div class="resume-item" data-lenses={group.lenses.join(' ')}>
+                        <h3 class="resume-skill-label">{group.label}</h3>
+                        <ul class="resume-tags">{group.items.map((item) => <li>{item}</li>)}</ul>
+                    </div>
+                ))}
+            </div>
+        </section>
+
+        <section class="resume-section" id="resume-honors" aria-labelledby="resume-honors-label">
+            <h2 id="resume-honors-label" class="resume-label">Honors &amp; Awards</h2>
+            <ul class="resume-entries resume-ledger">
+                {honors.map((honor) => (
+                    <li class="resume-item" data-lenses={honor.lenses.join(' ')}>
+                        <span class="resume-entry-main">
+                            <span class="resume-title">{honor.title}</span>
+                            <span class="resume-org">{honor.issuer}</span>
+                            <span class="resume-note">{honor.description}</span>
+                        </span>
+                        <span class="resume-dates">{honor.date}</span>
+                    </li>
+                ))}
+            </ul>
+        </section>
+
+        <section class="resume-section" id="resume-certifications" aria-labelledby="resume-certifications-label">
+            <h2 id="resume-certifications-label" class="resume-label">Certifications</h2>
+            <ul class="resume-entries resume-ledger resume-ledger--compact">
+                {certifications.map((certification) => (
+                    <li class="resume-item" data-lenses={certification.lenses.join(' ')}>
+                        <span class="resume-entry-main">
+                            <span class="resume-title">{certification.title}</span>
+                            <span class="resume-org">{certification.issuer} · <a class="resume-inline-link resume-credential" href={certification.href} target="_blank" rel="noopener noreferrer">View ↗</a></span>
+                        </span>
+                        <span class="resume-dates">{certification.date}</span>
+                    </li>
+                ))}
+            </ul>
+        </section>
+
+        {allNotes.length > 0 && (
+            <section class="resume-section" id="resume-notes" aria-labelledby="resume-notes-label">
+                <h2 id="resume-notes-label" class="resume-label">Notes</h2>
+                <ol class="resume-entries resume-endnotes">
+                    {allNotes.map((note) => (
+                        <li class="resume-item" id={`resume-note-${note.number}`} data-lenses={note.lenses}>
+                            <span class="resume-footnote-number">{note.number}</span>
+                            <span>
+                                {note.text}{note.href && <> <a class="resume-inline-link" href={note.href} target="_blank" rel="noopener noreferrer">{note.label ?? 'Source'} ↗</a></>}
+                                <a class="resume-backref" href={`#resume-ref-${note.number}`} data-resume-backref={note.number} aria-label={`Back to note ${note.number} in the text`}>↑</a>
+                            </span>
+                        </li>
+                    ))}
+                </ol>
+            </section>
+        )}
+    </div>
+</BaseLayout>
+
+<style>
+    .resume-inline-link {
+        font-family: 'Newsreader Variable', serif;
+        font-style: italic;
+        text-decoration: underline dashed 1px;
+        text-underline-offset: 3px;
+    }
+    .resume-inline-link:hover { text-decoration-style: solid; }
+
+    .resume-heading {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: .75rem 1.5rem;
+        margin-bottom: .75rem;
+    }
+    @media (min-width: 640px) { .resume-heading { margin-bottom: 1rem; } }
+    .resume-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: .75rem 1.5rem;
+        margin-bottom: 1.5rem;
+        padding-block: .8rem;
+        border-block: 1px dashed rgb(var(--color-border-main) / .35);
+    }
+    .resume-lenses { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem 1rem; }
+    .resume-lenses-label {
+        font-size: .65rem;
+        font-weight: 500;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: rgb(var(--color-text-main) / .62);
+    }
+    .resume-lenses ul { display: flex; flex-wrap: wrap; gap: .2rem .9rem; }
+    .resume-lenses a {
+        position: relative;
+        display: inline-block;
+        padding-left: .85rem;
+        font-family: 'Newsreader Variable', serif;
+        font-size: 1.02rem;
+        color: rgb(var(--color-text-main) / .55);
+        transition: color .2s;
+    }
+    .resume-lenses a::before {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        font-size: 1.15rem;
+        line-height: 1;
+        content: '~';
+        transform: translateY(-50%) scaleX(0);
+        transform-origin: left;
+        transition: transform .2s;
+    }
+    .resume-lenses a:hover, .resume-lenses a:focus-visible, .resume-lenses a[aria-current] { color: rgb(var(--color-text-main)); }
+    .resume-lenses a[aria-current] { font-style: italic; }
+    .resume-lenses a:hover::before, .resume-lenses a:focus-visible::before, .resume-lenses a[aria-current]::before { transform: translateY(-50%) scaleX(1); }
+    .resume-lenses ul:has(a:not([aria-current]):is(:hover, :focus-visible)) a[aria-current]::before { transform: translateY(-50%) scaleX(0); }
+    .resume-actions { display: flex; gap: 1.1rem; font-size: .95rem; }
+
+    .resume-document > .resume-section:first-child { border-top: 0; }
+    .resume-item, .resume-label { transition: opacity .3s; }
+    .resume-document[data-lens] .resume-item:not(.is-match) { opacity: .28; }
+    .resume-document[data-lens] .resume-item:not(.is-match):hover { opacity: .7; }
+    .resume-document[data-lens] .resume-section:not(:has(.is-match)) .resume-label { opacity: .4; }
+
+    .resume-section {
+        display: grid;
+        gap: .9rem;
+        padding-block: 1.6rem;
+        border-top: 1px dashed rgb(var(--color-border-main) / .35);
+        scroll-margin-top: 2rem;
+    }
+    .resume-label {
+        font-size: .65rem;
+        font-weight: 500;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: rgb(var(--color-text-main) / .62);
+    }
+    @media (min-width: 768px) {
+        .resume-section { grid-template-columns: 9.5rem minmax(0, 1fr); gap: 1.5rem; }
+        .resume-label { padding-top: .35rem; }
+    }
+
+    .resume-entry + .resume-entry { margin-top: .35rem; }
+    .resume-entry > summary {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        align-items: baseline;
+        gap: .2rem 1rem;
+        padding-block: .35rem;
+        cursor: pointer;
+        list-style: none;
+    }
+    .resume-entry > summary::-webkit-details-marker { display: none; }
+    .resume-entry-main { display: flex; flex-direction: column; min-width: 0; }
+    .resume-title {
+        font-family: 'Newsreader Variable', serif;
+        font-size: 1.15rem;
+        font-weight: 500;
+        line-height: 1.3;
+    }
+    .resume-entry > summary:hover .resume-title { text-decoration: underline dashed 1px; text-underline-offset: 4px; }
+    .resume-org { margin-top: .1rem; font-size: .88rem; color: rgb(var(--color-text-main) / .65); }
+    .resume-when { display: flex; flex-direction: column; align-items: flex-end; }
+    .resume-duration {
+        max-height: 0;
+        overflow: hidden;
+        font-size: .72rem;
+        letter-spacing: .04em;
+        color: rgb(var(--color-text-main) / .5);
+        opacity: 0;
+        transition: max-height .2s, opacity .2s;
+    }
+    .resume-entry[open] .resume-duration, .resume-entry > summary:hover .resume-duration { max-height: 1.2rem; opacity: 1; }
+    .resume-dates {
+        font-family: 'Newsreader Variable', serif;
+        font-size: .92rem;
+        font-style: italic;
+        white-space: nowrap;
+        color: rgb(var(--color-text-main) / .65);
+    }
+    .resume-mark {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: .8rem;
+        color: rgb(var(--color-text-main) / .45);
+        transition: transform .2s, color .2s;
+    }
+    .resume-entry[open] .resume-mark { color: rgb(var(--color-text-main) / .7); transform: rotate(45deg); }
+    .resume-body { padding: .35rem 0 .9rem; }
+    .resume-points {
+        padding-left: 1.1rem;
+        list-style: disc;
+        font-size: .95rem;
+        line-height: 1.6;
+    }
+    .resume-points li + li { margin-top: .3rem; }
+    .resume-points li::marker { color: rgb(var(--color-text-main) / .4); }
+    .resume-fn {
+        position: relative;
+        top: -.5em;
+        margin: 0 -.05em 0 .05em;
+        padding: .05em .12em;
+        border-radius: 2px;
+        font-family: 'Newsreader Variable', serif;
+        font-size: .78em;
+        font-weight: 600;
+        line-height: 1;
+        color: rgb(124 58 46);
+        cursor: pointer;
+        transition: background-color .2s, color .2s;
+    }
+    :global(.dark) .resume-fn { color: rgb(212 156 136); }
+    .resume-fn:hover { background: rgb(124 58 46 / .12); }
+    :global(.dark) .resume-fn:hover { background: rgb(212 156 136 / .16); }
+    .resume-fn[aria-expanded='true'] { background: rgb(124 58 46); color: rgb(var(--color-bg-main)); }
+    :global(.dark) .resume-fn[aria-expanded='true'] { background: rgb(212 156 136); color: rgb(var(--color-bg-main)); }
+    .resume-fn:focus-visible { outline: 2px solid rgb(var(--color-text-main)); outline-offset: 2px; }
+    .resume-footnote {
+        display: flex;
+        gap: .6rem;
+        margin: .5rem 0 .35rem;
+        padding: .1rem 0 .1rem .75rem;
+        border-left: 1px solid rgb(124 58 46 / .55);
+        font-family: 'Newsreader Variable', serif;
+        font-size: .98rem;
+        font-style: italic;
+        line-height: 1.5;
+        color: rgb(var(--color-text-main) / .78);
+        animation: resume-note-in .25s ease-out;
+    }
+    :global(.dark) .resume-footnote { border-color: rgb(212 156 136 / .55); }
+    .resume-footnote[hidden] { display: none; }
+    .resume-footnote-number {
+        min-width: .7rem;
+        font-style: normal;
+        font-weight: 600;
+        color: rgb(124 58 46);
+    }
+    :global(.dark) .resume-footnote-number { color: rgb(212 156 136); }
+    .resume-endnotes { display: grid; gap: .7rem; }
+    .resume-endnotes li {
+        display: flex;
+        gap: .6rem;
+        font-family: 'Newsreader Variable', serif;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: rgb(var(--color-text-main) / .8);
+        scroll-margin-top: 2rem;
+    }
+    .resume-endnotes li:target span:last-child { background: rgb(124 58 46 / .1); }
+    :global(.dark) .resume-endnotes li:target span:last-child { background: rgb(212 156 136 / .14); }
+    .resume-backref {
+        margin-left: .35rem;
+        font-family: 'Inter Variable', sans-serif;
+        font-size: .8rem;
+        color: rgb(var(--color-text-main) / .5);
+    }
+    .resume-backref:hover { color: rgb(var(--color-text-main)); }
+    @keyframes resume-note-in { from { opacity: 0; transform: translateY(-.2rem); } }
+    .resume-more { display: inline-block; margin-top: .5rem; font-size: .92rem; }
+    @media (max-width: 639px) {
+        .resume-entry > summary { grid-template-columns: minmax(0, 1fr) auto; }
+        .resume-when { grid-row: 2; grid-column: 1; flex-direction: row; align-items: baseline; gap: .5rem; }
+        .resume-duration::before { content: '· '; }
+        .resume-mark { grid-row: 1; grid-column: 2; }
+    }
+
+    .resume-citations { display: grid; gap: 1rem; }
+    .resume-citation {
+        padding-left: 1.75rem;
+        text-indent: -1.75rem;
+        font-family: 'Newsreader Variable', serif;
+        font-size: 1.05rem;
+        line-height: 1.5;
+    }
+    .resume-citation cite { font-style: italic; }
+    .resume-citation a:not(.resume-doi):hover cite { text-decoration: underline dashed 1px; text-underline-offset: 4px; }
+    .resume-doi {
+        font-family: 'Inter Variable', sans-serif;
+        font-size: .85rem;
+        white-space: nowrap;
+        color: rgb(var(--color-text-main) / .65);
+        text-decoration: underline dashed 1px;
+        text-underline-offset: 3px;
+    }
+    .resume-doi:hover { text-decoration-style: solid; }
+
+    .resume-skills { display: grid; gap: 1.1rem 2rem; }
+    @media (min-width: 640px) { .resume-skills { grid-template-columns: 1fr 1fr; } }
+    .resume-skill-label {
+        margin-bottom: .45rem;
+        font-family: 'Newsreader Variable', serif;
+        font-size: 1rem;
+        font-style: italic;
+    }
+    .resume-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .resume-tags li {
+        padding: .15rem .55rem;
+        border: 1px dashed rgb(var(--color-border-main) / .45);
+        border-radius: 9999px;
+        font-size: .82rem;
+    }
+
+    .resume-paper-actions { white-space: nowrap; }
+    .resume-paper-actions > span { margin-inline: .2rem; color: rgb(var(--color-text-main) / .45); }
+    .resume-paper-actions button { font-size: 1rem; }
+    .resume-paper-panel {
+        margin: .7rem 0 .2rem;
+        padding-left: .85rem;
+        border-left: 1px solid rgb(124 58 46 / .55);
+        text-indent: 0;
+        animation: resume-note-in .25s ease-out;
+    }
+    :global(.dark) .resume-paper-panel { border-color: rgb(212 156 136 / .55); }
+    .resume-paper-panel[hidden] { display: none; }
+    .resume-abstract { font-size: .98rem; line-height: 1.6; color: rgb(var(--color-text-main) / .82); }
+    .resume-abstract :global(p + p) { margin-top: .7rem; }
+    .resume-entries, .resume-cite-format { min-width: 0; }
+    .resume-cite { display: grid; grid-template-columns: minmax(0, 1fr); gap: .9rem; }
+    .resume-cite-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: .3rem;
+    }
+    .resume-cite-head span {
+        font-family: 'Inter Variable', sans-serif;
+        font-size: .65rem;
+        font-weight: 500;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: rgb(var(--color-text-main) / .62);
+    }
+    .resume-copy {
+        font-family: 'Inter Variable', sans-serif;
+        font-size: .75rem;
+        color: rgb(var(--color-text-main) / .65);
+        text-decoration: underline dashed 1px;
+        text-underline-offset: 3px;
+    }
+    .resume-copy:hover { color: rgb(var(--color-text-main)); text-decoration-style: solid; }
+    .resume-cite p { font-size: .98rem; line-height: 1.5; overflow-wrap: anywhere; }
+    .resume-cite pre {
+        overflow-x: auto;
+        padding: .7rem .8rem;
+        border: 1px dashed rgb(var(--color-border-main) / .35);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: .74rem;
+        line-height: 1.55;
+        color: rgb(var(--color-text-main) / .85);
+    }
+
+    .resume-ledger { display: grid; gap: .9rem; }
+    .resume-ledger li {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: baseline;
+        gap: 1rem;
+    }
+    .resume-ledger .resume-title { font-size: 1.05rem; }
+    .resume-ledger--compact { gap: .6rem; }
+    .resume-credential { font-size: .95rem; color: rgb(var(--color-text-main)); }
+    .resume-note { margin-top: .35rem; font-size: .92rem; line-height: 1.55; }
+
+    @media (prefers-reduced-motion: reduce) {
+        .resume-fn, .resume-footnote, .resume-paper-panel, .resume-mark, .resume-item, .resume-label, .resume-lenses a, .resume-lenses a::before, .resume-duration { transition: none; animation: none; }
+    }
+</style>
+
+<script>
+    function initResume() {
+        const toggle = document.querySelector<HTMLButtonElement>('[data-resume-toggle]');
+        const documentEl = document.querySelector<HTMLElement>('[data-resume-document]');
+        if (!toggle || !documentEl || toggle.dataset.initialized) return;
+        toggle.dataset.initialized = 'true';
+        const entries = Array.from(documentEl.querySelectorAll<HTMLDetailsElement>('.resume-entry'));
+        const items = Array.from(documentEl.querySelectorAll<HTMLElement>('.resume-item'));
+        const lensLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-resume-lens]'));
+
+        const sync = () => {
+            const allOpen = entries.every((entry) => entry.open);
+            toggle.textContent = allOpen ? 'Collapse all' : 'Expand all';
+            toggle.setAttribute('aria-pressed', String(allOpen));
+        };
+
+        const setLens = (lens: string) => {
+            if (!lensLinks.some((link) => link.dataset.resumeLens === lens)) lens = '';
+            lensLinks.forEach((link) => link.toggleAttribute('aria-current', link.dataset.resumeLens === lens));
+            if (lens) documentEl.dataset.lens = lens;
+            else delete documentEl.dataset.lens;
+            items.forEach((item) => {
+                const match = !lens || (item.dataset.lenses ?? '').split(' ').includes(lens);
+                item.classList.toggle('is-match', Boolean(lens) && match);
+                if (item instanceof HTMLDetailsElement) item.open = match;
+            });
+            sync();
+        };
+
+        const showNote = (number: string, open = true) => {
+            const marker = document.getElementById(`resume-ref-${number}`);
+            const note = document.getElementById(`resume-inline-${number}`);
+            if (!marker || !note) return;
+            note.hidden = !open;
+            marker.setAttribute('aria-expanded', String(open));
+            if (open) marker.closest('details')?.setAttribute('open', '');
+            return marker;
+        };
+        documentEl.querySelectorAll<HTMLAnchorElement>('.resume-fn').forEach((marker) => {
+            marker.addEventListener('click', (event) => {
+                event.preventDefault();
+                showNote(marker.textContent ?? '', marker.getAttribute('aria-expanded') !== 'true');
+            });
+        });
+        documentEl.querySelectorAll<HTMLAnchorElement>('[data-resume-backref]').forEach((link) => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const marker = showNote(link.dataset.resumeBackref ?? '');
+                marker?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                marker?.focus({ preventScroll: true });
+            });
+        });
+
+        documentEl.querySelectorAll<HTMLButtonElement>('[data-resume-panel]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const panel = document.getElementById(button.getAttribute('aria-controls') ?? '');
+                if (!panel) return;
+                panel.hidden = !panel.hidden;
+                button.setAttribute('aria-expanded', String(!panel.hidden));
+            });
+        });
+
+        documentEl.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(button.dataset.copy ?? '');
+                    button.textContent = 'Copied';
+                } catch {
+                    button.textContent = 'Couldn’t copy';
+                }
+                window.setTimeout(() => { button.textContent = 'Copy'; }, 1600);
+            });
+        });
+
+        toggle.addEventListener('click', () => {
+            const open = !entries.every((entry) => entry.open);
+            entries.forEach((entry) => { entry.open = open; });
+            sync();
+        });
+        entries.forEach((entry) => entry.addEventListener('toggle', sync));
+        lensLinks.forEach((link) => link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const lens = link.dataset.resumeLens ?? '';
+            const url = new URL(window.location.href);
+            if (lens) url.searchParams.set('for', lens);
+            else url.searchParams.delete('for');
+            history.replaceState(history.state, '', url);
+            setLens(lens);
+        }));
+
+        setLens(new URLSearchParams(window.location.search).get('for') ?? '');
+    }
+
+    document.addEventListener('astro:page-load', initResume);
+</script>

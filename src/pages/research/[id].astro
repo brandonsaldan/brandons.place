@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 
 type Props = { paper: CollectionEntry<'research'> };
 const { paper } = Astro.props;
-const { title, shortTitle, subtitle, publishDate, paperType, pageCount, doi, pdfUrl, repositories, frameworks, abstractLabel, excerpt, researchContext } = paper.data;
+const { title, shortTitle, subtitle, publishDate, paperType, pageCount, doi, pdfUrl, repositories, frameworks, excerpt, researchContext } = paper.data;
 const { Content } = await render(paper);
 const citation = researchCitation(paper);
 const pageURL = new URL(`/research/${paper.id}/`, Astro.site).href;
