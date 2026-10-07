@@ -9,9 +9,10 @@ export type Props = {
     description?: string;
     image?: { src: string; alt?: string };
     pageType?: 'website' | 'article';
+    noindex?: boolean;
 };
 
-const { description = '', image = siteConfig.image, pageType = 'website' } = Astro.props;
+const { description = '', image = siteConfig.image, pageType = 'website', noindex = false } = Astro.props;
 const title = [Astro.props.title, siteConfig.title].filter(Boolean).join(' | ');
 const resolvedImage = image?.src
     ? {
@@ -19,16 +20,8 @@ const resolvedImage = image?.src
           alt: image.alt
       }
     : undefined;
-const canonicalURL = new URL(Astro.request.url, Astro.site);
-
-function formatCanonicalURL(url: string | URL) {
-    const path = url.toString();
-    const hasQueryParams = path.includes('?');
-    if (hasQueryParams) {
-        path.replace(/\/?$/, '');
-    }
-    return path.replace(/\/?$/, hasQueryParams ? '' : '/');
-}
+const pathname = Astro.url.pathname;
+const canonicalURL = new URL(pathname.endsWith('/') || pathname.endsWith('.html') ? pathname : `${pathname}/`, Astro.site).href;
 ---
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -42,19 +35,20 @@ function formatCanonicalURL(url: string | URL) {
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="RSS" />
 
-<link rel="canonical" href={formatCanonicalURL(canonicalURL)} />
+<link rel="canonical" href={canonicalURL} />
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex" />}
 
 <meta property="og:type" content={pageType} />
-<meta property="og:url" content={formatCanonicalURL(canonicalURL)} />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 {resolvedImage?.src && <meta property="og:image" content={resolvedImage.src} />}
 {resolvedImage?.alt && <meta property="og:image:alt" content={resolvedImage.alt} />}
 
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={formatCanonicalURL(canonicalURL)} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-{resolvedImage?.src && <meta property="twitter:image" content={resolvedImage.src} />}
-{resolvedImage?.alt && <meta name="twitter:image:alt" content={resolvedImage?.alt} />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{resolvedImage?.src && <meta name="twitter:image" content={resolvedImage.src} />}
+{resolvedImage?.alt && <meta name="twitter:image:alt" content={resolvedImage.alt} />}

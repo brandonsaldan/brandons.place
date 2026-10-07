@@ -19,6 +19,8 @@ paperType: "Research Paper"
 pdfUrl: "/papers/SaldanAfricaInTheInternationalSystem.pdf"
 readingTime: 18
 isFeatured: true
+seo:
+  description: "Brandon Saldan examines Africa's role in the international system, its structural constraints, and paths toward greater agency in a multipolar world."
 ---
 
 This paper examines Africa's position in the international system through multiple theoretical frameworks, analyzing how historical legacies and structural constraints intersect with emerging opportunities for greater continental agency. By integrating realist, liberal, world-systems, and constructivist perspectives, the analysis reveals the limitations of single-framework approaches in explaining Africa's complex international relations. The study explores dimensions of Africa's global engagement, including the contested role of development aid, persistent security challenges exemplified by the Congo Wars and Sahel terrorism, and the implications of shifting external partnerships with China and Russia.

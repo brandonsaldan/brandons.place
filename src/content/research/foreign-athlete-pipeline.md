@@ -19,6 +19,8 @@ paperType: "Research Paper"
 pdfUrl: "/papers/SaldanTheForeignAthletePipeline.pdf"
 readingTime: 20
 isFeatured: true
+seo:
+  description: "Brandon Saldan traces how international recruiting in college athletics intersects with immigration law, geopolitics, and national security."
 ---
 
 This timeline examines the history of international student-athlete recruitment in American intercollegiate athletics as a geopolitical, legal, and national security problem rather than a purely sporting one. Tracing developments from the Cold War period through 2026, the timeline argues that the foreign athlete pipeline has functioned simultaneously as an instrument of American soft power, a surface for foreign government talent acquisition programs, and a site of compounding legal inequity for the international athletes whose labor it extracts.

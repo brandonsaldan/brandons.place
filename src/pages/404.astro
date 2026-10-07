@@ -7,7 +7,7 @@ const today = new Date();
 const postmarkDay = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
 ---
 
-<BaseLayout title="Page not found" description="This page doesn’t exist or has moved." showHeader={false}>
+<BaseLayout title="Page not found" description="This page doesn’t exist or has moved." noindex showHeader={false}>
     <h1 class="mb-3 text-4xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Return to sender</h1>
     <p class="mb-10 text-base leading-relaxed sm:text-lg">The page you’re looking for doesn’t exist, or it has moved somewhere else.</p>
 

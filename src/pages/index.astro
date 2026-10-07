@@ -19,9 +19,31 @@ const featuredProjects = projects.filter(({ data }) => data.isFeatured);
 
 const research = (await getCollection('research')).sort(sortItemsByDateDesc);
 const featuredResearch = research.filter(({ data }) => data.isFeatured);
+const siteURL = new URL('/', Astro.site).href;
+const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'WebSite',
+            '@id': `${siteURL}#website`,
+            url: siteURL,
+            name: siteConfig.title,
+            description: siteConfig.description,
+            publisher: { '@id': `${siteURL}#person` }
+        },
+        {
+            '@type': 'Person',
+            '@id': `${siteURL}#person`,
+            name: siteConfig.title,
+            url: siteURL,
+            sameAs: siteConfig.socialLinks?.map(({ href }) => href)
+        }
+    ]
+};
 ---
 
 <BaseLayout description={siteConfig.description} image={siteConfig.image} homeLayout>
+    <script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData).replaceAll('<', '\\u003c')} />
     <Hero slot="intro" />
     <PhotoGallery slot="gallery" />
     {

@@ -21,10 +21,11 @@ const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'ScholarlyArticle',
     headline: title,
-    author: { '@type': 'Person', name: 'Brandon Saldan' },
-    dateCreated: publishDate.toISOString().slice(0, 10),
+    author: { '@type': 'Person', name: 'Brandon Saldan', url: new URL('/', Astro.site).href },
+    datePublished: publishDate.toISOString().slice(0, 10),
     description: excerpt,
     url: pageURL,
+    mainEntityOfPage: pageURL,
     identifier: { '@type': 'PropertyValue', propertyID: 'DOI', value: doi },
     sameAs: [`https://doi.org/${doi}`, ...Object.values(repositories)],
     encoding: { '@type': 'MediaObject', contentUrl: pdfURL, encodingFormat: 'application/pdf' },
@@ -34,7 +35,7 @@ const structuredData = {
 const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2 hover:decoration-solid';
 ---
 
-<BaseLayout title={paper.data.seo?.title ?? shortTitle} description={paper.data.seo?.description ?? excerpt} pageType="article" showHeader={false}>
+<BaseLayout title={paper.data.seo?.title ?? shortTitle} description={paper.data.seo?.description ?? excerpt} image={paper.data.seo?.image} pageType="article" showHeader={false}>
     <Fragment slot="head">
         <meta name="citation_title" content={title} />
         <meta name="citation_author" content="Brandon Saldan" />
