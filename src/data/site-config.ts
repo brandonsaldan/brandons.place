@@ -73,11 +73,13 @@ const siteConfig: SiteConfig = {
       text: "Press",
       href: "/press",
       section: 'work',
+      showOnHome: false,
     },
     {
       text: "Grants",
       href: "/grants",
       section: 'work',
+      showOnHome: false,
     },
     {
       text: "Travel",
