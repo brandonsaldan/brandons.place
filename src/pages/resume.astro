@@ -76,9 +76,9 @@ const papers = await Promise.all(research.map(async (paper) => {
     </div>
     <p class="mb-8 text-base leading-relaxed sm:text-lg">{description} For anything not listed here, <a class="resume-inline-link" href="/contact">get in touch</a>.</p>
 
-    <div class="resume-bar">
-        <nav class="resume-lenses" aria-label="Focus the résumé">
-            <span class="resume-lenses-label">Reading for</span>
+    <div class="resume-controls">
+        <nav class="resume-lenses" aria-label="Focus on résumé content">
+            <span class="resume-lenses-label">Focus on</span>
             <ul>
                 <li><a href="/resume" data-resume-lens="" aria-current="true">Everything</a></li>
                 {lenses.map((lens) => <li><a href={`/resume?for=${lens.id}`} data-resume-lens={lens.id}>{lens.label}</a></li>)}
@@ -285,7 +285,7 @@ const papers = await Promise.all(research.map(async (paper) => {
         margin-bottom: .75rem;
     }
     @media (min-width: 640px) { .resume-heading { margin-bottom: 1rem; } }
-    .resume-bar {
+    .resume-controls {
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
