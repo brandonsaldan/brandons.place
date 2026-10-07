@@ -70,6 +70,11 @@ const siteConfig: SiteConfig = {
       section: 'work',
     },
     {
+      text: "Press",
+      href: "/press",
+      section: 'work',
+    },
+    {
       text: "Travel",
       href: "/travel",
       section: 'personal',
