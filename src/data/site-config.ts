@@ -75,6 +75,11 @@ const siteConfig: SiteConfig = {
       section: 'work',
     },
     {
+      text: "Grants",
+      href: "/grants",
+      section: 'work',
+    },
+    {
       text: "Travel",
       href: "/travel",
       section: 'personal',

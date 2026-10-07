@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const applicationUrl = 'https://airtable.com/appbBigvOyUCojEAU/pagngFqHu5eeoAxhg/form';
+const grantees = [
+    { project: 'Novel CRISPR delivery method in plants', builder: 'Ashna', field: 'Biotechnology' },
+    { project: 'Radio tracking for high-altitude balloons', builder: 'Maxwell', field: 'Aerospace' },
+    { project: 'Novel chemical processes for mine waste repurposing', builder: 'Carlos', field: 'Climate' },
+    { project: 'E-skin to give robots a sense of touch', builder: 'Visharad', field: 'Robotics' },
+    { project: 'Computer vision to detect falls in elder care', builder: 'Aaryan', field: 'Health Technology' },
+    { project: 'AI literacy for K–12 students', builder: 'Winston', field: 'Education' },
+    { project: 'Low-cost robotic prosthetic hands', builder: 'Tawheed', field: 'Health Technology' },
+];
+---
+
+<BaseLayout
+    title="Grants"
+    description="Brandon Saldan helps award $100–$500 microgrants to young builders as a general partner at Bagel Fund."
+    showHeader={false}
+>
+    <h1 class="mb-3 text-4xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Grants</h1>
+    <p class="mb-10 text-base leading-relaxed sm:text-lg">I’m a general partner at <a class="grants-link grants-intro-link" href="https://bagel.fund/" target="_blank" rel="noopener noreferrer">Bagel Fund <span aria-hidden="true">↗</span></a>, a nonprofit that gives $100–$500 non-dilutive microgrants to young builders.</p>
+
+    <div class="grants-sections mb-16 sm:mb-24">
+        <section class="grants-section" aria-labelledby="grants-fund">
+            <h2 id="grants-fund" class="grants-label">Who we support</h2>
+            <div class="grants-body">
+                <p>We typically award grants to builders ages 14–18 in financial need who are working on meaningful problems with scrappy solutions. Projects span software, robotics, health technology, education, and more.</p>
+            </div>
+        </section>
+
+        <section class="grants-section" aria-labelledby="grants-grantees">
+            <h2 id="grants-grantees" class="grants-label">Example projects</h2>
+            <div class="grants-body">
+                <ol class="grants-list">
+                    {grantees.map((item, index) => (
+                        <li>
+                            <span class="grants-number">{String(index + 1).padStart(2, '0')}</span>
+                            <div>
+                                <h3>{item.project}</h3>
+                                <p>{item.builder} <span aria-hidden="true">·</span> {item.field}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ol>
+                <a class="grants-link grants-directory" href="https://bagel.fund/" target="_blank" rel="noopener noreferrer">More projects at Bagel Fund <span aria-hidden="true">↗</span></a>
+            </div>
+        </section>
+
+        <section class="grants-section" aria-labelledby="grants-applications">
+            <h2 id="grants-applications" class="grants-label">Applications</h2>
+            <div class="grants-body">
+                <p>If you’re a young builder seeking support for a project, you can apply through Bagel Fund.</p>
+                <a class="grants-link grants-apply" href={applicationUrl} target="_blank" rel="noopener noreferrer">Apply for a microgrant <span aria-hidden="true">↗</span></a>
+            </div>
+        </section>
+    </div>
+</BaseLayout>
+
+<style>
+    .grants-sections { display: grid; }
+    .grants-section { display: grid; gap: .9rem; padding-block: 1.6rem; border-top: 1px dashed rgb(var(--color-border-main) / .35); }
+    .grants-section:first-child { padding-top: 0; border-top: 0; }
+    .grants-label { color: rgb(var(--color-text-main) / .62); font-size: .65rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; }
+    .grants-body { min-width: 0; }
+    .grants-body > p { max-width: 38rem; font-size: .95rem; line-height: 1.65; }
+    .grants-link { text-decoration: underline dashed 1px rgb(var(--color-text-main) / .4); text-underline-offset: 3px; }
+    .grants-link:hover { text-decoration-style: solid; }
+    .grants-intro-link { font-family: 'Newsreader Variable', serif; font-style: italic; text-decoration-color: currentColor; white-space: nowrap; }
+    .grants-list li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: .8rem; }
+    .grants-list li + li { margin-top: 1.35rem; }
+    .grants-number { padding-top: .15rem; color: rgb(var(--color-text-main) / .5); font-family: 'Newsreader Variable', serif; font-size: 1rem; font-style: italic; }
+    .grants-list h3 { font-family: 'Newsreader Variable', serif; font-size: 1.3rem; font-weight: 500; line-height: 1.2; }
+    .grants-list p { margin-top: .1rem; color: rgb(var(--color-text-main) / .65); font-size: .78rem; }
+    .grants-directory, .grants-apply { display: inline-block; margin-top: 1.4rem; font-family: 'Newsreader Variable', serif; font-size: 1.05rem; font-style: italic; }
+    .grants-apply { margin-top: .8rem; }
+    @media (min-width: 768px) {
+        .grants-section { grid-template-columns: 9.5rem minmax(0, 1fr); gap: 1.5rem; }
+        .grants-label { padding-top: .25rem; }
+    }
+</style>
