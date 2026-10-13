@@ -29,7 +29,7 @@ const subjectByPost: Record<string, string> = {
 const relatedRepository = repositoryByPost[post.id];
 const subject = subjectByPost[post.id];
 const pageURL = new URL(`/blog/${post.id}/`, Astro.site).href;
-const social = await socialImage(seo?.image ?? post.data.image);
+const social = (await socialImage(seo?.image ?? post.data.image)) ?? { src: `/og/blog/${post.id}.png`, alt: title };
 const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',

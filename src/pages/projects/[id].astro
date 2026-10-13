@@ -37,7 +37,7 @@ const repository = repositoryByProject[project.id];
 const details = detailsByProject[project.id];
 ---
 
-<BaseLayout title={seo?.title ?? rawTitle} description={seo?.description ?? description} image={await socialImage(seo?.image)} pageType="article" showHeader={false}>
+<BaseLayout title={seo?.title ?? rawTitle} description={seo?.description ?? description} image={(await socialImage(seo?.image)) ?? { src: `/og/projects/${project.id}.png`, alt: title }} pageType="article" showHeader={false}>
     <article class="mb-16 sm:mb-24">
         <header class="mb-8 sm:mb-12">
             <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">
