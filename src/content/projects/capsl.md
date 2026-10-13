@@ -5,6 +5,9 @@ publishDate: "2024-01-15"
 image:
   src: "../../assets/projects/art/capsl.webp"
   alt: "Painterly artwork selected for the Capsl project"
+status: "Experimental"
+focus: "Product Design & Frontend"
+repository: "https://github.com/trycapsl"
 isFeatured: false
 seo:
   image:

@@ -5,6 +5,9 @@ publishDate: "2024-01-15"
 image:
   src: "../../assets/projects/art/nocturne.webp"
   alt: "Painterly artwork selected for the Nocturne project"
+status: "Active Development"
+focus: "Embedded Systems & Open Source"
+repository: "https://github.com/usenocturne"
 isFeatured: true
 seo:
   image:

@@ -19,6 +19,8 @@ const blog = defineCollection({
         publishDate: z.coerce.date(),
         image: imageSchema(image),
         updatedDate: z.coerce.date().optional(),
+        subject: z.string().optional(),
+        repository: z.object({ label: z.string(), href: z.string().url() }).optional(),
         isFeatured: z.boolean().default(false),
         seo: seoSchema(image).optional()
     })
@@ -31,6 +33,9 @@ const projects = defineCollection({
         description: z.string().optional(),
         publishDate: z.coerce.date(),
         image: imageSchema(image),
+        status: z.string(),
+        focus: z.string(),
+        repository: z.string().url().optional(),
         isFeatured: z.boolean().default(false),
         seo: seoSchema(image).optional()
     })

@@ -15,19 +15,9 @@ export async function getStaticPaths() {
 type Props = { post: CollectionEntry<'blog'> };
 
 const { post } = Astro.props;
-const { title, publishDate, updatedDate, excerpt, seo } = post.data;
+const { title, publishDate, updatedDate, excerpt, subject, repository, seo } = post.data;
 const { Content } = await render(post);
 const readingTime = Math.max(1, Math.ceil((post.body || '').trim().split(/\s+/).filter(Boolean).length / 200));
-const repositoryByPost: Record<string, { label: string; href: string }> = {
-    'democratizing-genetic-analysis': { label: 'Codex', href: 'https://github.com/brandonsaldan/codex' },
-    'spotify-car-things-second-chapter': { label: 'Nocturne', href: 'https://github.com/usenocturne' }
-};
-const subjectByPost: Record<string, string> = {
-    'democratizing-genetic-analysis': 'Genetic Analysis',
-    'spotify-car-things-second-chapter': 'Hardware Revitalization'
-};
-const relatedRepository = repositoryByPost[post.id];
-const subject = subjectByPost[post.id];
 const pageURL = new URL(`/blog/${post.id}/`, Astro.site).href;
 const social = (await socialImage(seo?.image ?? post.data.image)) ?? { src: `/og/blog/${post.id}.png`, alt: title };
 const structuredData = {
@@ -86,14 +76,18 @@ const structuredData = {
 
             <aside class="self-start sm:sticky sm:top-8">
                 <div class="border-t-2 border-main pt-4">
-                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access related project</p>
-                    <Button class="mt-4 w-full" href={relatedRepository.href} target="_blank" rel="noreferrer">View {relatedRepository.label} <span class="ml-2 text-xs not-italic">↗</span></Button>
-                    <div class="mt-5 border-t border-main/15"></div>
-                    <div class="mt-4">
+                    {repository && (
+                        <>
+                            <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access related project</p>
+                            <Button class="mt-4 w-full" href={repository.href} target="_blank" rel="noreferrer">View {repository.label} <span class="ml-2 text-xs not-italic">↗</span></Button>
+                            <div class="mt-5 border-t border-main/15"></div>
+                        </>
+                    )}
+                    <div class={repository ? 'mt-4' : ''}>
                         <p class="text-xs uppercase tracking-[0.16em] text-main/50">Post details</p>
                         <dl class="mt-4 space-y-4 text-sm leading-relaxed">
                             <div><dt class="text-main/50">Format</dt><dd>Blog Post</dd></div>
-                            <div><dt class="text-main/50">Subject</dt><dd>{subject}</dd></div>
+                            {subject && <div><dt class="text-main/50">Subject</dt><dd>{subject}</dd></div>}
                         </dl>
                     </div>
                 </div>

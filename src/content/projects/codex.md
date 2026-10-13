@@ -5,6 +5,9 @@ publishDate: "2024-01-15"
 image:
   src: "../../assets/projects/art/codex.webp"
   alt: "Painterly artwork selected for the Codex project"
+status: "Dormant"
+focus: "Bioinformatics & Privacy"
+repository: "https://github.com/brandonsaldan/codex"
 isFeatured: true
 seo:
   image:

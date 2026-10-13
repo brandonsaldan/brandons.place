@@ -5,6 +5,10 @@ publishDate: "2023-06-13"
 image:
   src: "../../assets/blog/art/democratizing-genetic-analysis.webp"
   alt: "Painterly artwork selected for Democratizing Genetic Analysis"
+subject: "Genetic Analysis"
+repository:
+  label: "Codex"
+  href: "https://github.com/brandonsaldan/codex"
 isFeatured: true
 seo:
   image:

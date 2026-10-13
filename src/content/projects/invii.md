@@ -5,6 +5,9 @@ publishDate: "2021-01-15"
 image:
   src: "../../assets/projects/art/invii.webp"
   alt: "Painterly artwork selected for the Invii project"
+status: "Concluded January 2025"
+focus: "Restaurant Technology"
+repository: "https://github.com/getinvii"
 isFeatured: true
 seo:
   image:

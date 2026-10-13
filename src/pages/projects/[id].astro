@@ -15,26 +15,12 @@ export async function getStaticPaths() {
 type Props = { project: CollectionEntry<'projects'> };
 
 const { project } = Astro.props;
-const { title: rawTitle, description, publishDate, seo } = project.data;
+const { title: rawTitle, description, publishDate, status, focus, repository, seo } = project.data;
 const { Content } = await render(project);
 const readingTime = Math.max(1, Math.ceil((project.body || '').trim().split(/\s+/).filter(Boolean).length / 200));
 const separatorIndex = rawTitle.indexOf(' - ');
 const title = separatorIndex === -1 ? rawTitle : rawTitle.slice(0, separatorIndex);
 const subtitle = separatorIndex === -1 ? undefined : rawTitle.slice(separatorIndex + 3);
-const repositoryByProject: Record<string, string> = {
-    capsl: 'https://github.com/trycapsl',
-    codex: 'https://github.com/brandonsaldan/codex',
-    invii: 'https://github.com/getinvii',
-    nocturne: 'https://github.com/usenocturne'
-};
-const detailsByProject: Record<string, { status: string; focus: string }> = {
-    capsl: { status: 'Experimental', focus: 'Product Design & Frontend' },
-    codex: { status: 'Dormant', focus: 'Bioinformatics & Privacy' },
-    invii: { status: 'Concluded January 2025', focus: 'Restaurant Technology' },
-    nocturne: { status: 'Active Development', focus: 'Embedded Systems & Open Source' }
-};
-const repository = repositoryByProject[project.id];
-const details = detailsByProject[project.id];
 ---
 
 <BaseLayout title={seo?.title ?? rawTitle} description={seo?.description ?? description} image={(await socialImage(seo?.image)) ?? { src: `/og/projects/${project.id}.png`, alt: title }} pageType="article" showHeader={false}>
@@ -70,14 +56,18 @@ const details = detailsByProject[project.id];
 
             <aside class="self-start sm:sticky sm:top-8">
                 <div class="border-t-2 border-main pt-4">
-                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access this project</p>
-                    <Button class="mt-4 w-full" href={repository} target="_blank" rel="noreferrer">View on GitHub <span class="ml-2 text-xs not-italic">↗</span></Button>
-                    <div class="mt-5 border-t border-main/15"></div>
-                    <div class="mt-4">
+                    {repository && (
+                        <>
+                            <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access this project</p>
+                            <Button class="mt-4 w-full" href={repository} target="_blank" rel="noreferrer">View on GitHub <span class="ml-2 text-xs not-italic">↗</span></Button>
+                            <div class="mt-5 border-t border-main/15"></div>
+                        </>
+                    )}
+                    <div class={repository ? 'mt-4' : ''}>
                         <p class="text-xs uppercase tracking-[0.16em] text-main/50">Project details</p>
                         <dl class="mt-4 space-y-4 text-sm leading-relaxed">
-                            <div><dt class="text-main/50">Status</dt><dd>{details.status}</dd></div>
-                            <div><dt class="text-main/50">Focus</dt><dd>{details.focus}</dd></div>
+                            <div><dt class="text-main/50">Status</dt><dd>{status}</dd></div>
+                            <div><dt class="text-main/50">Focus</dt><dd>{focus}</dd></div>
                         </dl>
                     </div>
                 </div>
