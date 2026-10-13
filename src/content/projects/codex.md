@@ -1,7 +1,7 @@
 ---
 title: "Codex - In-Browser Bioinformatics Tool"
 description: "An open-source platform that enables users to explore and understand their genetic data through SNPedia integration."
-publishDate: "2024-01-15"
+publishDate: "2023-05-22"
 image:
   src: "../../assets/projects/art/codex.webp"
   alt: "Painterly artwork selected for the Codex project"
