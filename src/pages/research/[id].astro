@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import { formatResearchDate, researchCitation } from '../../utils/research-utils';
+import { socialImage } from '../../utils/image-utils';
 
 export async function getStaticPaths() {
     return (await getCollection('research')).map((paper) => ({
@@ -35,7 +36,7 @@ const structuredData = {
 const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2 hover:decoration-solid';
 ---
 
-<BaseLayout title={paper.data.seo?.title ?? shortTitle} description={paper.data.seo?.description ?? excerpt} image={paper.data.seo?.image} pageType="article" showHeader={false}>
+<BaseLayout title={paper.data.seo?.title ?? shortTitle} description={paper.data.seo?.description ?? excerpt} image={await socialImage(paper.data.seo?.image)} pageType="article" showHeader={false}>
     <Fragment slot="head">
         <meta name="citation_title" content={title} />
         <meta name="citation_author" content="Brandon Saldan" />

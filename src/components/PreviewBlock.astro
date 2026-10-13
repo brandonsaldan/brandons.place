@@ -1,5 +1,7 @@
 ---
-type Props = { index?: number; image?: { src: string; alt?: string }; href: string };
+import { Image } from 'astro:assets';
+
+type Props = { index?: number; image?: { src: ImageMetadata; alt?: string }; href: string };
 
 const { index = 0, image, href } = Astro.props;
 ---
@@ -9,7 +11,7 @@ const { index = 0, image, href } = Astro.props;
         <a class="block select-none" href={href} draggable="false" aria-label="Open entry">
             {
                 image ? (
-                    <img class="relative aspect-[4/3] w-full object-cover transition-opacity duration-200 group-hover/preview:opacity-80 sm:aspect-auto sm:h-56" src={image.src} alt={image.alt ?? ''} draggable="false" />
+                    <Image class="relative aspect-[4/3] w-full object-cover transition-opacity duration-200 group-hover/preview:opacity-80 sm:aspect-auto sm:h-56" src={image.src} alt={image.alt ?? ''} width={480} widths={[240, 480, 720, 960]} sizes="(min-width: 640px) 15rem, 100vw" draggable="false" />
                 ) : (
                     <div class="relative aspect-[4/3] w-full overflow-hidden bg-muted transition-opacity duration-200 group-hover/preview:opacity-80 sm:aspect-auto sm:h-56">
                         <div class="absolute -left-8 top-1/2 h-px w-[130%] rotate-[-20deg] bg-main/20"></div>

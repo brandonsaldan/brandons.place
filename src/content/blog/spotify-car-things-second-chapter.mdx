@@ -3,16 +3,19 @@ title: "Spotify Car Thing's Second Chapter"
 excerpt: "How a discontinued car accessory inspired an open-source project to save thousands of devices from the landfill through creative engineering."
 publishDate: "2024-01-15"
 image:
-  src: "/blog/art/spotify-car-things.webp"
+  src: "../../assets/blog/art/spotify-car-things.webp"
   alt: "Painterly artwork selected for Spotify Car Thing's Second Chapter"
 isFeatured: true
 seo:
   image:
-    src: "/projects/nocturne/nocturne-1.png"
+    src: "../../assets/projects/nocturne/nocturne-1.png"
     alt: "Nocturne OS running on Spotify Car Thing hardware"
 ---
 
-<img src="/projects/nocturne/nocturne-1.png" alt="Nocturne OS running on Spotify Car Thing hardware" class="w-full" />
+import { Image } from 'astro:assets';
+import nocturneAlpha from '../../assets/blog/nocturne-1.png';
+
+![Nocturne OS running on Spotify Car Thing hardware](../../assets/projects/nocturne/nocturne-1.png)
 
 In July 2022, Spotify made a decision that would affect thousands of users: they discontinued the Car Thing, their first hardware product, after just five months on the market. While many saw this as just another failed product launch, I saw an opportunity. These devices – packed with capable hardware including an Amlogic S905D2 SoC, a beautiful display, and robust build quality – were about to become electronic waste. That didn't sit right with me.
 
@@ -61,7 +64,7 @@ The community's response was overwhelming. Users began contributing ideas and co
 Despite these challenges, Nocturne had received coverage in numerous news outlets, including [TechSpot](https://www.techspot.com/news/105402-developers-keep-spotify-car-thing-alive-custom-firmware.html), [Ars Technica](https://arstechnica.com/gaming/2024/11/firmware-hacks-are-rejuvenating-spotifys-car-thing-before-the-company-bricks-it/), and [Gizmodo](https://gizmodo.com/spotify-car-thing-is-being-kept-alive-by-devoted-tinkerers-2000536816), and had been reviewed by large tech YouTubers, gathering over 3 million views. It even earned a mention on Linus Tech Tips' "The WAN Show".
 
 <figure>
-    <img src="/blog/nocturne-1.png" alt="Nocturne OS running on Spotify Car Thing hardware" width="600" class="mx-auto" />
+    <Image src={nocturneAlpha} alt="Nocturne OS running on Spotify Car Thing hardware" width={600} densities={[1, 2]} class="mx-auto" />
     <figcaption class="text-sm text-center mt-2 font-serif text-gray-600">v1.0.0-alpha running on my Car Thing with a Raspberry Pi Zero 2 W connected.</figcaption>
 </figure>
 

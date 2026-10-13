@@ -3,6 +3,7 @@ import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
+import { socialImage } from '../../utils/image-utils';
 
 export async function getStaticPaths() {
     return (await getCollection('projects')).map((project) => ({
@@ -36,7 +37,7 @@ const repository = repositoryByProject[project.id];
 const details = detailsByProject[project.id];
 ---
 
-<BaseLayout title={seo?.title ?? rawTitle} description={seo?.description ?? description} image={seo?.image} pageType="article" showHeader={false}>
+<BaseLayout title={seo?.title ?? rawTitle} description={seo?.description ?? description} image={await socialImage(seo?.image)} pageType="article" showHeader={false}>
     <article class="mb-16 sm:mb-24">
         <header class="mb-8 sm:mb-12">
             <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">

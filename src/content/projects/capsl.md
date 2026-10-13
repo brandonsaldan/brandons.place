@@ -3,16 +3,16 @@ title: "Capsl - Personalized Supplement Service"
 description: "An experimental supplement personalization and delivery service enabling custom vitamin and supplement blends through an engaging digital experience."
 publishDate: "2024-01-15"
 image:
-  src: "/projects/art/capsl.webp"
+  src: "../../assets/projects/art/capsl.webp"
   alt: "Painterly artwork selected for the Capsl project"
 isFeatured: false
 seo:
   image:
-    src: "/projects/capsl/capsl-1.png"
+    src: "../../assets/projects/capsl/capsl-1.png"
     alt: "Capsl supplement personalization interface"
 ---
 
-<img src="/projects/capsl/capsl-1.png" alt="Capsl supplement personalization interface" class="w-full" />
+![Capsl supplement personalization interface](../../assets/projects/capsl/capsl-1.png)
 
 Capsl is an experimental supplement personalization platform that enables users to create custom vitamin and supplement blends tailored to their individual needs. The experience combines a questionnaire-driven recommendation flow with subscription management, account tools, and a cohesive product identity.
 
