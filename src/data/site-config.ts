@@ -51,7 +51,7 @@ const siteConfig: SiteConfig = {
     "Business analytics",
     "Business strategy",
     "Software engineering",
-    "International relations",
+    "Political science",
   ],
   image: {
     src: "/og/og-main.png",
