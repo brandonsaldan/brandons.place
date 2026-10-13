@@ -3,16 +3,20 @@ title: "Democratizing Genetic Analysis"
 excerpt: "How a missing $12 report led to building an open-source platform for genetic analysis, attracting attention from industry pioneers."
 publishDate: "2023-06-13"
 image:
-  src: "/blog/art/democratizing-genetic-analysis.webp"
+  src: "../../assets/blog/art/democratizing-genetic-analysis.webp"
   alt: "Painterly artwork selected for Democratizing Genetic Analysis"
+subject: "Genetic Analysis"
+repository:
+  label: "Codex"
+  href: "https://github.com/brandonsaldan/codex"
 isFeatured: true
 seo:
   image:
-    src: "/projects/codex/codex-1.png"
+    src: "../../assets/projects/codex/codex-1.png"
     alt: "Codex platform interface"
 ---
 
-<img src="/projects/codex/codex-1.png" alt="Codex platform interface" class="w-full" />
+![Codex platform interface](../../assets/projects/codex/codex-1.png)
 
 **Project Overview:**
 Codex emerged from a personal need to analyze genetic raw data after losing access to a paid report. What started as a solution to avoid repaying $12 evolved into an innovative bioinformatics platform that processes genetic information locally in-browser, making sophisticated genetic analysis accessible to everyone.

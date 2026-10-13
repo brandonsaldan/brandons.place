@@ -3,16 +3,19 @@ title: "Invii - Restaurant Management Platform"
 description: "A comprehensive suite of tools designed to modernize restaurant operations through innovative technology solutions."
 publishDate: "2021-01-15"
 image:
-  src: "/projects/art/invii.webp"
+  src: "../../assets/projects/art/invii.webp"
   alt: "Painterly artwork selected for the Invii project"
+status: "Concluded January 2025"
+focus: "Restaurant Technology"
+repository: "https://github.com/getinvii"
 isFeatured: true
 seo:
   image:
-    src: "/projects/invii/invii-1.png"
+    src: "../../assets/projects/invii/invii-1.png"
     alt: "Invii platform interface"
 ---
 
-<img src="/projects/invii/invii-1.png" alt="Invii platform interface" class="w-full" />
+![Invii platform interface](../../assets/projects/invii/invii-1.png)
 
 Invii was a restaurant management platform built to explore how software could modernize day-to-day operations. As founder and CEO, I led the development of a suite of tools intended to streamline internal work, improve customer engagement, and create a more connected payment and reporting experience for restaurants.
 

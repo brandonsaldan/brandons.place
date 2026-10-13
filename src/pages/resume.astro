@@ -69,7 +69,7 @@ const papers = await Promise.all(research.map(async (paper) => {
 }));
 ---
 
-<BaseLayout title="Résumé" description={description} showHeader={false}>
+<BaseLayout title="Résumé" image={{ src: '/og/resume.png', alt: 'Résumé' }} description={description} showHeader={false}>
     <div class="resume-heading">
         <h1 class="text-4xl leading-tight font-serif italic sm:text-4xl">Résumé</h1>
         <Button href="/BrandonSaldanResume.pdf" download="Brandon Saldan Résumé.pdf">Download PDF</Button>

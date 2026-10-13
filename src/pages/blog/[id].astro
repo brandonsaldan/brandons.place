@@ -3,6 +3,7 @@ import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
+import { socialImage } from '../../utils/image-utils';
 
 export async function getStaticPaths() {
     return (await getCollection('blog')).map((post) => ({
@@ -14,27 +15,17 @@ export async function getStaticPaths() {
 type Props = { post: CollectionEntry<'blog'> };
 
 const { post } = Astro.props;
-const { title, publishDate, updatedDate, excerpt, seo } = post.data;
+const { title, publishDate, updatedDate, excerpt, subject, repository, seo } = post.data;
 const { Content } = await render(post);
 const readingTime = Math.max(1, Math.ceil((post.body || '').trim().split(/\s+/).filter(Boolean).length / 200));
-const repositoryByPost: Record<string, { label: string; href: string }> = {
-    'democratizing-genetic-analysis': { label: 'Codex', href: 'https://github.com/brandonsaldan/codex' },
-    'spotify-car-things-second-chapter': { label: 'Nocturne', href: 'https://github.com/usenocturne' }
-};
-const subjectByPost: Record<string, string> = {
-    'democratizing-genetic-analysis': 'Genetic Analysis',
-    'spotify-car-things-second-chapter': 'Hardware Revitalization'
-};
-const relatedRepository = repositoryByPost[post.id];
-const subject = subjectByPost[post.id];
 const pageURL = new URL(`/blog/${post.id}/`, Astro.site).href;
-const socialImage = seo?.image ?? post.data.image;
+const social = (await socialImage(seo?.image ?? post.data.image)) ?? { src: `/og/blog/${post.id}.png`, alt: title };
 const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: title,
     description: seo?.description ?? excerpt,
-    image: socialImage?.src ? new URL(socialImage.src, Astro.site).href : undefined,
+    image: social ? new URL(social.src, Astro.site).href : undefined,
     datePublished: publishDate.toISOString(),
     dateModified: (updatedDate ?? publishDate).toISOString(),
     author: { '@type': 'Person', name: 'Brandon Saldan', url: new URL('/', Astro.site).href },
@@ -42,7 +33,7 @@ const structuredData = {
 };
 ---
 
-<BaseLayout title={seo?.title ?? title} description={seo?.description ?? excerpt} image={socialImage} pageType="article" showHeader={false}>
+<BaseLayout title={seo?.title ?? title} description={seo?.description ?? excerpt} image={social} pageType="article" showHeader={false}>
     <Fragment slot="head">
         <meta property="article:published_time" content={publishDate.toISOString()} />
         {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
@@ -85,14 +76,18 @@ const structuredData = {
 
             <aside class="self-start sm:sticky sm:top-8">
                 <div class="border-t-2 border-main pt-4">
-                    <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access related project</p>
-                    <Button class="mt-4 w-full" href={relatedRepository.href} target="_blank" rel="noreferrer">View {relatedRepository.label} <span class="ml-2 text-xs not-italic">↗</span></Button>
-                    <div class="mt-5 border-t border-main/15"></div>
-                    <div class="mt-4">
+                    {repository && (
+                        <>
+                            <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access related project</p>
+                            <Button class="mt-4 w-full" href={repository.href} target="_blank" rel="noreferrer">View {repository.label} <span class="ml-2 text-xs not-italic">↗</span></Button>
+                            <div class="mt-5 border-t border-main/15"></div>
+                        </>
+                    )}
+                    <div class={repository ? 'mt-4' : ''}>
                         <p class="text-xs uppercase tracking-[0.16em] text-main/50">Post details</p>
                         <dl class="mt-4 space-y-4 text-sm leading-relaxed">
                             <div><dt class="text-main/50">Format</dt><dd>Blog Post</dd></div>
-                            <div><dt class="text-main/50">Subject</dt><dd>{subject}</dd></div>
+                            {subject && <div><dt class="text-main/50">Subject</dt><dd>{subject}</dd></div>}
                         </dl>
                     </div>
                 </div>

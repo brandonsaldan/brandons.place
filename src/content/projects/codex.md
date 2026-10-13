@@ -3,16 +3,19 @@ title: "Codex - In-Browser Bioinformatics Tool"
 description: "An open-source platform that enables users to explore and understand their genetic data through SNPedia integration."
 publishDate: "2024-01-15"
 image:
-  src: "/projects/art/codex.webp"
+  src: "../../assets/projects/art/codex.webp"
   alt: "Painterly artwork selected for the Codex project"
+status: "Dormant"
+focus: "Bioinformatics & Privacy"
+repository: "https://github.com/brandonsaldan/codex"
 isFeatured: true
 seo:
   image:
-    src: "/projects/codex/codex-1.png"
+    src: "../../assets/projects/codex/codex-1.png"
     alt: "Codex interface displaying genetic analysis"
 ---
 
-<img src="/projects/codex/codex-1.png" alt="Codex interface displaying genetic analysis" class="w-full" />
+![Codex interface displaying genetic analysis](../../assets/projects/codex/codex-1.png)
 
 Codex is an open-source interface for analyzing genetic data through SNPedia's research database. It processes raw DNA files in the browser, allowing users to explore genetic variants without uploading sensitive information to a server. The result is a privacy-first tool that makes a complex bioinformatics workflow easier to understand.
 

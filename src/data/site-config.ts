@@ -28,6 +28,7 @@ export type SiteConfig = {
   description: string;
   image?: Image;
   portrait?: Image;
+  topics?: string[];
   headerNavLinks?: HeaderLink[];
   footerNavLinks?: Link[];
   socialLinks?: Link[];
@@ -45,6 +46,13 @@ const siteConfig: SiteConfig = {
     src: "/photos/portrait.webp",
     alt: "Brandon Saldan",
   },
+  topics: [
+    "National security",
+    "Technology policy",
+    "Management information systems",
+    "Business analytics",
+    "Software engineering",
+  ],
   image: {
     src: "/og/og-main.png",
     alt: "Brandon Saldan - Frontend Software Engineer",

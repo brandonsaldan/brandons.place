@@ -3,16 +3,19 @@ title: "Nocturne - Custom Firmware and Companion App Ecosystem for Spotify Car T
 description: "An open-source custom firmware and companion app ecosystem that repurposes discontinued Spotify Car Thing hardware into a standalone Bluetooth media controller."
 publishDate: "2024-01-15"
 image:
-  src: "/projects/art/nocturne.webp"
+  src: "../../assets/projects/art/nocturne.webp"
   alt: "Painterly artwork selected for the Nocturne project"
+status: "Active Development"
+focus: "Embedded Systems & Open Source"
+repository: "https://github.com/usenocturne"
 isFeatured: true
 seo:
   image:
-    src: "/projects/nocturne/nocturne-1.png"
+    src: "../../assets/projects/nocturne/nocturne-1.png"
     alt: "Nocturne running on Spotify Car Thing hardware"
 ---
 
-<img src="/projects/nocturne/nocturne-1.png" alt="Nocturne running on Spotify Car Thing hardware" class="w-full" />
+![Nocturne running on Spotify Car Thing hardware](../../assets/projects/nocturne/nocturne-1.png)
 
 Nocturne is an open-source custom firmware and companion app ecosystem that repurposes the discontinued Spotify Car Thing into a standalone Bluetooth media controller. Built by a three-person engineering team, it replaces the stock firmware with a complete embedded Linux distribution, a real-time Rust system daemon, a touch-optimized web application running on the device, and native companion apps for iOS and Android. The project has more than 700 sponsors and a community of more than 1,700 members.
 
