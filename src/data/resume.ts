@@ -212,5 +212,6 @@ export const skills: { label: string; items: string[]; lenses: ResumeLens[] }[] 
     { label: 'Project & Product', items: ['Agile', 'Scrum', 'Sprint Planning', 'Backlog Grooming'], lenses: ['business', 'leadership'] },
     { label: 'Web & App Development', items: ['HTML', 'CSS', 'JS/TS', 'Vue.js', 'Nuxt', 'Next.js', 'React', 'Rust', 'TailwindCSS', 'Figma', 'WCAG/ARIA'], lenses: ['engineering'] },
     { label: 'Data & Reporting', items: ['SQL', 'Excel', 'Data Visualization', 'KPIs'], lenses: ['business', 'research'] },
+    { label: 'Research & Writing', items: ['Literature Review', 'Policy Analysis', 'International Relations Theory', 'Historical Research', 'Academic Writing'], lenses: ['research'] },
     { label: 'Business Tools', items: ['Jira', 'Trello', 'Google Workspace', 'Microsoft Office', 'Slack'], lenses: ['business'] },
 ];
