@@ -1,7 +1,7 @@
 ---
 title: "Capsl - Personalized Supplement Service"
 description: "An experimental supplement personalization and delivery service enabling custom vitamin and supplement blends through an engaging digital experience."
-publishDate: "2024-01-15"
+publishDate: "2023-03-15"
 image:
   src: "../../assets/projects/art/capsl.webp"
   alt: "Painterly artwork selected for the Capsl project"

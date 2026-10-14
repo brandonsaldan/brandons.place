@@ -41,21 +41,21 @@ const siteConfig: SiteConfig = {
   title: "Brandon Saldan",
   subtitle: "MIS/BA @ UNC Charlotte",
   description:
-    "Technical professional and undergraduate researcher in national security, technology, and policy based in Charlotte, NC",
+    "Brandon Saldan works across technology, data, and business strategy. Management Information Systems and Business Analytics student at UNC Charlotte.",
   portrait: {
     src: "/photos/portrait.webp",
     alt: "Brandon Saldan",
   },
   topics: [
-    "National security",
-    "Technology policy",
     "Management information systems",
     "Business analytics",
+    "Business strategy",
     "Software engineering",
+    "Political science",
   ],
   image: {
     src: "/og/og-main.png",
-    alt: "Brandon Saldan - Frontend Software Engineer",
+    alt: "Brandon Saldan, MIS/BA @ UNC Charlotte",
   },
   headerNavLinks: [
     {
@@ -131,7 +131,7 @@ const siteConfig: SiteConfig = {
     },
   ],
   hero: {
-    text: "I work at the intersection of technology, data, and business strategy, helping teams navigate complex operational and organizational problems, especially in policy and national security.\n\nI’m a Technical Advisor at Apple, completing dual degrees in Management Information Systems and Business Analytics with minors in Political Science and American Studies. My software engineering background helps me evaluate technology, lead technical work, and build digital products that connect engineering with business strategy.",
+    text: "I work at the intersection of technology, data, and business strategy, helping teams navigate complex operational and organizational problems.\n\nI’m completing dual degrees in Management Information Systems and Business Analytics with minors in Political Science and American Studies at the University of North Carolina at Charlotte, and work in technical support at Apple. My software engineering background helps me evaluate technology, lead technical work, build products that connect engineering with business strategy, and explain technical decisions plainly to people outside engineering.",
     actions: [
       {
         text: "Get in Touch",
