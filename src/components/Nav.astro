@@ -19,7 +19,7 @@ const folderEntries = {
         href: `/projects/${entry.id}/`,
     })),
     '/research': research.sort(sortByDateDesc).map((entry) => ({
-        text: entry.data.shortTitle,
+        text: entry.data.navTitle ?? entry.data.shortTitle,
         href: `/research/${entry.id}/`,
     })),
     '/blog': blog.sort(sortByDateDesc).map((entry) => ({

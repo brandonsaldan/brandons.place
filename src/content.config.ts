@@ -46,6 +46,7 @@ const research = defineCollection({
     schema: ({ image }) => z.object({
         title: z.string(),
         shortTitle: z.string(),
+        navTitle: z.string().optional(),
         subtitle: z.string(),
         researchContext: z.string(),
         frameworks: z.array(z.string()),
