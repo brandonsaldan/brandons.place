@@ -1,5 +1,6 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import { formatResearchDate, researchCitation } from '../../utils/research-utils';
@@ -14,9 +15,10 @@ export async function getStaticPaths() {
 
 type Props = { paper: CollectionEntry<'research'> };
 const { paper } = Astro.props;
-const { title, shortTitle, subtitle, publishDate, paperType, pageCount, doi, pdfUrl, repositories, frameworks, excerpt, researchContext } = paper.data;
+const { title, shortTitle, subtitle, publishDate, paperType, pageCount, doi, pdfUrl, repositories, frameworks, excerpt, researchContext, summary, figure } = paper.data;
 const { Content } = await render(paper);
 const citation = researchCitation(paper);
+const fullFigure = figure && (await getImage({ src: figure.src, width: Math.min(2400, figure.src.width), format: 'webp' }));
 const pageURL = new URL(`/research/${paper.id}/`, Astro.site).href;
 const pdfURL = new URL(pdfUrl, Astro.site).href;
 const structuredData = {
@@ -77,6 +79,14 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
 
         <div class="mt-10 grid gap-12 sm:mt-14 sm:grid-cols-[minmax(0,1fr)_14rem] sm:gap-16">
             <div class="min-w-0">
+                {summary && (
+                    <section class="mb-10 sm:mb-12" aria-labelledby="in-brief">
+                        <h2 id="in-brief" class="mb-5 text-2xl font-serif italic sm:text-3xl">In brief</h2>
+                        <ul class="space-y-4 border-l-2 border-main pl-5 text-base leading-relaxed sm:text-lg">
+                            {summary.map((point) => <li>{point}</li>)}
+                        </ul>
+                    </section>
+                )}
                 <h2 class="mb-5 text-2xl font-serif italic sm:text-3xl">Abstract</h2>
                 <div class="max-w-none prose prose-main sm:prose-lg">
                     <Content />
@@ -108,6 +118,17 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
                 </div>
             </aside>
         </div>
+
+        {figure && fullFigure && (
+            <figure class="mt-12 sm:mt-16">
+                <p class="mb-2 text-xs uppercase tracking-[0.16em] text-main/50">Key figure</p>
+                <h2 class="mb-6 text-2xl font-serif italic sm:text-3xl">{figure.title}</h2>
+                <a class="block rounded-sm bg-white p-3 sm:p-5" href={fullFigure.src} target="_blank" rel="noreferrer" aria-label="Open the full-size figure">
+                    <Image class="h-auto w-full" src={figure.src} alt={figure.alt} widths={[640, 960, 1536]} sizes="(min-width: 1280px) 768px, 100vw" />
+                </a>
+                <figcaption class="mt-4 max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">{figure.caption}</figcaption>
+            </figure>
+        )}
 
         <div class="mt-12 sm:mt-16">
             <details>
