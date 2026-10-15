@@ -292,6 +292,12 @@ const isInSection = (href: string) => {
             transform: none;
             transition: none;
         }
+        .index-panel { scrollbar-width: none; }
+        .index-panel::-webkit-scrollbar { display: none; }
+        .index-panel.has-more {
+            -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 5.5rem), rgb(0 0 0 / .3) calc(100% - 2rem), transparent);
+            mask-image: linear-gradient(to bottom, #000 calc(100% - 5.5rem), rgb(0 0 0 / .3) calc(100% - 2rem), transparent);
+        }
         .index-close, .index-backdrop { display: none; }
         .index-group { padding: .55rem 0; }
         .index-link { font-size: 1.05rem; }
@@ -335,14 +341,10 @@ const isInSection = (href: string) => {
         };
         const folderDetails = Array.from(panel.querySelectorAll<HTMLDetailsElement>('[data-index-folder]'));
         const folderState = readFolderState();
+        const openFolder = folderDetails.find((folder) => folder.open)
+            ?? folderDetails.find((folder) => folderState[folder.dataset.indexFolder ?? '']);
         folderDetails.forEach((folder) => {
-            const href = folder.dataset.indexFolder;
-            if (!href) return;
-            const isActiveSection = folder.open;
-            if (isActiveSection) return;
-            if (Object.prototype.hasOwnProperty.call(folderState, href)) {
-                folder.open = folderState[href];
-            }
+            folder.open = folder === openFolder;
         });
 
         const wideScreen = window.matchMedia('(min-width: 1280px)');
@@ -366,6 +368,15 @@ const isInSection = (href: string) => {
             });
         };
         const handleViewport = () => setOpen(false);
+        const updateOverflow = () => {
+            panel.classList.toggle('has-more', panel.scrollTop + panel.clientHeight < panel.scrollHeight - 1);
+        };
+        const revealCurrent = () => {
+            const current = panel.querySelector<HTMLElement>('.index-sub-link.is-current') ?? panel.querySelector<HTMLElement>('.index-link.is-current');
+            if (!current || !wideScreen.matches) return;
+            const hidden = current.getBoundingClientRect().bottom - panel.getBoundingClientRect().bottom + 48;
+            if (hidden > 0) panel.scrollTop += hidden;
+        };
         const handleLinkClick = () => setOpen(false);
         const handleFolderToggle = (event: Event) => {
             const folder = event.currentTarget;
@@ -375,6 +386,10 @@ const isInSection = (href: string) => {
             const state = readFolderState();
             state[href] = folder.open;
             writeFolderState(state);
+            if (folder.open) folderDetails.forEach((other) => {
+                if (other !== folder) other.open = false;
+            });
+            updateOverflow();
         };
 
         trigger.addEventListener('click', toggle);
@@ -385,6 +400,10 @@ const isInSection = (href: string) => {
         panel.querySelectorAll('a').forEach((link) => link.addEventListener('click', handleLinkClick));
         document.addEventListener('keydown', handleKeydown);
         wideScreen.addEventListener('change', handleViewport);
+        panel.addEventListener('scroll', updateOverflow, { passive: true });
+        window.addEventListener('resize', updateOverflow);
+        revealCurrent();
+        updateOverflow();
         return () => {
             trigger.removeEventListener('click', toggle);
             closeButton.removeEventListener('click', close);
@@ -394,6 +413,8 @@ const isInSection = (href: string) => {
             panel.querySelectorAll('a').forEach((link) => link.removeEventListener('click', handleLinkClick));
             document.removeEventListener('keydown', handleKeydown);
             wideScreen.removeEventListener('change', handleViewport);
+            panel.removeEventListener('scroll', updateOverflow);
+            window.removeEventListener('resize', updateOverflow);
         };
     }
 
