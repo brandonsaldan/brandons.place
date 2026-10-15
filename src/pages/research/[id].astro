@@ -80,11 +80,16 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
         <div class="mt-10 grid gap-12 sm:mt-14 sm:grid-cols-[minmax(0,1fr)_14rem] sm:gap-16">
             <div class="min-w-0">
                 {summary && (
-                    <section class="mb-10 sm:mb-12" aria-labelledby="in-brief">
-                        <h2 id="in-brief" class="mb-5 text-2xl font-serif italic sm:text-3xl">In brief</h2>
-                        <ul class="space-y-4 border-l-2 border-main pl-5 text-base leading-relaxed sm:text-lg">
-                            {summary.map((point) => <li>{point}</li>)}
-                        </ul>
+                    <section class="mb-10 rounded-sm bg-muted px-5 py-5 sm:mb-12 sm:px-6" aria-labelledby="plain-language-summary">
+                        <h2 id="plain-language-summary" class="text-xs uppercase tracking-[0.16em] text-main/50">Plain Language Summary</h2>
+                        <ol class="mt-4 space-y-3 text-sm leading-relaxed sm:text-[0.95rem]">
+                            {summary.map((point, index) => (
+                                <li class="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-2">
+                                    <span class="font-serif italic text-main/50" aria-hidden="true">{index + 1}.</span>
+                                    <span>{point}</span>
+                                </li>
+                            ))}
+                        </ol>
                     </section>
                 )}
                 <h2 class="mb-5 text-2xl font-serif italic sm:text-3xl">Abstract</h2>
@@ -121,7 +126,7 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
 
         {figure && fullFigure && (
             <figure class="mt-12 sm:mt-16">
-                <p class="mb-2 text-xs uppercase tracking-[0.16em] text-main/50">Key figure</p>
+                <p class="mb-2 text-xs uppercase tracking-[0.16em] text-main/50">Key Figure</p>
                 <h2 class="mb-6 text-2xl font-serif italic sm:text-3xl">{figure.title}</h2>
                 <a class="block rounded-sm bg-white p-3 sm:p-5" href={fullFigure.src} target="_blank" rel="noreferrer" aria-label="Open the full-size figure">
                     <Image class="h-auto w-full" src={figure.src} alt={figure.alt} widths={[640, 960, 1536]} sizes="(min-width: 1280px) 768px, 100vw" />
