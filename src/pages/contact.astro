@@ -52,7 +52,7 @@ const today = new Date();
 const postmarkDay = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
 const socialLinks = (siteConfig.socialLinks || []).map((link) => ({
     ...link,
-    handle: `@${new URL(link.href).pathname.split('/').filter(Boolean).pop()}`,
+    handle: link.handle ?? `@${new URL(link.href).pathname.split('/').filter(Boolean).pop()}`,
 }));
 ---
 

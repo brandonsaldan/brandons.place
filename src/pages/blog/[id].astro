@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import { socialImage } from '../../utils/image-utils';
+import { orcid } from '../../data/site-config';
 
 export async function getStaticPaths() {
     return (await getCollection('blog')).map((post) => ({
@@ -28,7 +29,7 @@ const structuredData = {
     image: social ? new URL(social.src, Astro.site).href : undefined,
     datePublished: publishDate.toISOString(),
     dateModified: (updatedDate ?? publishDate).toISOString(),
-    author: { '@type': 'Person', name: 'Brandon Saldan', url: new URL('/', Astro.site).href },
+    author: { '@type': 'Person', name: 'Brandon Saldan', url: new URL('/', Astro.site).href, sameAs: orcid },
     mainEntityOfPage: pageURL
 };
 ---

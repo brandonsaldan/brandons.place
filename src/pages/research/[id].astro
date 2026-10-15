@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import { formatResearchDate, researchCitation } from '../../utils/research-utils';
 import { socialImage } from '../../utils/image-utils';
+import { orcid } from '../../data/site-config';
 
 export async function getStaticPaths() {
     return (await getCollection('research')).map((paper) => ({
@@ -22,7 +23,7 @@ const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'ScholarlyArticle',
     headline: title,
-    author: { '@type': 'Person', name: 'Brandon Saldan', url: new URL('/', Astro.site).href },
+    author: { '@type': 'Person', name: 'Brandon Saldan', url: new URL('/', Astro.site).href, sameAs: orcid },
     datePublished: publishDate.toISOString().slice(0, 10),
     description: excerpt,
     url: pageURL,
@@ -40,6 +41,7 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
     <Fragment slot="head">
         <meta name="citation_title" content={title} />
         <meta name="citation_author" content="Brandon Saldan" />
+        <meta name="citation_author_orcid" content={orcid} />
         <meta name="citation_publication_date" content={publishDate.toISOString().slice(0, 10).replaceAll('-', '/')} />
         <meta name="citation_doi" content={doi} />
         <meta name="citation_pdf_url" content={pdfURL} />
@@ -60,6 +62,7 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
                 <div>
                     <p class="text-xs uppercase tracking-[0.16em] text-main/50">Author</p>
                     <p class="mt-2 text-sm leading-relaxed">Brandon Saldan</p>
+                    <a class={`mt-1 block text-sm ${linkClasses}`} href={orcid} target="_blank" rel="noreferrer">ORCID iD</a>
                 </div>
                 <div>
                     <p class="text-xs uppercase tracking-[0.16em] text-main/50">Published</p>
