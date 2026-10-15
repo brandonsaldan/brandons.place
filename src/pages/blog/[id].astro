@@ -21,7 +21,7 @@ const { Content } = await render(post);
 const relatedKind = repository?.href.startsWith(new URL('/research/', Astro.site).href) ? 'paper' : 'project';
 const readingTime = Math.max(1, Math.ceil((post.body || '').trim().split(/\s+/).filter(Boolean).length / 200));
 const pageURL = new URL(`/blog/${post.id}/`, Astro.site).href;
-const social = (await socialImage(seo?.image ?? post.data.image)) ?? { src: `/og/blog/${post.id}.png`, alt: title };
+const social = (await socialImage(seo?.image)) ?? { src: `/og/blog/${post.id}.png`, alt: title };
 const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
