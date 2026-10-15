@@ -59,7 +59,7 @@ const { showHeader = true, homeLayout = false, ...head } = Astro.props;
                     <div class="home-gallery"><slot name="gallery" /></div>
                     <div class="site-shell home-content flex-1">
                         <Nav railOnly />
-                        <main class="site-content w-full"><slot /></main>
+                        <section class="site-content w-full" aria-label="Selected work"><slot /></section>
                     </div>
                 </>
             ) : (
