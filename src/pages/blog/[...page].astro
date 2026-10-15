@@ -21,12 +21,12 @@ const blog = page.data;
 
 <BaseLayout
     title="Blog"
-    description="Long-form writing on technology, building things, ideas, and the strange details that make modern life worth examining."
+    description="Writing on technology, the projects I build, and the research I publish. Most posts start from something I’ve made or a paper I’ve written."
     image={{ src: '/og/blog.png', alt: 'Blog' }}
     showHeader={false}
 >
     <h1 class="mb-3 text-4xl leading-tight font-serif italic sm:mb-4 sm:text-4xl">Blog</h1>
-    <p class="mb-10 text-base leading-relaxed sm:mb-10 sm:text-lg">Long-form writing on technology, building things, ideas, and the strange details that make modern life worth examining.</p>
+    <p class="mb-10 text-base leading-relaxed sm:mb-10 sm:text-lg">Writing on technology, the projects I build, and the research I publish. Most posts start from something I’ve made or a paper I’ve written.</p>
     <div>
         {blog.map((post, index) => (
             <PreviewBlock index={index} image={post.data.image} href={`/blog/${post.id}/`}>

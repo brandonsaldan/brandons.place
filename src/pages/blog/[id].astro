@@ -17,6 +17,7 @@ type Props = { post: CollectionEntry<'blog'> };
 const { post } = Astro.props;
 const { title, publishDate, updatedDate, excerpt, subject, repository, seo } = post.data;
 const { Content } = await render(post);
+const relatedKind = repository?.href.startsWith(new URL('/research/', Astro.site).href) ? 'paper' : 'project';
 const readingTime = Math.max(1, Math.ceil((post.body || '').trim().split(/\s+/).filter(Boolean).length / 200));
 const pageURL = new URL(`/blog/${post.id}/`, Astro.site).href;
 const social = (await socialImage(seo?.image ?? post.data.image)) ?? { src: `/og/blog/${post.id}.png`, alt: title };
@@ -78,7 +79,7 @@ const structuredData = {
                 <div class="border-t-2 border-main pt-4">
                     {repository && (
                         <>
-                            <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access related project</p>
+                            <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access related {relatedKind}</p>
                             <Button class="mt-4 w-full" href={repository.href} target="_blank" rel="noreferrer">View {repository.label} <span class="ml-2 text-xs not-italic">↗</span></Button>
                             <div class="mt-5 border-t border-main/15"></div>
                         </>
