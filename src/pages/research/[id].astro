@@ -63,8 +63,15 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
             <div class="grid gap-7 sm:grid-cols-3 sm:gap-10">
                 <div>
                     <p class="text-xs uppercase tracking-[0.16em] text-main/50">Author</p>
-                    <p class="mt-2 text-sm leading-relaxed">Brandon Saldan</p>
-                    <a class={`mt-1 block text-sm ${linkClasses}`} href={orcid} target="_blank" rel="noreferrer">ORCID iD</a>
+                    <p class="mt-2 flex items-center gap-1.5 text-sm leading-relaxed">
+                        Brandon Saldan
+                        <a class="shrink-0 transition-opacity hover:opacity-75" href={orcid} target="_blank" rel="noreferrer" aria-label="ORCID iD" title="ORCID iD">
+                            <svg class="h-4 w-4" viewBox="0 0 256 256" aria-hidden="true">
+                                <path fill="#A6CE39" d="M256 128c0 70.7-57.3 128-128 128S0 198.7 0 128 57.3 0 128 0s128 57.3 128 128z" />
+                                <path fill="#fff" d="M86.3 186.2H70.9V79.1h15.4v107.1zM108.9 79.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7 0-21.5-13.7-39.7-43.7-39.7h-23.7v79.4zM88.7 56.8c0 5.5-4.5 10.1-10.1 10.1s-10.1-4.6-10.1-10.1c0-5.6 4.5-10.1 10.1-10.1s10.1 4.5 10.1 10.1z" />
+                            </svg>
+                        </a>
+                    </p>
                 </div>
                 <div>
                     <p class="text-xs uppercase tracking-[0.16em] text-main/50">Published</p>
@@ -80,9 +87,9 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
         <div class="mt-10 grid gap-12 sm:mt-14 sm:grid-cols-[minmax(0,1fr)_14rem] sm:gap-16">
             <div class="min-w-0">
                 {summary && (
-                    <section class="mb-10 rounded-sm bg-muted px-5 py-5 sm:mb-12 sm:px-6" aria-labelledby="plain-language-summary">
-                        <h2 id="plain-language-summary" class="text-xs uppercase tracking-[0.16em] text-main/50">Plain Language Summary</h2>
-                        <ol class="mt-4 space-y-3 text-sm leading-relaxed sm:text-[0.95rem]">
+                    <section class="mb-10 sm:mb-12" aria-labelledby="in-brief">
+                        <h2 id="in-brief" class="mb-5 text-2xl font-serif italic sm:text-3xl">In Brief</h2>
+                        <ol class="space-y-3 border-l border-main/15 pl-5 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
                             {summary.map((point, index) => (
                                 <li class="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-2">
                                     <span class="font-serif italic text-main/50" aria-hidden="true">{index + 1}.</span>
