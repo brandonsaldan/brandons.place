@@ -29,14 +29,14 @@ export type ResumeNote = {
 
 export const experience: ResumeEntry[] = [
     {
-        title: 'Technical Advisor',
+        title: 'Apple Support College Program Advisor',
         organization: 'Apple',
         location: 'Charlotte, NC',
         start: '2025-05',
         dates: 'May 2025 – Present',
         lenses: ['engineering', 'business'],
         points: [
-            'Selected for Apple’s competitive Support College Program, serving in a corporate role as a technical advisor while pursuing higher education in Management Information Systems.',
+            'Selected for Apple’s competitive Support College Program, serving in a corporate role as an advisor while pursuing higher education in Management Information Systems.',
             'Resolve technical issues across Apple’s hardware, software, and services ecosystem using internal tools and workflows, with an emphasis on first-contact resolution and KPI-driven performance.',
             'Deliver clear, empathetic communication to a diverse customer base while maintaining Apple’s standards for confidentiality, service quality, technical accuracy, and user experience.',
         ],
