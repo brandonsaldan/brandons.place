@@ -58,6 +58,8 @@
     }
 
     .music-record--small span { border-width: 1px; }
+
+    .prose > p:first-child > img:first-of-type { margin-top: 0; }
 }
 
 @layer utilities {
