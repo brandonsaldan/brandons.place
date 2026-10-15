@@ -63,6 +63,7 @@ const research = defineCollection({
         publishDate: z.coerce.date(),
         paperType: z.string(),
         pdfUrl: z.string(),
+        replicationUrl: z.string().url().optional(),
         readingTime: z.number().optional(),
         isFeatured: z.boolean().default(false),
         seo: seoSchema(image).optional()

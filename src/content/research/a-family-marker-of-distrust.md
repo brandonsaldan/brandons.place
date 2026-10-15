@@ -22,6 +22,7 @@ excerpt: "Using national survey data and sibling comparisons, this paper finds t
 publishDate: "2026-10-13"
 paperType: "Preprint"
 pdfUrl: "/papers/SaldanMaternalSmokingFamilyMarkerOfDistrust.pdf"
+replicationUrl: "https://works.hcommons.org/records/0nwbw-8j163/files/Saldan_Maternal_Smoking_Family_Marker_of_Distrust_Replication.zip?download=1"
 readingTime: 82
 isFeatured: true
 seo:

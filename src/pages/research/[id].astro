@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 
 type Props = { paper: CollectionEntry<'research'> };
 const { paper } = Astro.props;
-const { title, shortTitle, subtitle, publishDate, paperType, pageCount, doi, pdfUrl, repositories, frameworks, excerpt, researchContext, summary } = paper.data;
+const { title, shortTitle, subtitle, publishDate, paperType, pageCount, doi, pdfUrl, repositories, frameworks, excerpt, researchContext, summary, replicationUrl } = paper.data;
 const { Content } = await render(paper);
 const citation = researchCitation(paper);
 const pageURL = new URL(`/research/${paper.id}/`, Astro.site).href;
@@ -111,6 +111,7 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
                 <div class="border-t-2 border-main pt-4">
                     <p class="text-xs uppercase tracking-[0.16em] text-main/50">Access this paper</p>
                     <Button class="mt-4 w-full" href={pdfUrl} target="_blank" rel="noreferrer">Read PDF <span class="ml-2 text-xs not-italic">↗</span></Button>
+                    {replicationUrl && <Button class="mt-3 w-full" href={replicationUrl}>Replication Files <span class="ml-2 text-xs not-italic">↓</span></Button>}
                     <div class="mt-5 divide-y divide-main/15 border-y border-main/15">
                         <a class={`block py-3 text-sm ${linkClasses}`} href={`https://doi.org/${doi}`} target="_blank" rel="noreferrer">Open DOI <span class="float-right">↗</span></a>
                         <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.kcworks} target="_blank" rel="noreferrer">KCWorks <span class="float-right">↗</span></a>
