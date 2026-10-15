@@ -18,7 +18,8 @@ type Props = { post: CollectionEntry<'blog'> };
 const { post } = Astro.props;
 const { title, publishDate, updatedDate, excerpt, subject, repository, seo } = post.data;
 const { Content } = await render(post);
-const relatedKind = repository?.href.startsWith(new URL('/research/', Astro.site).href) ? 'paper' : 'project';
+const relatedPaper = (await getCollection('research')).find((paper) => repository?.href === new URL(`/research/${paper.id}/`, Astro.site).href);
+const relatedKind = relatedPaper ? 'paper' : 'project';
 const readingTime = Math.max(1, Math.ceil((post.body || '').trim().split(/\s+/).filter(Boolean).length / 200));
 const pageURL = new URL(`/blog/${post.id}/`, Astro.site).href;
 const social = (await socialImage(seo?.image)) ?? { src: `/og/blog/${post.id}.png`, alt: title };
@@ -31,7 +32,13 @@ const structuredData = {
     datePublished: publishDate.toISOString(),
     dateModified: (updatedDate ?? publishDate).toISOString(),
     author: { '@type': 'Person', name: 'Brandon Saldan', url: new URL('/', Astro.site).href, sameAs: orcid },
-    mainEntityOfPage: pageURL
+    mainEntityOfPage: pageURL,
+    isBasedOn: relatedPaper && {
+        '@type': 'ScholarlyArticle',
+        headline: relatedPaper.data.title,
+        url: repository?.href,
+        identifier: { '@type': 'PropertyValue', propertyID: 'DOI', value: relatedPaper.data.doi }
+    }
 };
 ---
 
