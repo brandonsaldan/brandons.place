@@ -17,10 +17,22 @@ const { showHeader = true, homeLayout = false, ...head } = Astro.props;
     <head>
         <BaseHead {...head} />
         <slot name="head" />
-        <script>
-            if (localStorage.theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
+        <script is:inline>
+            (() => {
+                const media = window.matchMedia('(prefers-color-scheme: dark)');
+                const applyTheme = () => {
+                    let stored = null;
+                    try {
+                        stored = localStorage.getItem('theme');
+                    } catch {}
+                    document.documentElement.classList.toggle('dark', stored ? stored === 'dark' : media.matches);
+                };
+                applyTheme();
+                if (window.__themeListeners) return;
+                window.__themeListeners = true;
+                document.addEventListener('astro:after-swap', applyTheme);
+                media.addEventListener('change', applyTheme);
+            })();
         </script>
         <script>
             document.addEventListener('dragstart', (event) => {
