@@ -21,13 +21,13 @@ import nocturneAlpha from '../../assets/blog/nocturne-1.png';
 
 ![Nocturne OS running on Spotify Car Thing hardware](../../assets/projects/nocturne/nocturne-1.png)
 
-In July 2022, Spotify made a decision that would affect thousands of users: they discontinued the Car Thing, their first hardware product, after just five months on the market. While many saw this as just another failed product launch, I saw an opportunity. These devices – packed with capable hardware including an Amlogic S905D2 SoC, a beautiful display, and robust build quality – were about to become electronic waste. That didn't sit right with me.
+In July 2022, Spotify made a decision that would affect thousands of users: they discontinued the Car Thing, their first hardware product, after just five months on the market. While many saw this as just another failed product launch, I saw an opportunity. These devices had capable hardware, including an Amlogic S905D2 SoC, a beautiful display, and robust build quality, and they were about to become electronic waste. That didn't sit right with me.
 
 ## From Frustration to Innovation
 
-When Spotify announced the discontinuation, they promised to maintain functionality for existing users, but we all knew what that meant – eventual obsolescence. A good friend of mine expressed his frustration with this, as well as the existing solutions for continued use that he had tried. All were clunky, requiring either convoluted server setups or unreliable workarounds that made the device more frustrating than functional. His frustration resonated with me – here was a perfectly good piece of hardware, thoughtfully designed and well-built, destined to become nothing more than a paperweight because of a business decision.
+When Spotify announced the discontinuation, they promised to maintain functionality for existing users, but we all knew that meant eventual obsolescence. A good friend of mine expressed his frustration with this, as well as the existing solutions for continued use that he had tried. All were clunky, requiring either convoluted server setups or unreliable workarounds that made the device more frustrating than functional. His frustration resonated with me. Here was a perfectly good piece of hardware, thoughtfully designed and well-built, destined to become nothing more than a paperweight because of a business decision.
 
-That conversation sparked something. Rather than accepting the limitations of existing solutions, we began to wonder if we could bypass them entirely. The hardware itself was solid – an Amlogic S905D2 SoC typically used in smart TVs and streaming boxes, suggesting untapped potential beyond its original single-purpose design. If we could understand how to communicate with this hardware directly, maybe we could give it a completely new brain.
+That conversation sparked something. Rather than accepting the limitations of existing solutions, we began to wonder if we could bypass them entirely. The hardware itself was solid. Its Amlogic S905D2 SoC is typically used in smart TVs and streaming boxes, which suggested untapped potential beyond its original single-purpose design. If we could understand how to communicate with this hardware directly, maybe we could give it a completely new brain.
 
 The challenge was significant: how do you take a device designed solely for Spotify and transform it into a versatile music management system? The hardware was capable, but with only 512MB of RAM and no built-in networking beyond Bluetooth, we needed creative solutions.
 
@@ -35,9 +35,9 @@ The challenge was significant: how do you take a device designed solely for Spot
 
 ### Phase 1: The Raspberry Pi Era
 
-Our first approach was ambitious but effective. Luckily for us, a GitHub user by the name of [bishopdynamics](https://github.com/bishopdynamics) had created a set of tools that helped unlock the hardware's potential. His early work in documenting the Car Thing's hardware and creating tools for initial access proved huge for us - it gave us the foundation we needed to start building something new. Standing on these shoulders, we developed a distributed system where a Raspberry Pi would handle all networking and connectivity. The Pi would connect to either a home WiFi network or, using a custom setup script, to a phone's mobile hotspot for in-car use.
+Our first approach was ambitious but effective. Luckily for us, a GitHub user by the name of [bishopdynamics](https://github.com/bishopdynamics) had created a set of tools that helped unlock the hardware's potential. His early work in documenting the Car Thing's hardware and creating tools for initial access proved huge for us, giving us the foundation we needed to start building something new. Standing on these shoulders, we developed a distributed system where a Raspberry Pi would handle all networking and connectivity. The Pi would connect to either a home WiFi network or, using a custom setup script, to a phone's mobile hotspot for in-car use.
 
-This solution, while not elegant, proved our concept: these devices could do more than their original design intended. The Raspberry Pi acted as the brain of the operation, managing all network communications while the Car Thing focused purely on interface and control. The setup wasn't perfect – requiring additional hardware and separate network configuration wasn't ideal – but it was a crucial first step in understanding how we could push the boundaries of what this hardware could do.
+This solution, while not elegant, proved our concept: these devices could do more than their original design intended. The Raspberry Pi acted as the brain of the operation, managing all network communications while the Car Thing focused purely on interface and control. The setup wasn't perfect, since it required additional hardware and separate network configuration, but it was a crucial first step in understanding how we could push the boundaries of what this hardware could do.
 
 ```python
 # Excerpt from setup_hotspot_rpi.py, shipped in v2.0.0-beta.1
@@ -61,7 +61,7 @@ else:
 ...
 ```
 
-By this point, Nocturne had already become the first mod for the Car Thing with the capability to be used in a vehicle; which was particularly meaningful given that the device was originally designed for exactly this purpose, yet other modifications had lost this crucial functionality. The mobile hotspot connection script meant you could simply start your car, and within moments your Car Thing would be connected and ready to go – just as Spotify had originally intended, but now with our own software running the show.
+By this point, Nocturne had already become the first mod for the Car Thing with the capability to be used in a vehicle; which was particularly meaningful given that the device was originally designed for exactly this purpose, yet other modifications had lost this crucial functionality. The mobile hotspot connection script meant you could simply start your car, and within moments your Car Thing would be connected and ready to go, just as Spotify had originally intended, but now with our own software running the show.
 
 The community's response was overwhelming. Users began contributing ideas and code, helping us optimize the system and add features. But we knew we could do better. The Raspberry Pi requirement, while functional, felt like a temporary solution rather than the elegant final form this project deserved. Each installation required precise setup, and troubleshooting network issues meant dealing with two devices instead of one. These complications, while manageable for technically-inclined users, created a barrier for wider adoption.
 
@@ -74,7 +74,7 @@ Despite these challenges, Nocturne had received coverage in numerous news outlet
 
 ### Phase 2: Breaking Free
 
-A major turning point came when GitHub user [JoeyEamigh](https://github.com/JoeyEamigh) developed a NixOS-based system for the Car Thing as part of a [hackathon submission](https://devpost.com/software/car-thang). This custom Linux distribution opened up new possibilities for running software directly on the device, without requiring additional hardware. We saw the potential immediately – if we could run a full Linux distribution on the Car Thing, we could eliminate the need for the Raspberry Pi entirely.
+A major turning point came when GitHub user [JoeyEamigh](https://github.com/JoeyEamigh) developed a NixOS-based system for the Car Thing as part of a [hackathon submission](https://devpost.com/software/car-thang). This custom Linux distribution opened up new possibilities for running software directly on the device, without requiring additional hardware. We saw the potential immediately: if we could run a full Linux distribution on the Car Thing, we could eliminate the need for the Raspberry Pi entirely.
 
 We expanded our team, bringing on two new members who specialized in backend development and Linux engineering. Together, we developed `nocturned`, a lightweight daemon that runs locally on the device and manages Bluetooth connectivity. This daemon enables direct Bluetooth tethering with a phone, handling everything from device pairing to network connection management through a clean API interface.
 
@@ -128,6 +128,6 @@ None of this would have been possible without the collective effort of the incre
 - [Dominic Frye](https://github.com/itsnebulalol)
 - [shadow](https://github.com/68p)
 
-(Listed alphabetically – I promise I didn't put myself first on purpose! Trust me, the rest of the team are the real heroes here!)
+(Listed alphabetically. I promise I didn't put myself first on purpose! Trust me, the rest of the team are the real heroes here!)
 
 Special thanks also go to [bishopdynamics](https://github.com/bishopdynamics) for their early work in documenting the Car Thing hardware, [JoeyEamigh](https://github.com/JoeyEamigh) whose NixOS work helped pave the way for our v3 release, the [Thing Labs](https://github.com/JoeyEamigh) team, and all contributors and sponsors to the project.
