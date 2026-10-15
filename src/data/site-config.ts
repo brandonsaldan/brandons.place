@@ -9,6 +9,10 @@ export type Link = {
   href: string;
 };
 
+export type SocialLink = Link & {
+  handle?: string;
+};
+
 export type HeaderLink = Link & {
   section?: 'work' | 'personal';
   showOnHome?: boolean;
@@ -31,11 +35,13 @@ export type SiteConfig = {
   topics?: string[];
   headerNavLinks?: HeaderLink[];
   footerNavLinks?: Link[];
-  socialLinks?: Link[];
+  socialLinks?: SocialLink[];
   hero?: Hero;
   postsPerPage?: number;
   projectsPerPage?: number;
 };
+
+export const orcid = "https://orcid.org/0009-0005-4385-983X";
 
 const siteConfig: SiteConfig = {
   title: "Brandon Saldan",
@@ -120,6 +126,11 @@ const siteConfig: SiteConfig = {
     {
       text: "GitHub",
       href: "https://github.com/brandonsaldan",
+    },
+    {
+      text: "ORCID",
+      href: orcid,
+      handle: "0009-0005-4385-983X",
     },
     {
       text: "Twitter",

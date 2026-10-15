@@ -13,6 +13,10 @@ image:
   src: "../../assets/research/africa-international-system.webp"
   alt: "Painterly landscape of a waterfront settlement beneath a mountain"
 pageCount: 15
+summary:
+  - "No single theory of international relations explains Africa's place in the world. The paper reads it through four: power politics, cooperation through institutions, economic dependency, and the role of ideas and identity."
+  - "Aid, reliance on raw material exports, debt, and conflict tend to keep African states dependent, and newer partners such as China and Russia bring both more options and new forms of dependence."
+  - "The paper argues that African states can gradually gain influence by integrating regionally through bodies like the African Union, ECOWAS, and the continental free trade area, diversifying their partners, and raising more of their own revenue."
 excerpt: "This paper analyzes Africa's position in the international system through major IR and political economy frameworks, then evaluates structural constraints and strategic pathways for greater agency in a multipolar environment."
 publishDate: "2025-05-07"
 paperType: "Research Paper"

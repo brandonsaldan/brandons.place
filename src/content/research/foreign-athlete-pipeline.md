@@ -13,6 +13,10 @@ image:
   src: "../../assets/research/foreign-athlete-pipeline.webp"
   alt: "Oil painting of red curtains framing purple trees"
 pageCount: 25
+summary:
+  - "Recruiting foreign athletes to American colleges has never been only about sports. Since the Cold War it has served American soft power, and it later grew up alongside foreign government programs that recruited talent from the same universities."
+  - "Visa rules tightened after September 11 mattered little to athletes until the NCAA allowed name, image, and likeness deals in 2021 and revenue sharing in 2025. Limits on outside work for student visa holders have kept many international athletes from earning what their American teammates now can."
+  - "By 2026 immigration law, national security policy, and athlete pay all press on the same system at once, and neither the NCAA nor any single federal agency is responsible for reconciling them."
 excerpt: "Tracing international recruitment in American college athletics from the Cold War to 2026, this paper examines the intersection of athletic labor, immigration law, and national security."
 publishDate: "2026-05-05"
 paperType: "Research Paper"

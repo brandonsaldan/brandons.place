@@ -14,6 +14,10 @@ image:
   src: "../../assets/research/a-family-marker-of-distrust.webp"
   alt: "Painting of a house engulfed in smoke and yellow flames"
 pageCount: 91
+summary:
+  - "Adults whose mothers smoked while pregnant with them are more likely to say the federal government rarely does what most Americans want."
+  - "The pregnancy itself does not seem to be the cause. When one sibling was exposed in the womb and another was not, the exposed sibling did not rate the government lower, even though the same comparison picks up the expected drop in birth weight."
+  - "Instead, smoking through pregnancy seems to mark families that share a distrustful outlook. The mothers show the same pattern, as do smokers of their generation and adult smokers in a separate national survey. Where that outlook comes from is still an open question."
 excerpt: "Using national survey data and sibling comparisons, this paper finds that maternal smoking during pregnancy marks families in which adult children perceive the federal government as less responsive. The evidence weighs against a large prenatal effect."
 publishDate: "2026-10-13"
 paperType: "Preprint"
