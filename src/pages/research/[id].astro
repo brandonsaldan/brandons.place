@@ -18,6 +18,7 @@ const { title, shortTitle, subtitle, publishDate, paperType, pageCount, doi, pdf
 const { Content } = await render(paper);
 const citation = researchCitation(paper);
 const pageURL = new URL(`/research/${paper.id}/`, Astro.site).href;
+const companionPost = (await getCollection('blog')).find((post) => post.data.repository?.href === pageURL);
 const pdfURL = new URL(pdfUrl, Astro.site).href;
 const structuredData = {
     '@context': 'https://schema.org',
@@ -117,6 +118,7 @@ const linkClasses = 'underline decoration-dashed decoration-1 underline-offset-2
                         <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.kcworks} target="_blank" rel="noreferrer">KCWorks <span class="float-right">↗</span></a>
                         <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.researchGate} target="_blank" rel="noreferrer">ResearchGate <span class="float-right">↗</span></a>
                         <a class={`block py-3 text-sm ${linkClasses}`} href={repositories.academia} target="_blank" rel="noreferrer">Academia.edu <span class="float-right">↗</span></a>
+                        {companionPost && <a class={`block py-3 text-sm ${linkClasses}`} href={`/blog/${companionPost.id}/`}>Blog Post <span class="float-right">→</span></a>}
                     </div>
                     <div class="mt-4">
                         <p class="text-xs uppercase tracking-[0.16em] text-main/50">Paper details</p>
