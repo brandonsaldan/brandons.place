@@ -18,11 +18,6 @@ summary:
   - "Adults whose mothers smoked while pregnant with them are more likely to say the federal government rarely does what most Americans want."
   - "The pregnancy itself does not seem to be the cause. When one sibling was exposed in the womb and another was not, the exposed sibling did not rate the government lower, even though the same comparison picks up the expected drop in birth weight."
   - "Instead, smoking through pregnancy seems to mark families that share a distrustful outlook. The mothers show the same pattern, as do smokers of their generation and adult smokers in a separate national survey. Where that outlook comes from is still an open question."
-figure:
-  src: "../../assets/research/figures/a-family-marker-of-distrust-figure-3.png"
-  alt: "Two-panel chart of differences in perceived government responsiveness on a 1 to 5 scale. Panel A, across families: respondents whose mothers smoked in their own pregnancy rate the government 0.21 lower than those whose mothers never smoked; those whose mothers smoked in another pregnancy, 0.10 lower; those whose mothers smoked but in no pregnancy on file, 0.03 higher. Panel B, between siblings: the sibling exposed in the womb rates the government 0.23 higher in 2008 and 0.14 higher averaging 2006 and 2008, while a sibling who currently smokes rates it 0.17 lower."
-  title: "Where the Difference Lies: Across Mothers, Not Across a Mother's Pregnancies"
-  caption: "Points are differences in mean response on the 1 to 5 scale, with 95% confidence intervals; the shaded band marks differences smaller than 0.10. The top panel compares respondents by their mother's smoking history. The bottom panel compares siblings within the same family, where exposure in the womb shows no penalty but a sibling's own smoking does."
 excerpt: "Using national survey data and sibling comparisons, this paper finds that maternal smoking during pregnancy marks families in which adult children perceive the federal government as less responsive. The evidence weighs against a large prenatal effect."
 publishDate: "2026-10-13"
 paperType: "Preprint"

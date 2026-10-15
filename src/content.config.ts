@@ -59,7 +59,6 @@ const research = defineCollection({
         image: imageSchema(image),
         pageCount: z.number().int().positive(),
         summary: z.array(z.string()).min(1).max(4).optional(),
-        figure: z.object({ src: image(), alt: z.string(), title: z.string(), caption: z.string() }).optional(),
         excerpt: z.string().optional(),
         publishDate: z.coerce.date(),
         paperType: z.string(),
