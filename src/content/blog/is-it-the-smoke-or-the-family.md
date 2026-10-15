@@ -10,6 +10,8 @@ repository:
   label: "Paper"
   href: "https://brandonsaldan.com/research/a-family-marker-of-distrust/"
 isFeatured: true
+seo:
+  title: "Smoking in Pregnancy and Trust in Government"
 ---
 
 My latest paper asks whether a mother's smoking during pregnancy is related to how her children see the federal government as adults, and if so, why.

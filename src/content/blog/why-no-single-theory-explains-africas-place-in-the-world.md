@@ -10,6 +10,8 @@ repository:
   label: "Paper"
   href: "https://brandonsaldan.com/research/africa-international-system/"
 isFeatured: true
+seo:
+  title: "Africa in World Politics: Four Theories Compared"
 ---
 
 I wrote this paper for an upper-level political science course. It asks which of the major theories of international relations best explains Africa's position in the world. My answer is that each explains part of it and none explains all of it.

@@ -10,6 +10,8 @@ repository:
   label: "Paper"
   href: "https://brandonsaldan.com/research/foreign-athlete-pipeline/"
 isFeatured: true
+seo:
+  title: "International Athletes, Visas, and College Sports"
 ---
 
 I wrote this paper for a course on the history of the NCAA. It traces international recruiting in American college athletics from 1952 to 2026 and argues that it has always been tied to foreign policy, immigration law, and national security, not just competition.
