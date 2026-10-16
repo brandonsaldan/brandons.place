@@ -8,6 +8,9 @@ import vercel from '@astrojs/vercel';
 export default defineConfig({
     site: 'https://brandonsaldan.com',
     adapter: vercel(),
+    redirects: {
+        '/projects/codex': '/projects/twofold'
+    },
     integrations: [
         mdx(),
         sitemap(),

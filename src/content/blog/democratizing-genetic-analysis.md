@@ -8,7 +8,7 @@ image:
 subject: "Genetic Analysis"
 repository:
   label: "Codex"
-  href: "https://github.com/brandonsaldan/codex"
+  href: "https://github.com/brandonsaldan/twofold"
 isFeatured: true
 seo:
   image:
@@ -96,6 +96,4 @@ Within the last two decades, genetic health testing has transformed our understa
 
 Codex has evolved from a personal project into a powerful tool for democratizing genetic analysis.
 
-![Codex Demo](https://raw.githubusercontent.com/brandonsaldan/codex/main/public/images/genecodex.gif)
-
-The project is open source and available on [GitHub](https://github.com/brandonsaldan/codex), with a live demo at [codex-brandonsaldan.vercel.app](https://codex-brandonsaldan.vercel.app/).
+The project is open source and available on [GitHub](https://github.com/brandonsaldan/twofold), with a live demo at [twofold.brandonsaldan.com](https://twofold.brandonsaldan.com/).
