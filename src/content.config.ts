@@ -37,6 +37,7 @@ const projects = defineCollection({
         status: z.string(),
         focus: z.string(),
         repository: z.string().url().optional(),
+        website: z.string().url().optional(),
         isFeatured: z.boolean().default(false),
         seo: seoSchema(image).optional()
     })

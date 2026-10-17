@@ -8,6 +8,7 @@ image:
 status: "Active Development"
 focus: "Bioinformatics & Privacy"
 repository: "https://github.com/brandonsaldan/twofold"
+website: "https://twofold.brandonsaldan.com"
 isFeatured: true
 seo:
   image:
