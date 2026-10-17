@@ -9,6 +9,12 @@ subject: "Genetic Analysis"
 repository:
   label: "Codex"
   href: "https://github.com/brandonsaldan/twofold"
+notice:
+  label: "This post is out of date"
+  text: "It describes GeneCodex as it worked in 2023. The project has since been rebuilt from the ground up as Twofold, so the features, architecture, and links described here no longer reflect how it works today."
+  link:
+    label: "Read about Twofold"
+    href: "/projects/twofold/"
 isFeatured: true
 seo:
   image:

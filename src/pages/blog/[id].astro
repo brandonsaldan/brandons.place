@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 type Props = { post: CollectionEntry<'blog'> };
 
 const { post } = Astro.props;
-const { title, publishDate, updatedDate, excerpt, subject, repository, seo } = post.data;
+const { title, publishDate, updatedDate, excerpt, subject, repository, notice, seo } = post.data;
 const { Content } = await render(post);
 const relatedPaper = (await getCollection('research')).find((paper) => repository?.href === new URL(`/research/${paper.id}/`, Astro.site).href);
 const relatedKind = relatedPaper ? 'paper' : 'project';
@@ -80,6 +80,13 @@ const structuredData = {
 
         <div class="mt-10 grid gap-12 sm:mt-14 sm:grid-cols-[minmax(0,1fr)_14rem] sm:gap-16">
             <div class="min-w-0 max-w-none prose prose-main sm:prose-lg">
+                {notice && (
+                    <aside class="not-prose mb-10 bg-muted p-5 sm:p-6" aria-label={notice.label}>
+                        <p class="text-xs uppercase tracking-[0.16em] text-main/50">{notice.label}</p>
+                        <p class="mt-3 text-base leading-relaxed">{notice.text}</p>
+                        {notice.link && <a class="mt-3 inline-block text-base underline decoration-dashed decoration-1 underline-offset-2 hover:decoration-solid" href={notice.link.href}>{notice.link.label}</a>}
+                    </aside>
+                )}
                 <Content />
             </div>
 

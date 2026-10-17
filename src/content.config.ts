@@ -21,6 +21,7 @@ const blog = defineCollection({
         updatedDate: z.coerce.date().optional(),
         subject: z.string().optional(),
         repository: z.object({ label: z.string(), href: z.string().url() }).optional(),
+        notice: z.object({ label: z.string().default('A note on this post'), text: z.string(), link: z.object({ label: z.string(), href: z.string() }).optional() }).optional(),
         isFeatured: z.boolean().default(false),
         seo: seoSchema(image).optional()
     })
